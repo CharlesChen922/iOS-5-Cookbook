@@ -6,7 +6,7 @@
 
 #import <UIKit/UIKit.h>
 
-// Simple macro distinguishes iPhone from iPad
+// 這支簡單的巨集可區分iPhone與iPad
 #define IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 
 @interface TestBedAppDelegate : NSObject <UIApplicationDelegate>
@@ -21,7 +21,7 @@
     UIViewController *vc = [[UIViewController alloc] init];
     vc.view.backgroundColor = [UIColor greenColor];
  
-    // Add a basic label that says "Hello World"
+    // 加入一個標籤顯示"Hello World"
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, window.bounds.size.width, 80.0f)];
     label.text = @"Hello World";
     label.center = CGPointMake(CGRectGetMidX(window.bounds), CGRectGetMidY(window.bounds));
