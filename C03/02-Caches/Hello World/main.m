@@ -29,9 +29,9 @@
 
 - (void) loadObject
 {
-	// This causes a new object to be loaded as each time is unique. When you 
-	// click twice within the same second, the retrieved object will not
-	// be generated the second time because the date is the same.
+	// 若日期時間不同，會建立新物件物件、並載入。
+	// 若你在同一秒內很快地按兩下，因為兩次的日期時間相同，
+	// 所以第二次不會建立新物件。
 	[objectCache retrieveObjectNamed:[[NSDate date] description]];
     self.title = NUMSTR(++nTimes);
 }

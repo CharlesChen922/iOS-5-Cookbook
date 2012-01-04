@@ -9,12 +9,13 @@
 @implementation ObjectCache
 @synthesize myCache, allocationSize;
 
+// 回傳新快取
 + (ObjectCache *) cache
 {
 	return [[ObjectCache alloc] init];
 }
 
-// Fake loading an object by creating NSData of the given size
+// 建立某大小的NSData，假裝有載入物件
 - (id) loadObjectNamed: (NSString *) someKey
 {
     if (!allocationSize)
@@ -26,7 +27,7 @@
     return data;
 }
 
-// When an object is not found, it's loaded
+// 當找不到某物件時，載入它
 - (id) retrieveObjectNamed: (NSString *) someKey
 {
     if (!myCache) 
@@ -40,7 +41,7 @@
 	return object;
 }
 
-// Clear the cache at a memory warning
+// 記憶體低下時清理快取
 - (void) respondToMemoryWarning
 {
 	[myCache removeAllObjects];
