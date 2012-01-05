@@ -9,7 +9,7 @@
 
 NSArray *allSubviews(UIView *aView);
 
-// recursive descent
+// 以遞迴深入的方式回傳所有的子視圖
 NSArray *allSubviews(UIView *aView)
 {
 	NSArray *results = [aView subviews];
@@ -28,9 +28,12 @@ NSArray *allSubviews(UIView *aView)
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+	
+    // 從nib載入視圖後，進行其他設定
     field1.keyboardType = UIKeyboardTypeDecimalPad;
 }
 
+// 回應擺設方向變更，更新位置
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     BOOL isPortrait = UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation]);
