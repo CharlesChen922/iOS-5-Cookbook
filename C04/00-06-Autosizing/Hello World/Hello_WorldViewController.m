@@ -9,6 +9,11 @@
 #define BARBUTTON(TITLE, SELECTOR) 	[[UIBarButtonItem alloc] initWithTitle:TITLE style:UIBarButtonItemStylePlain target:self action:SELECTOR]
 
 @implementation Hello_WorldViewController
+
+- (void)action:(id)sender {
+    // 不作事
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
