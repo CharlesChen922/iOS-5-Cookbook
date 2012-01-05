@@ -13,7 +13,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    // 從nib載入視圖後，進行其他設定
     field1.keyboardType = UIKeyboardTypeDecimalPad;
 }
 
