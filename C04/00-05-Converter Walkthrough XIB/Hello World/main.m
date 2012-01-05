@@ -35,7 +35,7 @@ action:SELECTOR]
     field2 = (UITextField *)[self.view viewWithTag:12];
     field1.keyboardType = UIKeyboardTypeDecimalPad;
 
-    // Set title and add convert button
+    // 設定標題，加入Convert按鈕
     self.title = @"Converter";
     self.navigationItem.rightBarButtonItem = BARBUTTON(@"Convert", @selector(convert:));
 }
