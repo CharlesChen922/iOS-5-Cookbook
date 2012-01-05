@@ -13,14 +13,14 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender 
 {
-    // existing popover
+    // 解除已存在的懸浮元件並釋放
     if (self.popoverController)
     {
         [self.popoverController dismissPopoverAnimated:NO];
         self.popoverController = nil;
     }
         
-    // retain the popover
+    // 保留懸浮元件，設定它的內容大小
     if ([segue.identifier isEqualToString:@"basic pop"]) 
     {
         UIStoryboardPopoverSegue *popoverSegue = (UIStoryboardPopoverSegue *)segue;
@@ -31,14 +31,17 @@
     }
 }
 
+// 解除時，釋放懸浮元件
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)thePopoverController {
     self.popoverController = nil;
 }
 
+// 先前步步指引的程式碼
 - (IBAction)dismissModalController:(id)sender {
     [self dismissModalViewControllerAnimated:YES];
 }
 
+// 支援所有裝置擺設方向，自動旋轉
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
     
