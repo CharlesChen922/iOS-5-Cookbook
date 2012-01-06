@@ -19,7 +19,7 @@
 @implementation NumberViewController
 @synthesize number, textView;
 
-// Return a new view controller at the specified level number
+// 根據層級深度回傳新的視圖控制器
 + (id) controllerWithNumber: (int) number
 {
     NumberViewController *viewController = [[NumberViewController alloc] init];
@@ -28,28 +28,29 @@
     return viewController;
 }
 
-// Increment and push a controller onto the stack
+// 層級深度加一，堆入控制器到堆疊裡
 - (void) pushController: (id) sender
 {
     NumberViewController *nvc = [NumberViewController controllerWithNumber:number + 1];
     [self.navigationController pushViewController:nvc animated:YES];
 }
 
-// Set up the text and title
+// 顯示視圖時，設定文字與標題
 - (void) viewDidAppear: (BOOL) animated
 {
     self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // match the title to the text view
+    // 將文字視圖的內容跟標題設定為一樣的文字
     self.title = self.textView.text; 
     self.textView.frame = self.view.frame;
     
-    // Add a right bar button that pushes a new view
+    // 加入右邊的列按鈕，負責推入新視圖
     if (number < 6)
         self.navigationItem.rightBarButtonItem = 
         BARBUTTON(@"Push", @selector(pushController:));
 }
 
+// 初始化時就建立文字視圖，而不是在載入視圖時
 - (id) init
 {
     if (!(self = [super init])) return self;
@@ -70,7 +71,6 @@
     textView = nil;
 }
 
-// Create the view
 - (void) loadView
 {
     [super loadView];
