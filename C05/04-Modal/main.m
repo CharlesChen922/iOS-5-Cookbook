@@ -26,19 +26,20 @@
 
 @implementation TestBedViewController
 
+// 呈現控制器
 - (void) action: (id) sender
 {
-    // Load info controller from storyboard
+    // 從storyboard載入控制器
     NSString *sourceName = IS_IPAD ? @"Modal~iPad" : @"Modal~iPhone";
     UIStoryboard *sb = [UIStoryboard storyboardWithName:sourceName bundle:[NSBundle mainBundle]];
     UINavigationController *navController = [sb instantiateViewControllerWithIdentifier:@"infoNavigationController"];
     
-    // Select the transition style
+    // 選擇過場效果
 	int styleSegment = [(UISegmentedControl *)self.navigationItem.titleView selectedSegmentIndex];
 	int transitionStyles[4] = {UIModalTransitionStyleCoverVertical, UIModalTransitionStyleCrossDissolve, UIModalTransitionStyleFlipHorizontal, UIModalTransitionStylePartialCurl};
 	navController.modalTransitionStyle = transitionStyles[styleSegment];
 	
-	// Select the presentation style for iPad only
+	// 選擇iPad才有的呈現風格
 	if (IS_IPAD)
 	{
 		int presentationSegment = [(UISegmentedControl *)[[self.view subviews] lastObject] selectedSegmentIndex];
@@ -46,7 +47,7 @@
         
 		if (navController.modalTransitionStyle == UIModalTransitionStylePartialCurl)
 		{
-			// Partial curl with any non-full screen presentation raises an exception
+			// 部分捲頁若搭配非全螢幕呈現，會引發例外
 			navController.modalPresentationStyle = UIModalPresentationFullScreen;
 			[(UISegmentedControl *)[[self.view subviews] lastObject] setSelectedSegmentIndex:0];
 		}
