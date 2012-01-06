@@ -77,7 +77,7 @@
 didEndCustomizingViewControllers:(NSArray *)viewControllers 
                  changed:(BOOL)changed
 {
-    // Collect the view controller order
+    // 收集視圖控制器的標題，決定順序
     NSMutableArray *titles = [NSMutableArray array];
     for (UIViewController *vc in viewControllers) 
         [titles addObject:vc.title];
@@ -89,7 +89,7 @@ didEndCustomizingViewControllers:(NSArray *)viewControllers
 - (void)tabBarController:(UITabBarController *)controller 
  didSelectViewController:(UIViewController *)viewController
 {
-    // Store the selected tab
+    // 記錄被點選的標簽
     NSNumber *tabNumber = [NSNumber numberWithInt:[controller selectedIndex]];
     [[NSUserDefaults standardUserDefaults] 
      setObject:tabNumber forKey:@"selectedTab"];
@@ -101,7 +101,7 @@ didEndCustomizingViewControllers:(NSArray *)viewControllers
     [application setStatusBarHidden:YES];
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    // Globally use a black tint for nav bars
+    // 全體使用黑色漸層為導覽列顏色
     [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
     
     NSMutableArray *controllers = [NSMutableArray array];
@@ -110,7 +110,7 @@ didEndCustomizingViewControllers:(NSArray *)viewControllers
     
     if (titles)
     {
-        // titles retrieved from user defaults
+        // 從使用者預設值系統取回標題
         for (NSString *theTitle in titles)
         {
             BrightnessController *controller = 
@@ -123,7 +123,7 @@ didEndCustomizingViewControllers:(NSArray *)viewControllers
     } 
     else 
     {
-        // generate all new controllers
+        // 建立所有視圖控制器
         for (int i = 0; i <= 10; i++) 
         {
             BrightnessController *controller = 
@@ -139,7 +139,7 @@ didEndCustomizingViewControllers:(NSArray *)viewControllers
     tabBarController.customizableViewControllers = controllers;
     tabBarController.delegate = self;
     
-    // Restore any previously selected tab
+    // 回復先前點選的標簽
     NSNumber *tabNumber = [[NSUserDefaults standardUserDefaults] objectForKey:@"selectedTab"];
     if (tabNumber)
         tabBarController.selectedIndex = [tabNumber intValue];    
