@@ -20,7 +20,7 @@
 
 -(void) segmentAction: (UISegmentedControl *) segmentedControl
 {
-    // Update the label with the segment number
+    // 以分段項目的編號，更新標籤
     NSString *segmentNumber = [NSString stringWithFormat:@"%0d", 
                                segmentedControl.selectedSegmentIndex + 1];
     [(UITextView *)self.view setText:segmentNumber];
@@ -31,13 +31,13 @@
     self.view.backgroundColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Create a central text view
+    // 建立文字視圖
     UITextView *textView = [[UITextView alloc] initWithFrame:self.view.frame];
     textView.font = [UIFont fontWithName:@"Futura" size:96.0f];
     textView.textAlignment = UITextAlignmentCenter;
     self.view = textView;
     
-    // Create the segmented control
+    // 建立分段控制項
     NSArray *buttonNames = [NSArray arrayWithObjects:
                             @"One", @"Two", @"Three", @"Four", @"Five", @"Six", nil];
     UISegmentedControl* segmentedControl = [[UISegmentedControl alloc] initWithItems:buttonNames];
@@ -46,7 +46,7 @@
     [segmentedControl addTarget:self action:@selector(segmentAction:) 
                forControlEvents:UIControlEventValueChanged];
     
-    // Add it to the navigation bar
+    // 把分段控制項置入導覽列
     self.navigationItem.titleView = segmentedControl;
 }
 
