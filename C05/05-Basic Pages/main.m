@@ -25,10 +25,10 @@
     if ((pageNumber < 0) || (pageNumber > 9)) return nil;
     float targetWhite = 0.9f - (pageNumber / 10.0f);
     
-    // Establish a new controller
+    // 建立新控制器
     UIViewController *controller = [BookController rotatableViewController];
     
-    // Draw a shaded swatch
+    // 將一塊區域上色
     CGRect appRect = [[UIScreen mainScreen] applicationFrame];
     UIGraphicsBeginImageContext(appRect.size);
     [[UIColor colorWithWhite:targetWhite alpha:1.0f] set];
@@ -41,12 +41,12 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    // Add it as an image
+    // 以圖像的身分加入
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [controller.view addSubview:imageView];
     
-    // Add a label
+    // 加入標籤
     UILabel *textLabel = [[UILabel alloc] initWithFrame:(CGRect){.size = CGSizeMake(200.0f, 40.0f)}];
     textLabel.text = [NSString stringWithFormat:@"%0.0f%% White", 100 * targetWhite];
     textLabel.font = [UIFont fontWithName:@"Futura" size:30.0f];
@@ -58,7 +58,7 @@
 
 - (void) viewDidLoad
 {
-    // Add the child controller, and set it to the first page
+    // 加入子控制器，設定成為第一頁
     [self.view addSubview:bookController.view];
     [self addChildViewController:bookController];
     [bookController didMoveToParentViewController:self];
@@ -69,13 +69,13 @@
 {
     [super loadView];
 
-    // Build the view
+    // 建立視圖
     CGRect appRect = [[UIScreen mainScreen] applicationFrame];
     self.view = [[UIView alloc] initWithFrame: appRect];
     self.view.backgroundColor = [UIColor whiteColor];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
-    // Establish the page view controller
+    // 建立頁面視圖控制器
     bookController = [BookController bookWithDelegate:self];
     bookController.view.frame = (CGRect){.size = appRect.size};
 }
