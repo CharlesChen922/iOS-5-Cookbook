@@ -63,6 +63,7 @@
     return vc;
 }
 
+// 滑桿的回呼方法，重置計時器，移到下一新頁面
 - (void) moveToPage: (UISlider *) theSlider
 {
     [hiderTimer invalidate];
@@ -70,6 +71,7 @@
     [bookController moveToPage:(int) theSlider.value];
 }
 
+// BookController的委派方法，更新滑桿的數值
 - (void) bookControllerDidTurnToPage: (NSNumber *) pageNumber
 {
     pageSlider.value = pageNumber.intValue;
@@ -79,7 +81,7 @@
 {
     [super viewDidLoad];
 
-    // Add page view controller as a child view, and do housekeeping
+    // 加入頁面視圖控制器，以及雜項處理
     [self addChildViewController:bookController];
     [self.view addSubview:bookController.view];
     [bookController didMoveToParentViewController:self];
@@ -88,7 +90,7 @@
     [self.view addSubview:pageSlider];
 }
 
-// Hide the slider after the timer fires
+// 計時器時限到了，隱藏滑桿
 - (void) hideSlider: (NSTimer *) aTimer
 {
     [UIView animateWithDuration:0.3f animations:^(void){
@@ -99,7 +101,7 @@
     hiderTimer = nil;
 }
 
-// Present the slider when tapped
+// 點擊時顯示滑桿
 - (void) handleTap: (UIGestureRecognizer *) recognizer
 {
     [UIView animateWithDuration:0.3f animations:^(void){
@@ -114,28 +116,28 @@
 {
     [super loadView];
     
-    // Create background view
+    // 建立背景視圖
     CGRect appRect = [[UIScreen mainScreen] applicationFrame];
     self.view = [[UIView alloc] initWithFrame: appRect];
     self.view.backgroundColor = [UIColor whiteColor];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
-    // Load colors and create first view controller
+    // 載入顏色值，建立第一個視圖控制器
     NSString *pathname = [[NSBundle mainBundle]  pathForResource:@"crayons" ofType:@"txt" inDirectory:@"/"];
 	rawColors = [[NSString stringWithContentsOfFile:pathname encoding:NSUTF8StringEncoding error:nil] 
                   componentsSeparatedByString:@"\n"];
     
-    // Establish the page view controller
+    // 建立頁面視圖控制器
     bookController = [BookController bookWithDelegate:self];
     bookController.view.frame = (CGRect){.size = appRect.size};
     
-    // Establish a slider
+    // 建立滑桿
     float minSize = MIN(appRect.size.width, appRect.size.height);
     float sliderHeight = IS_IPHONE ? 40.0f : 80.0f;
     pageSlider = [[UISlider alloc] initWithFrame:CGRectMake(0.0f, 0.0f, minSize, sliderHeight)];
     [pageSlider addTarget:self action:@selector(moveToPage:) forControlEvents:UIControlEventValueChanged];
 
-    pageSlider.alpha = 0.0f; // initially hidden
+    pageSlider.alpha = 0.0f; // 一開始處於隱藏狀態
     pageSlider.center = CGPointMake(self.view.center.x, sliderHeight / 2.0f);
     pageSlider.minimumValue = 0.0f;
     pageSlider.maximumValue = (float)(rawColors.count - 1);
@@ -145,6 +147,7 @@
     pageSlider.minimumTrackTintColor = [UIColor grayColor];
     pageSlider.maximumTrackTintColor = [UIColor blackColor];
     
+	// 設定點擊的行為，顯示被隱藏的滑桿
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     [self.view addGestureRecognizer:tap];
     
