@@ -16,6 +16,8 @@
 @end
 
 @implementation BrightnessController
+// 以標準Quartz函式與UIKit圖像方法，
+// 建立標簽圖示的色票
 - (UIImage*) buildSwatch: (int) aBrightness
 {
     CGRect rect = CGRectMake(0.0f, 0.0f, 30.0f, 30.0f);
@@ -31,6 +33,7 @@
     return image;
 }
 
+// 視圖控制器的背景顏色與標簽列項目圖示
 -(BrightnessController *) initWithBrightness: (int) aBrightness
 {
     self = [super init];
@@ -40,6 +43,7 @@
     return self;
 }
 
+// 背景著色
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -77,10 +81,10 @@
     [application setStatusBarHidden:YES];
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    // Globally use a black tint for nav bars
+    // 導覽列皆使用黑色
     [[UINavigationBar appearance] setTintColor:[UIColor blackColor]];
     
-    // Build an array of controllers
+    // 建立控制器陣列
     NSMutableArray *controllers = [NSMutableArray array];
     for (int i = 0; i <= 10; i++) 
     {
