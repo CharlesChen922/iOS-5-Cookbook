@@ -9,7 +9,7 @@
 #define COOKBOOK_PURPLE_COLOR	[UIColor colorWithRed:0.20392f green:0.19607f blue:0.61176f alpha:1.0f]
 #define BARBUTTON(TITLE, SELECTOR) 	[[UIBarButtonItem alloc] initWithTitle:TITLE style:UIBarButtonItemStylePlain target:self action:SELECTOR]
 
-// Return an exhaustive descent of the view's subviews
+// 回傳某視圖完整的子視圖清單
 NSArray *allSubviews(UIView *aView)
 {
 	NSArray *results = [aView subviews];
@@ -22,7 +22,7 @@ NSArray *allSubviews(UIView *aView)
 	return results;
 }
 
-// Return all views throughout the application
+// 回傳應用程式裡所有的視圖
 NSArray *allApplicationViews()
 {
     NSArray *results = [[UIApplication sharedApplication] windows];
@@ -35,7 +35,7 @@ NSArray *allApplicationViews()
     return results;
 }
 
-// Return an array of parent views from the window down to the view
+// 回傳含有所有父視圖的陣列，從視窗開始
 NSArray *pathToView(UIView *aView)
 {
     NSMutableArray *array = [NSMutableArray arrayWithObject:aView];
@@ -56,8 +56,7 @@ NSArray *pathToView(UIView *aView)
 
 - (void) collectViews: (id) sender
 {
-	// The two subviews of the main view are the image view backsplash
-	// and the single label that shows the selected number
+    // 主視圖裡兩個子視圖，圖像視圖當底圖，標籤顯示被點選的號碼
 	printf("Subviews of the main view:\n");
 	NSLog(@"%@", allSubviews(self.view));
 	
@@ -65,14 +64,14 @@ NSArray *pathToView(UIView *aView)
 	for (UIView *eachView in allSubviews(self.view))
 		NSLog(@"%@", pathToView(eachView));
 	
-	// More views than you could dream of! 
+	// 視圖數目，比你想的還要多！
 	printf("\nAll window subviews:\n");
 	NSLog(@"%@", allApplicationViews());
 }
 
 -(void) segmentAction: (UISegmentedControl *) sender
 {
-	// Update the label with the segment number
+	// 以分段控制項編號更新標籤
 	UILabel *label = (UILabel *)[self.view viewWithTag:101];
 	[label setText:[NSString stringWithFormat:@"%0d", sender.selectedSegmentIndex + 1]];
 }
@@ -85,7 +84,7 @@ NSArray *pathToView(UIView *aView)
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
 	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Test", @selector(collectViews:));
     
-    // Create the segmented control. Choose one of the three styles
+    // 建立分段控制項，三種風格選一個
 	NSArray *buttonNames = [NSArray arrayWithObjects:@"One", @"Two", @"Three", @"Four", @"Five", @"Six", nil];
 	UISegmentedControl* segmentedControl = [[UISegmentedControl alloc] initWithItems:buttonNames];
 	segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar; 
