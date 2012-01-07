@@ -38,6 +38,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 						 [self.view exchangeSubviewAtIndex:0 withSubviewAtIndex:1];
 					 }
 					 completion:^(BOOL done){
+                         // 視圖互換位置
                          UIImageView *tmp = frontObject;
                          frontObject = backObject;
                          backObject = tmp;
@@ -53,13 +54,13 @@ CGPoint CGRectGetCenter(CGRect rect)
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
 	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Swap", @selector(swap:));
     
-    // Create the back object, shrink and hide
+    // 建立後面的物件，縮小並隱藏
 	backObject = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BFlyCircle.png"]];
 	backObject.transform = CGAffineTransformMakeScale(0.25f, 0.25f);
 	backObject.alpha = 0.0f;
 	[self.view addSubview:backObject];
 	
-	// Create the front object
+	// 建立前面的物件
 	frontObject = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BFlyCircleMaroon.png"]];
 	[self.view addSubview:frontObject];
 }
