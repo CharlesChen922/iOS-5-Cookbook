@@ -7,8 +7,8 @@
 #import "UIView-SubviewGeometry.h"
 static BOOL seeded = NO;
 
-// This is a private version of the function that appears in my UIView Frame category
-// It's included here as a private function to avoid requiring the other file
+// 這是個私用函式，出現在我的UIView Frame類目
+// 我抄過來放在這裡，就不用匯入其他檔案
 CGRect rectWithCenter(CGRect rect, CGPoint center)
 {
 	CGRect newrect = CGRectZero;
@@ -38,14 +38,14 @@ CGRect rectWithCenter(CGRect rect, CGPoint center)
 }
 
 #pragma mark Percent Displacement
-// Move view into place as a percentage-based displacement
+// 以百分比例指定位置，移動視圖
 - (CGPoint) centerInView: (UIView *) aView withHorizontalPercent: (float) h withVerticalPercent: (float) v
 {
-	// Move in by the inset amount and then by size of the subview
+	// 以insets縮窄視圖的UIEdgeInset，再以子視圖的大小縮窄
 	CGRect baseRect = aView.bounds;
 	CGRect subRect = CGRectInset(baseRect, self.frame.size.width / 2.0f, self.frame.size.height / 2.0f);
 	
-	// Return a point that is h% horizontal and v% vertical
+	// 回傳點座標，水平方向為h%，垂直方向為v%
 	float px = (float)(h * subRect.size.width);
 	float py = (float)(v * subRect.size.height);
 	return CGPointMake(px + subRect.origin.x, py + subRect.origin.y);
@@ -57,17 +57,17 @@ CGRect rectWithCenter(CGRect rect, CGPoint center)
 }
 
 #pragma mark Random
-// Thanks to August Joki and manitoba98
+// 感謝August Joki與manitoba98
 - (CGPoint) randomCenterInView: (UIView *) aView withInsets: (UIEdgeInsets) insets
 {
-    // random seeding
+    // 以目前時間當亂數種子
     if (!seeded) {seeded = YES; srandom(time(NULL));}
     
-	// Move in by the inset amount and then by size of the subview
+	// 以insets縮窄視圖的UIEdgeInset，再以子視圖的大小縮窄
 	CGRect innerRect = UIEdgeInsetsInsetRect([aView bounds], insets);
 	CGRect subRect = CGRectInset(innerRect, self.frame.size.width / 2.0f, self.frame.size.height / 2.0f);
 	
-	// Return a random point
+	// 亂數回傳一個點座標
 	float rx = (float)(random() % (int)floor(subRect.size.width));
 	float ry = (float)(random() % (int)floor(subRect.size.height));
 	return CGPointMake(rx + subRect.origin.x, ry + subRect.origin.y);
