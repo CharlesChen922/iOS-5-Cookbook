@@ -33,7 +33,7 @@ CGRect CGRectCenteredInRect(CGRect rect, CGRect mainRect)
 
 @implementation UIView (ViewGeometry)
 
-// Retrieve and set the origin
+// 取回原點、設定原點
 - (CGPoint) origin
 {
     return self.frame.origin;
@@ -47,7 +47,7 @@ CGRect CGRectCenteredInRect(CGRect rect, CGRect mainRect)
 }
 
 
-// Retrieve and set the size
+// 取回大小、設定大小
 - (CGSize) size
 {
     return self.frame.size;
@@ -60,14 +60,16 @@ CGRect CGRectCenteredInRect(CGRect rect, CGRect mainRect)
     self.frame = newframe;
 }
 
+// 查詢其他與frame相關的位置座標
 - (CGPoint) midpoint
 {
+    // midpoint中點，對應於視圖本身的座標系統
+    // center中心點，對應於父視圖的座標系統
     CGFloat x = CGRectGetMidX(self.bounds);
     CGFloat y = CGRectGetMidY(self.bounds);
     return CGPointMake(x, y);
 }
 
-// Query other frame locations
 - (CGPoint) bottomRight
 {
     CGFloat x = self.frame.origin.x + self.frame.size.width;
@@ -90,7 +92,7 @@ CGRect CGRectCenteredInRect(CGRect rect, CGRect mainRect)
 }
 
 
-// Retrieve and set height, width, top, bottom, left, right
+// 取回與設定高度、寬度、top、bottom、left、right
 - (CGFloat) height
 {
     return self.frame.size.height;
@@ -164,7 +166,7 @@ CGRect CGRectCenteredInRect(CGRect rect, CGRect mainRect)
     self.frame = newframe;
 }
 
-// Move via offset
+// 以位移值移動
 - (void) moveBy: (CGPoint) delta
 {
     CGPoint newcenter = self.center;
@@ -173,7 +175,7 @@ CGRect CGRectCenteredInRect(CGRect rect, CGRect mainRect)
     self.center = newcenter;
 }
 
-// Scaling
+// 縮放
 - (void) scaleBy: (CGFloat) scaleFactor
 {
     CGRect newframe = self.frame;
@@ -182,7 +184,7 @@ CGRect CGRectCenteredInRect(CGRect rect, CGRect mainRect)
     self.frame = newframe;
 }
 
-// Ensure that both dimensions fit within the given size by scaling down
+// 確保在垂直與水平兩個方向，都不會超過aSize指定的大小
 - (void) fitInSize: (CGSize) aSize
 {
     CGFloat scale;

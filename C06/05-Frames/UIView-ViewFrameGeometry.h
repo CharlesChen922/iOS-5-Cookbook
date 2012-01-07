@@ -17,6 +17,7 @@ CGRect CGRectCenteredInRect(CGRect rect, CGRect mainRect);
 
 @property (readonly) CGPoint midpoint;
 
+// 左上角就是原點，所以就不包含它了
 @property (readonly) CGPoint bottomLeft;
 @property (readonly) CGPoint bottomRight;
 @property (readonly) CGPoint topRight;

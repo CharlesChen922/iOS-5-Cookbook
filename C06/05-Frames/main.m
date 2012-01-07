@@ -63,7 +63,7 @@
     
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
 
-    // Create movement buttons
+    // 建立分段控制項，按下會移動底下的視圖
 	NSArray *buttonNames = [@"Top Bottom Center Left Right" componentsSeparatedByString:@" "];
 	segmentedControl = [[UISegmentedControl alloc] initWithItems:buttonNames];
 	segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar; 
