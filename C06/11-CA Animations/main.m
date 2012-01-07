@@ -20,7 +20,7 @@
 
 - (void) animate: (id) sender
 {
-	// Set up the animation
+	// 設定
 	CATransition *animation = [CATransition animation];
 	animation.delegate = self;
 	animation.duration = 1.0f;
@@ -44,19 +44,19 @@
 	}
 	animation.subtype = kCATransitionFromBottom;
 	
-	// Perform the animation
+	// 執行動畫
 	[self.view exchangeSubviewAtIndex:0 withSubviewAtIndex:1];
 	[self.view.layer addAnimation:animation forKey:@"animation"];
 }
 
 - (void) viewDidAppear: (BOOL) animated
 {
-	// Create the back object
+	// 建立後面的物件
 	UIImageView *backObject = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BFlyCircle.png"]] autorelease];
 	backObject.center = self.view.center;
 	[self.view addSubview:backObject];
 	
-	// Create the front object
+	// 建立前面的物件
 	UIImageView *frontObject = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"BFlyCircleMaroon.png"]] autorelease];
 	frontObject.center = self.view.center;
 	[self.view addSubview:frontObject];
@@ -64,7 +64,7 @@
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
 	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Go", @selector(animate:));
 	
-	// Add a segmented control to select the animation
+	// 加入分段控制項，選擇動畫效果種類
 	UISegmentedControl *sc = [[UISegmentedControl alloc] initWithItems:[@"Fade Over Push Reveal" componentsSeparatedByString:@" "]];
 	sc.segmentedControlStyle = UISegmentedControlStyleBar;
 	sc. selectedSegmentIndex = 0;
