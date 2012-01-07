@@ -30,6 +30,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 	self.navigationItem.rightBarButtonItem.enabled = NO;
 	[UIView animateWithDuration:1.0f
 					 animations:^{
+						 // 這裡是實際發生淡出效果的地方
 						 imageView.alpha = 0.0f;
 					 }
 					 completion:^(BOOL done){
@@ -44,6 +45,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 	self.navigationItem.rightBarButtonItem.enabled = NO;
 	[UIView animateWithDuration:1.0f
 					 animations:^{
+						 // 這裡是實際發生淡入效果的地方
 						 imageView.alpha = 1.0f;
 					 }
 					 completion:^(BOOL done){
