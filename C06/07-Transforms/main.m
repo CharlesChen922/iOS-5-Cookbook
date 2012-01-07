@@ -30,22 +30,22 @@ CGPoint CGRectGetCenter(CGRect rect)
 
 - (void) move: (NSTimer *) aTimer
 {
-	// Rotate each iteration by 1% of PI
+	// 每次旋轉1%的PI圓周率
     CGFloat angle = theta * (M_PI / 100.0f);
     CGAffineTransform transform = CGAffineTransformMakeRotation(angle);
     
-	// Theta ranges between 0% and 199% of PI, i.e. between 0 and 2*PI
+	// theta範圍是0%到199%的圓周率，也就是0到2*PI
 	theta = (theta + 1) % 200;
 	
-    // For fun, scale by the absolute value of the cosine
+    // 為了讓畫面有趣一點，以cosine的絕對值進行縮放
     float degree = cos(angle);
     if (degree < 0.0) degree *= -1.0f;
     degree += 0.5f;
 	
-	// Create add scaling to the rotation transform
+	// 縮放與旋轉結合在一起
     CGAffineTransform scaled = CGAffineTransformScale(transform, degree, degree);
 	
-    // Apply the affine transform
+    // 套用仿射幾何轉換
     if(imageView)
 		[imageView setTransform:scaled];
 }
