@@ -31,14 +31,17 @@
     self.view.backgroundColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Load butterfly images
+    // 載入蝴蝶圖檔
 	NSMutableArray *bflies = [NSMutableArray array];
 	for (int i = 1; i <= 17; i++)
 		[bflies addObject:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"bf_%d", i] ofType:@"png"]]];
 
+    // 建立視圖
     butterflyView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 60.0f, 60.0f)]; 
+	// 設定動畫元素，持續時間
 	butterflyView.animationImages = bflies;
 	butterflyView.animationDuration = 0.75f;
+	// 將視圖加入父視圖
 	[self.view addSubview:butterflyView];
 	[butterflyView startAnimating];
     
