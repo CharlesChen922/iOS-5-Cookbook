@@ -20,14 +20,14 @@
 
 - (void) updateSwitch:(id)sender 
 {
-	// toggle the switch from its current setting
+	// 切換開關狀態
 	UISwitch *s = [self.view.window switchNamed:@"my switch"];
 	[s setOn:!s.isOn];
 }
 
 - (void) updateTime:(id)sender 
 {
-	// set the label to the current time
+	// 設定標籤的文字為目前時間
 	[self.view.window labelNamed:@"my label"].text = [[NSDate date] description];
 }
 
@@ -59,7 +59,7 @@
 
 - (void) dealloc
 {
-    // Uncomment for associated names
+    // 若要使用關聯式名稱的作法，請拿掉註解。
     [self.view viewWithTag:LABEL_TAG].nametag = nil;
     [self.view viewWithTag:SWITCH_TAG].nametag = nil;
 }

@@ -8,15 +8,15 @@
 
 @interface UIView (NameExtensions)
 
-// Associated Object
+// 關聯式物件
 @property (nonatomic, strong) NSString *nametag;
 - (UIView *) viewWithNametag: (NSString *) aName;
 
-// Regular Dictionary
+// 一般的字典
 - (NSInteger) registerName: (NSString *) aName;
 - (BOOL) unregisterName: (NSString *) aName;
 
-// Typed Access
+// 有型別的存取方法
 - (UIView *) viewNamed: (NSString *) aName;
 - (UIAlertView *) alertViewNamed: (NSString *) aName;
 - (UIActionSheet *) actionSheetNamed: (NSString *) aName;

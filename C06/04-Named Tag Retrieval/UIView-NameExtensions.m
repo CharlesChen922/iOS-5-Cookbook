@@ -31,19 +31,19 @@ static ViewIndexer *sharedInstance = nil;
 }
 
 #pragma mark registration
-// Pull a new number and increase the count
+// 取得新數字並增加計數值
 - (NSInteger) pullNumber
 {
 	return count++;
 }
 
-// Check to see if name exists in dictionary
+// 檢查名稱是否已經存在於字典裡
 - (BOOL) nameExists: (NSString *) aName
 {
 	return [tagdict objectForKey:aName] != nil;
 }
 
-// Pull out first matching name for tag
+// 抓出第一個與標號配對成功的名稱
 - (NSString *) nameForTag: (NSInteger) aTag
 {
 	NSNumber *tag = [NSNumber numberWithInt:aTag];
@@ -53,7 +53,7 @@ static ViewIndexer *sharedInstance = nil;
 	return [names objectAtIndex:0];
 }
 
-// Return the tag for a registered name. 0 if not found
+// 回傳已註冊名稱的標號，若無回傳0
 - (NSInteger) tagForName: (NSString *)aName
 {
 	NSNumber *tag = [tagdict objectForKey:aName];
@@ -61,15 +61,15 @@ static ViewIndexer *sharedInstance = nil;
 	return [tag intValue];
 }
 
-// Unregistering reverts tag to 0
+// 取消註冊，標號設回0
 - (BOOL) unregisterName: (NSString *) aName forView: (UIView *) aView
 {
 	NSNumber *tag = [tagdict objectForKey:aName];
 	
-	// tag not found
+	// 沒找到標號
 	if (!tag) return NO;
 	
-	// tag does not match registered name
+	// 標號無法與已註冊名稱配對成功
 	if (aView.tag != [tag intValue]) return NO;
 	
 	aView.tag = 0;
@@ -77,18 +77,18 @@ static ViewIndexer *sharedInstance = nil;
 	return YES;
 }
 
-// Register a new name. Names will not re-register (unregister first, please).
-// If a view is already registered, it is unregistered and re-registered
+// 註冊新名稱，名稱不能再次註冊。（請先取消註冊。）
+// 如果視圖已經註冊過，它會被取消註冊，然後重新註冊。
 - (NSInteger) registerName:(NSString *)aName forView: (UIView *) aView
 {
-	// You cannot re-register an existing name
+	// 你不能再次註冊已經存在的名稱
 	if ([[ViewIndexer sharedInstance] nameExists:aName]) return 0;
 	
-	// Check to see if the view is named already. If so, unregister.
+	// 檢查視圖否已經有名稱了，若是，取消註冊。
 	NSString *currentName = [self nameForTag:aView.tag];
 	if (currentName) [self unregisterName:currentName forView:aView];
 	
-	// Register the existing tag or pull a new tag if aView.tag is 0
+	// 若有標號，進行註冊。若aView.tag為0，先抓出一個新標號。
 	if (!aView.tag) aView.tag = [[ViewIndexer sharedInstance] pullNumber];
 	[tagdict setObject:[NSNumber numberWithInt:aView.tag] forKey:aName];
 	return aView.tag;
@@ -129,18 +129,18 @@ static const char *NametagKey = "Nametag Key";
 {
     if (!aName) return nil;
     
-    // Is this the right view?
+    // 這是正確的視圖嗎？
     if ([self.nametag isEqualToString:aName])
         return self;
     
-    // Recurse depth first on subviews
+    // 遞迴式、深度優先
     for (UIView *subview in self.subviews) 
     {
         UIView *resultView = [subview viewNamed:aName];
         if (resultView) return resultView;
     }
     
-    // Not found
+    // 沒找到
     return nil;
 }
 
@@ -161,13 +161,13 @@ static const char *NametagKey = "Nametag Key";
 {
     if (!aName) return nil;
     
-    // Uncomment for Registered Names
+    // 若要使用註冊名稱的作法，請拿掉註解。
     /*
 	NSInteger tag = [[ViewIndexer sharedInstance] tagForName:aName];
 	return [self viewWithTag:tag];
      */
     
-    // Uncomment for Associated Names
+    // 若要使用關聯式名稱的作法，請拿掉註解。
     return [self viewWithNametag:aName];
 }
 
