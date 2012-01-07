@@ -20,27 +20,27 @@
     UIViewController *source = (UIViewController *) super.sourceViewController;
     UIViewController *dest = (UIViewController *) super.destinationViewController;
 
-    // Move out by half of the parent's width
+    // 根據父視圖寬度的一半，移出去
     UIView *backsplash = source.view.superview;
     float endLoc = (goesForward ? 1.0f : -1.0f) * backsplash.frame.size.width;
 
-    // Move into the backsplash
+    // 移進底圖
     dest.view.frame = backsplash.bounds;
     dest.view.alpha = 0.0f;
     
-    // Reverse the transform for the destination's start
+    // 反轉幾何轉換，給目的地視圖用的
     CGAffineTransform transform = CGAffineTransformMakeTranslation(-endLoc, 0.0f);
     transform = CGAffineTransformScale(transform, 0.1f, 0.1f);
     dest.view.transform = transform;
     
     [UIView animateWithDuration:0.6f animations:^(void)
      {
-         // Move the destination view into place
+         // 把目的地視圖放進來
          [backsplash addSubview:dest.view];
          dest.view.alpha = 1.0f;
          dest.view.transform = CGAffineTransformIdentity;
          
-         // Spin out the source view and hide it
+         // 移出來源視圖，並隱藏
          CGAffineTransform transform = CGAffineTransformMakeTranslation(endLoc, 0.0f);
          transform = CGAffineTransformScale(transform, 0.1f, 0.1f);
          source.view.alpha = 0.0f;
@@ -48,12 +48,12 @@
 
      } completion: ^(BOOL done)
      {
-         // Remove and restore the source view
+         // 移除、復原來源視圖
          [source.view removeFromSuperview];
          source.view.alpha = 1.0f;
          source.view.transform = CGAffineTransformIdentity;
 
-         // Update the delegate
+         // 更新委派
          if (delegate)
              SAFE_PERFORM_WITH_ARG(delegate, @selector(segueDidComplete), nil);
      }];

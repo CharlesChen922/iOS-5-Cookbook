@@ -25,23 +25,23 @@
 
 @implementation TestBedViewController
 
-// Informal delegate method re-enables bar buttons
+// 非正式委派方法，再次啟用列按鈕
 - (void) segueDidComplete
 {
     item.rightBarButtonItem.enabled = YES;
     item.leftBarButtonItem.enabled = YES;
 }
 
-// Transition to new view using custom segue
+// 使用客製的串場，以過場效果切換到新視圖
 - (void) switchToView: (int) newIndex goingForward: (BOOL) goesForward
 {
     if (vcIndex == newIndex) return;
     
-    // Prepare for segue by disabling bar buttons
+    // 關閉列按鈕，準備串場
     item.rightBarButtonItem.enabled = NO;
     item.leftBarButtonItem.enabled = NO;    
     
-    // Segue to the new controller
+    // 連接新控制器的串場
     UIViewController *source = [childControllers objectAtIndex:vcIndex];
     UIViewController *destination = [childControllers objectAtIndex:newIndex];
     RotatingSegue *segue = [[RotatingSegue alloc] initWithIdentifier:@"segue" source:source destination:destination];  
@@ -52,14 +52,14 @@
     vcIndex = newIndex;
 }
 
-// Go forward
+// 往前
 - (void) progress: (id) sender
 {
     int newIndex = ((vcIndex + 1) % childControllers.count);  
     [self switchToView:newIndex goingForward:YES];
 }
 
-// Go backwards
+// 往後
 - (void) regress: (id) sender
 {
     int newIndex = vcIndex - 1;
@@ -67,15 +67,15 @@
     [self switchToView:newIndex goingForward:NO];
 }
 
-// Establish core interface
+// 建立主介面
 - (void) viewDidLoad
 {
-    // Create a basic background.
+    // 建立基本的背景
     self.view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self.view.backgroundColor = [UIColor blackColor];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
-    // Create backsplash for animation support
+    // 建立底圖、供動畫使用
     backsplash = [[ReflectingView alloc] initWithFrame:CGRectInset(self.view.frame, 100.0f, 150.0f)];
     backsplash.usesGradientOverlay = YES;
     backsplash.frame = CGRectOffset(backsplash.frame, 0.0f, -80.0f);
@@ -84,7 +84,7 @@
     [backsplash setupReflection];
     // [self setupGradient];
     
-    // Load child array from storyboard
+    // 從storyboard載入子視圖控制器陣列
     UIStoryboard *aStoryboard = [UIStoryboard storyboardWithName:@"child" bundle:[NSBundle mainBundle]];
     childControllers = [NSArray arrayWithObjects:
                         [aStoryboard instantiateViewControllerWithIdentifier:@"0"],
@@ -92,7 +92,7 @@
                         [aStoryboard instantiateViewControllerWithIdentifier:@"2"],
                         nil];
 
-    // Set each child as a child view controller, setting its tag and frame
+    // 設定標號與frame
     for (UIViewController *controller in childControllers)
     {
         controller.view.tag = 1066;
@@ -100,17 +100,17 @@
         [self addChildViewController:controller];
     }
 
-    // Initialize scene with first child controller
+    // 以第一子控制器初始化場景
     vcIndex = 0;
     UIViewController *controller = (UIViewController *)[childControllers objectAtIndex:0];
     [backsplash addSubview:controller.view];
 
-    // Create Navigation Item for custom bar
+    // 建立導覽項目
     item = [[UINavigationItem alloc] initWithTitle:@"Custom Container"];
     item.leftBarButtonItem = BARBUTTON(@"\u25C0 Back", @selector(regress:));
     item.rightBarButtonItem = BARBUTTON(@"Forward \u25B6", @selector(progress:));
 
-    // Create and add custom Navigation Bar
+    // 建立、加入客製導覽列
     bar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 44.0f)];
     bar.tintColor = COOKBOOK_PURPLE_COLOR;
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
