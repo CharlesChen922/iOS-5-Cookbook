@@ -15,11 +15,11 @@
 @implementation TestBedViewController
 /*
  
- DISPLAY A RECURSIVE VIEW HIERARCHY TREE
+ 遞迴式印出視圖層級樹狀結構
  
  */
 
-// Recursively travel down the view tree, increasing the indentation level for children
+// 遞迴式往下探索視圖樹，每往下一層就增加縮排深度
 - (void) dumpView: (UIView *) aView atIndent: (int) indent into:(NSMutableString *) outstring
 {
 	for (int i = 0; i < indent; i++) [outstring appendString:@"--"];
@@ -27,7 +27,7 @@
 	for (UIView *view in [aView subviews]) [self dumpView:view atIndent:indent + 1 into:outstring];
 }
 
-// Start the tree recursion at level 0 with the root view
+// 從根視圖以層級0開始，遞迴探索樹狀結構
 - (NSString *) displayViews: (UIView *) aView
 {
 	NSMutableString *outstring = [[NSMutableString alloc] init];
@@ -35,7 +35,7 @@
 	return outstring;
 }
 
-// Show the tree
+// 輸出
 - (void) displayViews
 {
 	NSLog(@"%@", [self displayViews: self.view.window]);
@@ -43,11 +43,10 @@
 
 /*
  
- The following methods are hard-coded to produce the two-item list to match the view 
- hierarchy example in the Views chapter.
+ 底下寫死方法實作，生出書中範例的視圖層級，有兩個項目的列表。
  
- This application is basically non-functional, meant only to show view hierarchies.
- 
+ 本程式碼純粹為了示範視圖層級，這支應用程式沒什麼功能。
+
  */
 
 #define DATA_ARRAY	[NSArray arrayWithObjects:@"Pick Up Milk", @"Call Anna", nil]
