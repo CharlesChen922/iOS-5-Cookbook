@@ -19,14 +19,14 @@
 
 - (void) updateSwitch:(id)sender 
 {
-	// toggle the switch from its current setting
+	// 切換開關狀態
 	UISwitch *s = [self.view.window switchWithTag:SWITCH_TAG];
 	[s setOn:!s.isOn];
 }
 
 - (void) updateTime:(id)sender 
 {
-	// set the label to the current time
+	// 設定標籤的文字為目前時間
 	[self.view.window labelWithTag:LABEL_TAG].text = [[NSDate date] description];
 }
 
