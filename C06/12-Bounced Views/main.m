@@ -32,7 +32,7 @@ typedef void (^CompletionBlock)(BOOL finished);
 {
 	self.navigationItem.rightBarButtonItem.enabled = NO;
     
-    // Define the three stages of the animation in forward order
+    // 以正順序定義動畫的三個階段
     AnimationBlock makeSmall = ^(void){
         bounceView.transform = CGAffineTransformMakeScale(0.01f, 0.01f);};
     AnimationBlock makeLarge = ^(void){
@@ -40,7 +40,7 @@ typedef void (^CompletionBlock)(BOOL finished);
     AnimationBlock restoreToOriginal = ^(void) {
         bounceView.transform = CGAffineTransformIdentity;};
     
-    // Create the three completion links in reverse order
+    // 以反順序建立三個completion block
     CompletionBlock reenable = ^(BOOL finished) {
         self.navigationItem.rightBarButtonItem = BARBUTTON(@"Start", @selector(bounce:));};
     CompletionBlock shrinkBack = ^(BOOL finished) {
@@ -48,7 +48,7 @@ typedef void (^CompletionBlock)(BOOL finished);
     CompletionBlock bounceLarge = ^(BOOL finished){
         [UIView animateWithDuration:0.2 animations:makeLarge completion:shrinkBack];};
 
-    // Start the animation
+    // 開始動畫
     [UIView animateWithDuration: 0.5f animations:makeSmall completion:bounceLarge];	
 }
 
