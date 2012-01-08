@@ -18,7 +18,7 @@
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-    // Specify which view responds to zoom events
+    // 指定誰要被縮放
     return imageView;
 }
 
@@ -48,31 +48,36 @@
     
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
+    // 建立捲動視圖
     scrollView = [[UIScrollView alloc] init];
     scrollView.delegate = self;
     scrollView.maximumZoomScale = 4.0f;
     RESIZABLE(scrollView);
     [self.view addSubview:scrollView];
     
+    // 建立內嵌的圖像視圖
     imageView = [[UIImageView alloc] init];
     imageView.contentMode = UIViewContentModeCenter;
     [scrollView addSubview:imageView];
     
+    // 使用操作佇列以非同步方式載入資料
     NSString *map = @"http://maps.weather.com/images/maps/current/curwx_720x486.jpg";
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     [queue addOperationWithBlock:
      ^{
-         // Load the weather data
+         // 載入氣象資料
          NSURL *weatherURL = [NSURL URLWithString:map];
          NSData *imageData = [NSData dataWithContentsOfURL:weatherURL];
          
-         // Update the image on the main thread using the main queue
+         // 使用主佇列在主緒程裡更新圖像
          [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+             // 下載圖像資料，設定圖像
              UIImage *weatherImage = [UIImage imageWithData:imageData];
              imageView.userInteractionEnabled = YES;
              imageView.image = weatherImage;
              imageView.frame = (CGRect){.size = weatherImage.size};
              
+             // 更動捲動視圖的縮放比
              float scalex = scrollView.frame.size.width / weatherImage.size.width;
              float scaley = scrollView.frame.size.height / weatherImage.size.height;
              scrollView.zoomScale = MIN(scalex, scaley);
