@@ -18,13 +18,13 @@
 
 @implementation TestBedViewController
 
-// Switch between cameras
+// 切換相機
 - (void) switch: (id) sender
 {
     [helper switchCameras];
 }
 
-// Start or Pause
+// 開始或暫停
 - (void) toggle: (id) sender
 {
     if (helper.session.isRunning)
@@ -57,14 +57,14 @@
     
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Switch between cameras
+    // 切換相機
     if ([CameraImageHelper numberOfCameras] > 1)
         self.navigationItem.leftBarButtonItem = BARBUTTON(@"Switch", @selector(switch:));
     
-    // Start or Pause
+    // 開始或暫停
     self.navigationItem.rightBarButtonItem = BARBUTTON(@"Pause", @selector(toggle:));
     
-    // The image view holds the live preview
+    // 圖像視圖含有即時預覽畫面
     imageView = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     imageView.contentMode = UIViewContentModeCenter;
     RESIZABLE(imageView);
