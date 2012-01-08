@@ -8,8 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-// There's a bug when creating CI Images from PNG vs JPEG
-// This is a workaround
+// 解決從PNG格式建立CI Image JPEG格式的臭蟲
 CIImage *ciImageFromPNG(NSString *pngFileName);
 
 // RGBA offsets
@@ -23,7 +22,7 @@ UIImage *imageFromView(UIView *theView);
 UIImage *screenShot();
 
 @interface UIImage (Utilities)
-// Extract a subimage
+// 取出圖像裡的一部分
 - (UIImage *) subImageWithBounds:(CGRect) rect;
 
 // Thumbnails
@@ -37,7 +36,7 @@ UIImage *screenShot();
 // Perform a basic Canny detection
 - (UIImage *) convolveImageWithEdgeDetection;
 
-// This is a bug workaround for creating a UIImage from a CIImage
+// 從CIImage建立UIImage，這是個暫時解法
 + (UIImage *) imageWithCIImage: (CIImage *) aCIImage orientation: (UIImageOrientation) anOrientation;
 
 // Create an image from a bitmap

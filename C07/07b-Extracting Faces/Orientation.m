@@ -109,7 +109,7 @@ UIImageOrientation currentImageOrientationWithMirroring(BOOL isUsingFrontCamera)
     }
 }
 
-// Expected Image orientation from current orientation and camera in use
+// 從目前的擺設方向與使用的相機，得出UIImageOrientation
 UIImageOrientation currentImageOrientation(BOOL isUsingFrontCamera, BOOL shouldMirrorFlip)
 {
     if (shouldMirrorFlip) 
@@ -135,15 +135,15 @@ uint currentEXIFOrientation(BOOL isUsingFrontCamera, BOOL shouldMirrorFlip)
     return exifOrientationFromUIOrientation(currentImageOrientation(isUsingFrontCamera, shouldMirrorFlip));
 }
 
-// Does not take camera into account for both portrait orientations
-// This is likely due to an ongoing bug
+// 在兩個直擺擺設方向時，沒有將照機考慮進去
+// 這應該是個臭蟲
 uint detectorEXIF(BOOL isUsingFrontCamera, BOOL shouldMirrorFlip)
 {
     if (isUsingFrontCamera || deviceIsLandscape())
         return currentEXIFOrientation(isUsingFrontCamera, shouldMirrorFlip);
     
-    // Only back camera portrait  or upside down here. This bugs me a lot.
-    // Detection happens but the geometry is messed.
+    // 這裡只有後方相機直擺或上下顛倒的情況
+	// 可以進行辨識，但幾何位置一團糟
     int orientation = currentEXIFOrientation(!isUsingFrontCamera, shouldMirrorFlip);
     return orientation;
 }

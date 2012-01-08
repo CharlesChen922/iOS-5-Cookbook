@@ -7,15 +7,14 @@
 
 #import <UIKit/UIKit.h>
 
-// There's a bug when creating CI Images from PNG vs JPEG
-// This is a workaround
+// 解決從PNG格式建立CI Image JPEG格式的臭蟲
 CIImage *ciImageFromPNG(NSString *pngFileName);
 
 @interface UIImage (Utilities)
 
-// Extract a subimage
+// 取出圖像裡的一部分
 - (UIImage *) subImageWithBounds:(CGRect) rect;
 
-// This is a bug workaround for creating a UIImage from a CIImage
+// 從CIImage建立UIImage，這是個暫時解法
 + (UIImage *) imageWithCIImage: (CIImage *) aCIImage orientation: (UIImageOrientation) anOrientation;
 @end

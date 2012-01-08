@@ -8,7 +8,7 @@
 
 /*
  
- HOME BUTTON CAMERA  OUTPUT  UNMIRRORED       MIRRORED         ORIENTATION
+ HOME鍵      相機     輸出    無鏡射            鏡射             擺設方向
  Bottom      Front   Right   Left Mirrored    Right            Portrait
  Right       Front   Down    Down Mirrored    Down             LandscapeLeft
  Top         Front   Left    Right Mirrored   Left             PortraitUpsideDown
@@ -19,7 +19,7 @@
  Top         Back    Left    Left             Right Mirrored   PortraitUpsideDown
  Left        Back    Down    Down             Down Mirrored    LandscapeRight
  
- AVAILABLE ORIENTATIONS: EXIF and UIImageOrientation
+ 可用的擺設方向：EXIF 與 UIImageOrientation
  
  topleft toprt   botrt  botleft   leftop      righttop     rightbot   leftbot
  EXIF 1    2       3      4         5            6           7          8
@@ -35,7 +35,7 @@
  
  
  
- MAPPINGS BETWEEN ORIENTATIONS:
+ 擺設方向的對應關係：
  
  {1, 3, 6, 8, 2, 4, 5, 7};  EXIF
  {0  1  2  3  4  5  6  7}   UIIMG
@@ -45,7 +45,7 @@
 
  */
 
-// EXIF ORIENTATIONS
+// EXIF擺設方向（EXIF ORIENTATIONS）
 typedef enum {
     kTopLeft			= 1, // UIImageOrientationUp,           (0,0) at top left
     kTopRight           = 2, // UIImageOrientationUpMirrored,   (0,0) at top right
@@ -59,41 +59,41 @@ typedef enum {
 
 /*
  
- UIIMAGE ORIENTATIONS
+ UIImage擺設方向（UIIMAGE ORIENTATIONS）
  
  typedef enum {
- UIImageOrientationUp =            0, // 0 deg rotation exif 1
- UIImageOrientationDown =          1, // 180 deg rotation exif 3
- UIImageOrientationLeft =          2, // 90 deg CCW exif 6
- UIImageOrientationRight =         3, // 90 deg CW exif 8
- UIImageOrientationUpMirrored =    4, // horizontal flip exif 2
- UIImageOrientationDownMirrored =  5, // horizontal flip exif 4
- UIImageOrientationLeftMirrored =  6, // vertical flip exif 5
- UIImageOrientationRightMirrored = 7, // vertical flip exif 7
+ UIImageOrientationUp =            0, // 旋轉0度 exif 1
+ UIImageOrientationDown =          1, // 旋轉180度 exif 3
+ UIImageOrientationLeft =          2, // 逆時鐘旋轉90度 exif 6
+ UIImageOrientationRight =         3, // 順時鐘旋轉90度 exif 8
+ UIImageOrientationUpMirrored =    4, // 水平翻轉 exif 2
+ UIImageOrientationDownMirrored =  5, // 水平翻轉 exif 4
+ UIImageOrientationLeftMirrored =  6, // 重直翻轉 exif 5
+ UIImageOrientationRightMirrored = 7, // 垂直翻轉 exif 7
  } UIImageOrientation;
  */
 
 /*
  
- DEVICE ORIENTATIONS
+ 裝置擺設方向（DEVICE ORIENTATIONS）
  
  UIDeviceOrientationUnknown
-     The orientation of the device cannot be determined.
+     無法判別裝置擺設方向
  UIDeviceOrientationPortrait
-     The device is in portrait mode, with the device held upright and the home button at the bottom.
+     直擺，Home鍵在下，裝置豎起來
  UIDeviceOrientationPortraitUpsideDown
-     The device is in portrait mode but upside down, with the device held upright and the home button at the top.
+     直擺，上下顛倒，Home鍵在上，裝置豎起來
  UIDeviceOrientationLandscapeLeft
-     The device is in landscape mode, with the device held upright and the home button on the right side.
+     橫擺，Home健在右，裝置豎起來
  UIDeviceOrientationLandscapeRight
-     The device is in landscape mode, with the device held upright and the home button on the left side.
+     橫擺，Home健在左，裝置豎起來
  UIDeviceOrientationFaceUp
-     The device is held parallel to the ground with the screen facing upwards.
+     裝置與地面呈平行，螢幕面朝上（天空）
  UIDeviceOrientationFaceDown
-     The device is held parallel to the ground with the screen facing downwards.
+     裝置與地面呈平行，螢幕面朝下（地面）
  */
 
-// UTILITY FUNCTIONS
+// 工具函式
 
 NSString *imageOrientationNameFromOrientation(UIImageOrientation orientation);
 NSString *imageOrientationName(UIImage *anImage);
@@ -110,7 +110,7 @@ UIImageOrientation imageOrientationFromEXIFOrientation(uint exiforientation);
 UIImageOrientation currentImageOrientation(BOOL isUsingFrontCamera, BOOL shouldMirrorFlip);
 uint currentEXIFOrientation(BOOL isUsingFrontCamera, BOOL shouldMirrorFlip);
 
-// There is a huge bug in that portrait / back camera doesn't recognize 
-// properly with its native EXIF alignment This function works around it 
-// but you then have to adjust the geometry accordingly. Bah.
+// 有個很嚴重的bug，直擺 ∕ 後方相機時，無法正確辨認原生EXIF的資料
+// 這個函式解決了這個問題
+// 但是，之後，你必須隨之調整位置方向，唉。
 uint detectorEXIF(BOOL isUsingFrontCamera, BOOL shouldMirrorFlip);

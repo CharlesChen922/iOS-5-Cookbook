@@ -127,19 +127,19 @@
     
     [session beginConfiguration];
     
-    // Remove existing inputs
+    // 移除已存在的輸入
     for (AVCaptureInput *input in [session inputs])
         [session removeInput:input];
     
-    // Change the input
+    // 變更輸入
     AVCaptureDeviceInput *captureInput = [AVCaptureDeviceInput deviceInputWithDevice:newDevice error:nil];
     [session addInput:captureInput];
     
     [session commitConfiguration];
 }
 
-// Autorelease pool added thanks to suggestion by Josh Snyder -- May not be
-// needed any more under ARC but retained in code for now
+// 感謝Josh Snyder的建議，加入自動釋放池
+// 使用ARC編譯的話就不需要了，但先放著
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
     @autoreleasepool 
@@ -167,15 +167,15 @@
 {
     NSError *error;
     
-    // Is a camera available
+    // 有相機嗎？
     if (![CameraImageHelper numberOfCameras]) return;
 
-    // Choose camera
+    // 選擇哪一台相機
     isUsingFrontCamera = NO;
     if ((whichCamera == kCameraFront) && [CameraImageHelper frontCameraAvailable])
         isUsingFrontCamera = YES;
 
-    // Retrieve the selected camera
+    // 取回選定的相機
     AVCaptureDevice *device = isUsingFrontCamera ? [CameraImageHelper frontCamera] : [CameraImageHelper backCamera];
     
     // Create the capture input
@@ -186,19 +186,19 @@
         return;
     }
     
-    // Create capture output
-    // Update thanks to Jake Marsh who points out not to use the main queue
+    // 建立拍攝輸出
+    // 感謝Jake Marsh，指出不應該使用主佇列
     char *queueName = "com.sadun.tasks.grabFrames";
     dispatch_queue_t queue = dispatch_queue_create(queueName, NULL);  
     AVCaptureVideoDataOutput *captureOutput = [[AVCaptureVideoDataOutput alloc] init];
     captureOutput.alwaysDiscardsLateVideoFrames = YES; 
     [captureOutput setSampleBufferDelegate:self queue:queue];
     
-    // Establish settings
+    // 設定
     NSDictionary *settings = [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
     [captureOutput setVideoSettings:settings];
     
-    // Create a session
+    // 建立時域
     self.session = [[AVCaptureSession alloc] init];
     [session addInput:captureInput];
     [session addOutput:captureOutput];
