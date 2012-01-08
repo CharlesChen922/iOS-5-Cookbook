@@ -37,6 +37,8 @@ CGPoint CGRectGetCenter(CGRect rect)
     
     ALAssetsLibraryAssetForURLResultBlock result = ^(ALAsset *__strong asset){
         ALAssetRepresentation *assetRepresentation = [asset defaultRepresentation];
+		
+		// 這裡，取回資料，模擬器會當掉
         CGImageRef cgImage = [assetRepresentation CGImageWithOptions:nil];
         if (cgImage)
             imageView.image = [UIImage imageWithCGImage:cgImage];
@@ -49,7 +51,7 @@ CGPoint CGRectGetCenter(CGRect rect)
     [library assetForURL:assetURL resultBlock:result failureBlock:failure];
 }
 
-// Update image and for iPhone, dismiss the controller
+// 更新圖像，若是iPhone就解除控制器
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
 	if (IS_IPHONE)
@@ -58,19 +60,20 @@ CGPoint CGRectGetCenter(CGRect rect)
         imagePickerController = nil;
 	}
     
+	// 以URL取回圖像
     NSURL *url = [info objectForKey:UIImagePickerControllerReferenceURL];
     NSLog(@"About to load asset from %@", url);
     [self loadImageFromAssetURL:url];
 }
 
-// Dismiss picker
+// 解除挑選器
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *)picker
 {
     [self dismissModalViewControllerAnimated:YES];
     imagePickerController = nil;
 }
 
-// Popover was dismissed
+// 在iPad上，懸浮元件已經解除了
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)aPopoverController
 {
 	imagePickerController = nil;
@@ -79,7 +82,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 
 - (void) pickImage: (id) sender
 {
-	// Create an initialize the picker
+	// 建立並初始化挑選器
 	imagePickerController = [[UIImagePickerController alloc] init];
 	imagePickerController.sourceType =  UIImagePickerControllerSourceTypePhotoLibrary;
 	imagePickerController.delegate = self;
