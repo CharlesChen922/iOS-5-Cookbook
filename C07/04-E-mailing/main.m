@@ -34,13 +34,12 @@ CGPoint CGRectGetCenter(CGRect rect)
 
 - (NSString *) mimeTypeForExtension: (NSString *) ext 
 {
-    // Request the UTI via the file extension 
+    // 以檔案的副檔名查詢UTI
     CFStringRef UTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef) ext, NULL);
     if (!UTI) return nil;
     
-    // Request the MIME file type via the UTI, 
-    // may return nil for unrecognized MIME types
-    
+    // 以UTI查詢MIME類型，
+    // 若無法辨識，會回傳nil
     NSString *mimeType = (__bridge_transfer NSString *) UTTypeCopyPreferredTagWithClass(UTI, kUTTagClassMIMEType);
 
     return mimeType;
@@ -50,7 +49,7 @@ CGPoint CGRectGetCenter(CGRect rect)
           didFinishWithResult:(MFMailComposeResult)result
                         error:(NSError*)error
 {
-    // Dismiss the e-mail controller once the user is done
+    // 使用者操作結束，解除郵件撰寫控制器
     [self dismissModalViewControllerAnimated:YES];
     
     if (imagePickerController) 
@@ -70,7 +69,7 @@ CGPoint CGRectGetCenter(CGRect rect)
     }
     
     
-    // Customize the e-mail
+    // 設定email
     MFMailComposeViewController *mcvc = [[MFMailComposeViewController alloc] init];
     mcvc.mailComposeDelegate = self;
     [mcvc setSubject:@"Here’s a great photo!"];
@@ -81,7 +80,7 @@ CGPoint CGRectGetCenter(CGRect rect)
     [mcvc addAttachmentData:UIImageJPEGRepresentation(image, 1.0f)
                    mimeType:@"image/jpeg" fileName:@"pickerimage.jpg"];
     
-    // Present the e-mail composition controller
+    // 呈現郵件撰寫控制器
     if (IS_IPHONE)
         [imagePickerController presentModalViewController:mcvc animated:YES];
     else
@@ -94,7 +93,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 }
 
 
-// Update image and for iPhone, dismiss the controller
+// 更新圖像。若是iPhone就解除控制器
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
@@ -105,14 +104,14 @@ CGPoint CGRectGetCenter(CGRect rect)
     [self emailImage:image];
 }
 
-// Dismiss picker
+// 解除挑選器
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *)picker
 {
     [self dismissModalViewControllerAnimated:YES];
     imagePickerController = nil;
 }
 
-// Popover was dismissed
+// 在iPad上，懸浮元件已經解除了
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)aPopoverController
 {
 	imagePickerController = nil;
@@ -121,7 +120,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 
 - (void) pickImage: (id) sender
 {
-	// Create an initialize the picker
+	// 建立並初始化挑選器
 	imagePickerController = [[UIImagePickerController alloc] init];
 	imagePickerController.sourceType =  UIImagePickerControllerSourceTypePhotoLibrary;
     imagePickerController.allowsEditing = editSwitch.isOn;
