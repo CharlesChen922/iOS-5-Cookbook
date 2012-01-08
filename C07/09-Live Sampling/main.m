@@ -21,7 +21,6 @@
 
 @implementation TestBedViewController
 
-// Switch between cameras
 - (void) switch: (id) sender
 {
     [helper switchCameras];
@@ -31,6 +30,7 @@
 
 - (void) pickColor
 {
+	// 取出中央的128x128區域當樣本
     UIImage *currentImage = helper.currentImage;
     CGRect sampleRect = CGRectMake(0.0f, 0.0f, SAMPLE_LENGTH, SAMPLE_LENGTH);
     sampleRect = CGRectCenteredInRect(sampleRect, (CGRect){.size = currentImage.size});
@@ -42,15 +42,15 @@
 	int bucket[360];
 	CGFloat sat[360], bri[360];
 	
-	// Initialize hue bucket and average saturation and brightness collectors
+	// 建立柱狀圖，取得每一取樣色調的平均飽和度與平均明亮度
 	for (int i = 0; i < 360; i++) 
 	{
-		bucket[i] = 0;
-		sat[i] = 0.0f;
-		bri[i] = 0.0f;
+		bucket[i] = 0; // 柱狀圖取樣
+		sat[i] = 0.0f; // 平均飽和度
+		bri[i] = 0.0f; // 平均明亮度
 	}
 	
-	// Iterate over each sample pixel, accumulating hsb info
+	// 迭代每個取樣像素，收集hsb資訊
 	for (int y = 0; y < SAMPLE_LENGTH; y++)
 		for (int x = 0; x < SAMPLE_LENGTH; x++)
 		{			
@@ -58,15 +58,18 @@
 			CGFloat g = ((CGFloat)bits[greenOffset(x, y, SAMPLE_LENGTH)] / 255.0f);
 			CGFloat b = ((CGFloat)bits[blueOffset(x, y, SAMPLE_LENGTH)] / 255.0f);
 			
+			// 把RGB轉為HSV
 			CGFloat h, s, v;
 			rgbtohsb(r, g, b, &h, &s, &v);
 			int hue = (hue > 359.0f) ? 0 : (int) h;
+			
+			// 對每一色調進行統計
 			bucket[hue]++;
 			sat[hue] += s;
 			bri[hue] += v;
 		}
 	
-	// Retrieve the hue mode
+	// 取回色調模式
 	int max = -1;
 	int maxVal = -1;
 	for (int i = 0; i < 360; i++)
@@ -78,12 +81,14 @@
 		}
 	}
 	
-	// Create a color based on the mode hue, average sat & bri
+	// 根據色調模式、平均飽和度、平均明亮度建立顏色
 	float h = max / 360.0f;
 	float s = sat[max]/maxVal;
 	float br = bri[max]/maxVal;
 	
 	UIColor *hueColor = [UIColor colorWithHue:h saturation:s brightness:br alpha:1.0f];
+	
+    // 顯示選出來的顏色
     self.navigationController.navigationBar.tintColor = hueColor;
     
     free(bits);

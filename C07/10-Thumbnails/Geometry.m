@@ -110,6 +110,8 @@ CGRect  CGRectFlipOrigin(CGRect rect)
     return CGRectMake(rect.origin.y, rect.origin.x, rect.size.width, rect.size.height);
 }
 
+// 在保持長寬比的情形下，
+// 給定原始大小與可用顯示空間的大小，回傳新的Fit大小
 CGSize CGSizeFitInSize(CGSize sourceSize, CGSize destSize)
 {
 	CGFloat destScale;

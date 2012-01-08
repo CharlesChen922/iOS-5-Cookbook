@@ -40,7 +40,7 @@ CIImage *ciImageFromPNG(NSString *pngFileName)
 
 + (UIImage *) imageWithBits: (UInt8 *) bits withSize: (CGSize) size
 {
-	// Create a color space
+	// 建立色彩空間
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	if (colorSpace == NULL)
     {
@@ -49,7 +49,7 @@ CIImage *ciImageFromPNG(NSString *pngFileName)
         return nil;
     }
 	
-	// Create the bitmap context
+	// 建立點陣圖內文
     CGContextRef context = CGBitmapContextCreate (bits, size.width, size.height, 8, size.width * 4, colorSpace, kCGImageAlphaPremultipliedFirst);
     if (context == NULL)
     {
@@ -59,13 +59,13 @@ CIImage *ciImageFromPNG(NSString *pngFileName)
 		return nil;
     }
 	
-	// Create the image ref
+	// 建立CGImageRef
     CGColorSpaceRelease(colorSpace );
 	CGImageRef imageRef = CGBitmapContextCreateImage(context);
 	free(CGBitmapContextGetData(context)); // This does the free
 	CGContextRelease(context);
 	
-	// Return image using image ref
+	// 利用CGImageRef回傳UIImage
 	UIImage *newImage = [UIImage imageWithCGImage:imageRef];
 	CFRelease(imageRef);
 
@@ -88,7 +88,7 @@ CIImage *ciImageFromPNG(NSString *pngFileName)
 
 CGContextRef CreateARGBBitmapContext (CGSize size)
 {
-    // Create the new color space
+    // 建立新的色彩空間
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     if (colorSpace == NULL)
     {
@@ -96,7 +96,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
         return NULL;
     }
     
-    // Allocate memory for the bitmap data
+    // 配置記憶體存放點陣圖資料
     void *bitmapData = malloc(size.width * size.height * 4);
     if (bitmapData == NULL)
     {
@@ -105,7 +105,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
         return NULL;
     }
     
-    // Build an 8-bit per channel context
+    // 建立內文，一個色頻有8 bits
     CGContextRef context = CGBitmapContextCreate (bitmapData, size.width, size.height, 8, size.width * 4, colorSpace, kCGImageAlphaPremultipliedFirst);
     CGColorSpaceRelease(colorSpace );
     if (context == NULL)
@@ -120,7 +120,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
 
 - (UInt8 *) createBitmap
 {
-    // Create bitmap data for the given image
+    // 給定某圖像，建立點陣圖資料
     CGContextRef context = CreateARGBBitmapContext(self.size);
     if (context == NULL) return NULL;
     
@@ -134,22 +134,21 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
 
 - (UIImage *) convolveImageWithEdgeDetection
 {
-    // Dimensions
+    // 維度
     int theheight = floor(self.size.height);
     int thewidth =  floor(self.size.width);
     
-    // Get input and create output bits
+    // 取得輸入bits，建立輸出bits
     UInt8 *inbits = (UInt8 *)[self createBitmap];
     UInt8 *outbits = (UInt8 *)malloc(theheight * thewidth * 4);
     
-    // Basic Canny Edge Detection
+    // 基本的Canny邊緣偵測
     int matrix1[9] = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
     int matrix2[9] = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
     
     int radius = 1;
     
-    // Iterate through each available pixel (leaving a radius-sized
-    // boundary)
+    // 迭代每個像素（留下寬radius的邊界)
     for (int y = radius; y < (theheight - radius); y++)
         for (int x = radius; x < (thewidth - radius); x++)
         {
@@ -177,7 +176,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
                     offset++;
                 }
             
-            // Assign the outbits
+            // 賦值outbits
             int sumr = MIN(((ABS(sumr1) + ABS(sumr2)) / 2), 255);
             int sumg = MIN(((ABS(sumg1) + ABS(sumg2)) / 2), 255);
             int sumb = MIN(((ABS(sumb1) + ABS(sumb2)) / 2), 255);
@@ -190,7 +189,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
             (UInt8) inbits[alphaOffset(x, y, thewidth)];
         }
     
-    // Release the original bitmap. imageWithBits frees outbits
+    // 釋放原先的點陣圖，imageWithBits釋放outbits
     free(inbits);
 
     return [UIImage imageWithBits:outbits withSize:CGSizeMake(thewidth, theheight)];

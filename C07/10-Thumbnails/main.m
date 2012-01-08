@@ -21,7 +21,6 @@
 
 @implementation TestBedViewController
 
-// Switch between cameras
 - (void) switch: (id) sender
 {
     [helper switchCameras];
@@ -59,7 +58,6 @@
     
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Switch between cameras
     if ([CameraImageHelper numberOfCameras] > 1)
         self.navigationItem.leftBarButtonItem = BARBUTTON(@"Switch", @selector(switch:));
     

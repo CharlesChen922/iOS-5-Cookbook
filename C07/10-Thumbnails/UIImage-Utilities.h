@@ -17,7 +17,7 @@ NSUInteger redOffset(NSUInteger x, NSUInteger y, NSUInteger w);
 NSUInteger greenOffset(NSUInteger x, NSUInteger y, NSUInteger w);
 NSUInteger blueOffset(NSUInteger x, NSUInteger y, NSUInteger w);
 
-// Screen shots
+// 將視圖的畫面抓下來
 UIImage *imageFromView(UIView *theView);
 UIImage *screenShot();
 
@@ -25,20 +25,20 @@ UIImage *screenShot();
 // 取出圖像裡的一部分
 - (UIImage *) subImageWithBounds:(CGRect) rect;
 
-// Thumbnails
+// 縮圖
 - (UIImage *) fitInSize: (CGSize) viewsize;
 - (UIImage *) centerInSize: (CGSize) viewsize;
 - (UIImage *) fillSize: (CGSize) viewsize;
 
-// Return a bitmap representation of the image
+// 回傳圖像的點陣圖資料
 - (UInt8 *) createBitmap;
 
-// Perform a basic Canny detection
+// 基本的Canny邊緣偵測
 - (UIImage *) convolveImageWithEdgeDetection;
 
 // 從CIImage建立UIImage，這是個暫時解法
 + (UIImage *) imageWithCIImage: (CIImage *) aCIImage orientation: (UIImageOrientation) anOrientation;
 
-// Create an image from a bitmap
+// 從點陣圖資料建立UIImage
 + (UIImage *) imageWithBits: (UInt8 *) bits withSize: (CGSize) size;
 @end

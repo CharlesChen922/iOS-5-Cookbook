@@ -21,7 +21,6 @@
 
 @implementation TestBedViewController
 
-// Switch between cameras
 - (void) switch: (id) sender
 {
     [helper switchCameras];
@@ -29,7 +28,7 @@
 
 - (void) process: (id) sender
 {
-    // Prepare the interface
+    // 準備使用介面
     self.navigationItem.rightBarButtonItem = nil;
     UIAlertView *alertView = [[UIAlertView alloc] 
                               initWithTitle:@"\n\nProcessing\nPlease wait." 
@@ -37,7 +36,7 @@
                               otherButtonTitles:nil];
     [alertView show];
     
-    // Create a background queue for processing
+    // 建立背景佇列負責影像處理
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     [queue addOperationWithBlock:
      ^{
@@ -45,7 +44,7 @@
          UIImage *processed = [theImage convolveImageWithEdgeDetection];
          UIImage *oriented = [UIImage imageWithCGImage:processed.CGImage scale:1.0f orientation:currentImageOrientation(helper.isUsingFrontCamera, NO)];
 
-         // Update the image on the main thread using the main queue
+         // 使用主佇列，在主緒程裡更新圖像
          [[NSOperationQueue mainQueue] addOperationWithBlock:^{
              imageView.image = oriented;
              [alertView dismissWithClickedButtonIndex:-1 animated:YES];

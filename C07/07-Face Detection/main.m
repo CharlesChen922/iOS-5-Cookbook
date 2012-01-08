@@ -22,7 +22,7 @@
 
 @implementation TestBedViewController
 
-// Switch between cameras
+// 切換照相機
 - (void) switch: (id) sender
 {
     [helper switchCameras];
@@ -52,7 +52,7 @@
     for (CIFaceFeature *feature in features)
     {
         CGRect rect = rectInEXIF(detectOrientation, feature.bounds, imageRect);
-        if (deviceIsPortrait() && helper.isUsingFrontCamera) // workaround
+        if (deviceIsPortrait() && helper.isUsingFrontCamera) // 暫時解法
         {
             rect.origin = CGPointFlipHorizontal(rect.origin, imageRect);
             rect.origin = CGPointOffset(rect.origin, -rect.size.width, 0.0f);
@@ -67,7 +67,7 @@
             [[[UIColor redColor] colorWithAlphaComponent:0.5f] set];
             CGPoint position = feature.leftEyePosition;
             CGPoint pt = pointInEXIF(detectOrientation, position, imageRect);
-            if (deviceIsPortrait() && helper.isUsingFrontCamera) // workaround
+            if (deviceIsPortrait() && helper.isUsingFrontCamera) // 暫時解法
                 pt = CGPointFlipHorizontal(pt, imageRect);
             
             UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:pt radius:30.0f startAngle:0.0f endAngle:2 * M_PI clockwise:YES];
@@ -79,7 +79,7 @@
             [[[UIColor blueColor] colorWithAlphaComponent:0.5f] set];
             CGPoint position = feature.rightEyePosition;
             CGPoint pt = pointInEXIF(detectOrientation, position, imageRect);
-            if (deviceIsPortrait() && helper.isUsingFrontCamera) // workaround
+            if (deviceIsPortrait() && helper.isUsingFrontCamera) // 暫時解法
                 pt = CGPointFlipHorizontal(pt, imageRect);
 
             UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:pt radius:30.0f startAngle:0.0f endAngle:2 * M_PI clockwise:YES];
@@ -91,7 +91,7 @@
             [[[UIColor greenColor] colorWithAlphaComponent:0.5f] set];
             CGPoint position = feature.mouthPosition;
             CGPoint pt = pointInEXIF(detectOrientation, position, imageRect);
-            if (deviceIsPortrait() && helper.isUsingFrontCamera) // workaround
+            if (deviceIsPortrait() && helper.isUsingFrontCamera) // 暫時解法
                 pt = CGPointFlipHorizontal(pt, imageRect);
 
             UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:pt radius:30.0f startAngle:0.0f endAngle:2 * M_PI clockwise:YES];
@@ -122,7 +122,7 @@
     
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Switch between cameras
+    // 切換照相機
     if ([CameraImageHelper numberOfCameras] > 1)
         self.navigationItem.leftBarButtonItem = BARBUTTON(@"Switch", @selector(switch:));
         

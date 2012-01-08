@@ -22,7 +22,7 @@
 
 @implementation TestBedViewController
 
-// Switch between cameras
+// 切換相機
 - (void) switch: (id) sender
 {
     [helper switchCameras];
@@ -46,16 +46,16 @@
     NSDictionary *imageOptions = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:detectOrientation] forKey:CIDetectorImageOrientation];
     NSArray *features = [detector featuresInImage:ciImage options:imageOptions];
     if (!features.count) return;
-    CIFaceFeature *feature = [features lastObject]; // only one at a time
+    CIFaceFeature *feature = [features lastObject]; // 一次一個
     
     CGRect rect = rectInEXIF(detectOrientation, feature.bounds, imageRect);
-    if (deviceIsPortrait() && helper.isUsingFrontCamera) // workaround
+    if (deviceIsPortrait() && helper.isUsingFrontCamera) // 暫時解法
     {
         rect.origin = CGPointFlipHorizontal(rect.origin, imageRect);
         rect.origin = CGPointOffset(rect.origin, -rect.size.width, 0.0f);
     }
     
-    // Expand by about 10%
+    // 放大約10%
     CGPoint center = CGRectGetCenter(rect);
     CGFloat width = rect.size.width * 1.1f;
     CGFloat height = rect.size.height * 1.1f;
@@ -83,7 +83,7 @@
     
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Switch between cameras
+    // 切換相機
     if ([CameraImageHelper numberOfCameras] > 1)
         self.navigationItem.leftBarButtonItem = BARBUTTON(@"Switch", @selector(switch:));
         
