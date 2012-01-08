@@ -30,9 +30,10 @@ CGPoint CGRectGetCenter(CGRect rect)
 
 @implementation TestBedViewController
 
-// Update image and for iPhone, dismiss the controller
+// 更新圖像，若是iPhone就解除控制器
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+    // 如果有就取回編修後的圖像，要不然就取回原先的
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     if (!image) 
         image = [info objectForKey:UIImagePickerControllerOriginalImage];
@@ -45,14 +46,14 @@ CGPoint CGRectGetCenter(CGRect rect)
 	}
 }
 
-// Dismiss picker
+// 解除挑選器
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *)picker
 {
     [self dismissModalViewControllerAnimated:YES];
     imagePickerController = nil;
 }
 
-// Popover was dismissed
+// 在iPad上，懸浮元件已經解除了
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)aPopoverController
 {
 	imagePickerController = nil;
@@ -61,7 +62,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 
 - (void) pickImage: (id) sender
 {
-	// Create an initialize the picker
+	// 建立並初始化挑選器
 	imagePickerController = [[UIImagePickerController alloc] init];
 	imagePickerController.sourceType =  UIImagePickerControllerSourceTypePhotoLibrary;
     imagePickerController.allowsEditing = editSwitch.isOn;
@@ -73,9 +74,14 @@ CGPoint CGRectGetCenter(CGRect rect)
 	}
 	else 
 	{
+        // 清除任何先前的懸浮元件
         if (popoverController) [popoverController dismissPopoverAnimated:NO];
+		
+        // 建立新懸浮元件並保留
         popoverController = [[UIPopoverController alloc] initWithContentViewController:imagePickerController];
         popoverController.delegate = self;
+		
+		// 顯示懸浮元件
         [popoverController presentPopoverFromBarButtonItem:self.navigationItem.rightBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 	}
 }
@@ -91,6 +97,7 @@ CGPoint CGRectGetCenter(CGRect rect)
     RESIZABLE(imageView);
     [self.view addSubview:imageView];
 
+    // 是否允許編輯
     editSwitch = [[UISwitch alloc] init];
     self.navigationItem.titleView = editSwitch;
     
