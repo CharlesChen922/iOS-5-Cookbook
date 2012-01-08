@@ -30,7 +30,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 
 @implementation TestBedViewController
 
-// Update image and for iPhone, dismiss the controller
+// 更新圖像，若是iPhone就解除控制器
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
@@ -47,14 +47,14 @@ CGPoint CGRectGetCenter(CGRect rect)
 	}
 }
 
-// Dismiss picker
+// 解除挑選器
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *)picker
 {
     [self dismissModalViewControllerAnimated:YES];
     imagePickerController = nil;
 }
 
-// Popover was dismissed
+// 在iPad上，懸浮元件已經解除了
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)aPopoverController
 {
 	imagePickerController = nil;
@@ -63,7 +63,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 
 - (void) snapImage: (id) sender
 {
-    // Create an initialize the picker
+    // 建立並初始化挑選器
 	imagePickerController = [[UIImagePickerController alloc] init];
     imagePickerController.sourceType =  UIImagePickerControllerSourceTypeCamera;
     imagePickerController.allowsEditing = editSwitch.isOn;
@@ -84,7 +84,7 @@ CGPoint CGRectGetCenter(CGRect rect)
 
 - (void)image:(UIImage *)image didFinishSavingWithError: (NSError *)error contextInfo:(void *)contextInfo;
 {
-    // Handle the end of the image write process
+    // 處理寫入圖像程序結束時的情況
     if (!error)
         NSLog(@"Image written to photo album");
     else
