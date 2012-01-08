@@ -22,7 +22,7 @@
 
 @implementation TestBedViewController
 
-// Switch between cameras
+// 切換相機
 - (void) switch: (id) sender
 {
     [helper switchCameras];
@@ -33,15 +33,19 @@
     useFilter = !useFilter;
 }
 
+// 每秒抓10次圖像資料，根據狀況套用濾鏡，並顯示結果
 - (void) snap: (NSTimer *) timer
 {
     UIImageOrientation orientation = currentImageOrientation(helper.isUsingFrontCamera, NO);
     if (useFilter)
     {
+        // 建立褐色濾鏡，強度75%
         CIFilter *sepiaFilter = [CIFilter filterWithName:@"CISepiaTone"
                                            keysAndValues: @"inputImage", helper.ciImage, nil];
         [sepiaFilter setDefaults];  
         [sepiaFilter setValue:[NSNumber numberWithFloat:0.75f] forKey:@"inputIntensity"];
+		
+        // 套用濾鏡並顯示結果
         CIImage *sepiaImage = [sepiaFilter valueForKey:kCIOutputImageKey];
         if (sepiaImage)
             imageView.image = [UIImage imageWithCIImage:sepiaImage orientation:orientation];
@@ -69,21 +73,23 @@
     
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Switch between cameras
+    // 加入基本功能
     if ([CameraImageHelper numberOfCameras] > 1)
         self.navigationItem.leftBarButtonItem = BARBUTTON(@"Switch", @selector(switch:));
     
-            
     self.navigationItem.rightBarButtonItem = BARBUTTON(@"Toggle Filter", @selector(toggleFilter:));
         
+    // 建立圖像視圖以顯示結果
     imageView = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     RESIZABLE(imageView);
     [self.view addSubview:imageView];
 
+    // 建立新的相機操作時域
     helper = [CameraImageHelper helperWithCamera:kCameraFront];
     [helper startRunningSession];
     
+    // 每秒更新十次
     [NSTimer scheduledTimerWithTimeInterval:0.03f target:self selector:@selector(snap:) userInfo:nil repeats:YES];    
 }
 
