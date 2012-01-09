@@ -18,6 +18,7 @@
 @implementation TouchTrackerView
 - (void) touchesBegan:(NSSet *) touches withEvent:(UIEvent *) event
 {
+	// 初始化新路線
 	path = [UIBezierPath bezierPath];	
 	path.lineWidth = 4.0f;
 	
@@ -27,6 +28,7 @@
 
 - (void) touchesMoved:(NSSet *) touches withEvent:(UIEvent *) event
 {
+	// 在路徑上加入新的點
 	UITouch *touch = [touches anyObject];
 	[path addLineToPoint:[touch locationInView:self]];
 	[self setNeedsDisplay];
