@@ -20,25 +20,25 @@
 
 @implementation TestBedViewController
 
-// Update the thumb images as needed
+// 視情況更新大姆哥圖像
 - (void) updateThumb: (UISlider *) aSlider
 {
-	// Only update the thumb when registering significant changes, i.e. 10%
+	// 數值超過一定變動程度以上，這裡是10%，才更新大姆哥
 	if ((slider.value < 0.98) && (ABS(slider.value - previousValue) < 0.1f)) return;
 	
-	// create a new custom thumb image and use it for the highlighted state
+	// 高亮度狀態下，建立客製後的大姆哥圖像
     UIImage *customimg = thumbWithLevel(slider.value);
 	[slider setThumbImage: customimg forState: UIControlStateHighlighted];
 	previousValue = slider.value;
 }
 
-// Expand the slider to accomodate the bigger thumb
+// 增大滑桿的尺寸，容納尺寸較大的大姆哥
 - (void) startDrag: (UISlider *) aSlider
 {
 	slider.frame = CGRectInset(slider.frame, 0.0f, -30.0f);
 }
 
-// At release, shrink the frame back to normal
+// 手指離開螢幕，將滑桿尺寸調回原本大小
 - (void) endDrag: (UISlider *) aSlider
 {
     slider.frame = CGRectInset(slider.frame, 0.0f, 30.0f);
@@ -49,28 +49,28 @@
     [super loadView];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // Set global UISlider appearance attributes
+    // 設定UISlider全域外觀屬性
     [[UISlider appearance] setMinimumTrackTintColor:[UIColor blackColor]];
     [[UISlider appearance] setMaximumTrackTintColor:[UIColor grayColor]];
     
-    // Initialize slider settigns
+    // 滑桿數值的初始值
 	previousValue = -99.0f;
 	
-	// Create slider
+	// 建立滑桿
 	slider = [[UISlider alloc] initWithFrame:(CGRect){.size=CGSizeMake(200.0f, 40.0f)}];
     [slider setThumbImage:simpleThumb() forState:UIControlStateNormal];
 	slider.value = 0.0f;
     	
-	// Create the callbacks for touch, move, and release
+	// 設定觸控事件（開始、移動、結束）的回呼方法
 	[slider addTarget:self action:@selector(startDrag:) forControlEvents:UIControlEventTouchDown];
 	[slider addTarget:self action:@selector(updateThumb:) forControlEvents:UIControlEventValueChanged];
 	[slider addTarget:self action:@selector(endDrag:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 	
-	// Present the slider
+	// 滑桿初始設定
 	[self.view addSubview:slider];
 	[self performSelector:@selector(updateThumb:) withObject:slider afterDelay:0.1f];
     
-    // Appearance examples
+    // 外觀設定範例 examples
     /*
     CGFloat width = [[UIScreen mainScreen] bounds].size.width;
     UIBarButtonItem *hello = BARBUTTON(@"Hello", nil);
