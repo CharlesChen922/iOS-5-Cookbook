@@ -29,7 +29,7 @@
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-	// Calculate and store offset, and pop view into front if needed
+	// 計算並儲存偏移量，並把視圖移到最上面
 	CGPoint pt = [[touches anyObject] locationInView:self];
 	startLocation = pt;
 	[[self superview] bringSubviewToFront:self];
@@ -37,13 +37,13 @@
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-	// Calculate offset
+	// 計算偏移量
 	CGPoint pt = [[touches anyObject] locationInView:self];
 	float dx = pt.x - startLocation.x;
 	float dy = pt.y - startLocation.y;
 	CGPoint newcenter = CGPointMake(self.center.x + dx, self.center.y + dy);
 	
-	// Set new location
+	// 設定新位置
 	self.center = newcenter;
 }
 @end
@@ -58,7 +58,7 @@
     self.view.backgroundColor = [UIColor blackColor];
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Add the flowers to random points on the screen	
+    // 加入花朵，亂數擺放在螢幕上
 	for (int i = 0; i < MAXFLOWERS; i++)
 	{
 		NSString *whichFlower = [[NSArray arrayWithObjects:@"blueFlower.png", @"pinkFlower.png", @"orangeFlower.png", nil] objectAtIndex:(random() % 3)];
