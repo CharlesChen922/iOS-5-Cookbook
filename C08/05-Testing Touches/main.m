@@ -39,25 +39,25 @@
 	CGPoint pt;
 	float HALFSIDE = SIDELENGTH / 2.0f;
 	
-	// normalize with centered origin
+	// 將中心當做圓點，正規化
 	pt.x = (point.x - HALFSIDE) / HALFSIDE;
 	pt.y = (point.y - HALFSIDE) / HALFSIDE;
 	
-	// x^2 + y^2 = radius
+	// x^2 + y^2 = radius（半徑）
 	float xsquared = pt.x * pt.x;
 	float ysquared = pt.y * pt.y;
 	
-	// If the radius < 1, the point is within the clipped circle
+	// 若半徑小於等於1，該點落於圓圈內
 	if ((xsquared + ysquared) < 1.0) return YES;
 	return NO;
 }
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // Promote the touched view
+    // 將被觸摸到的視圖移到最前面
     [self.superview bringSubviewToFront:self];
     
-    // Remember original location
+    // 記住原來的位置
     previousLocation = self.center;
 }
 
@@ -66,7 +66,7 @@
 	CGPoint translation = [uigr translationInView:self.superview];
 	CGPoint newcenter = CGPointMake(previousLocation.x + translation.x, previousLocation.y + translation.y);
 	
-	// Bound movement into parent bounds
+	// 將移動範圍限制在父視圖的bounds內
 	float halfx = CGRectGetMidX(self.bounds);
 	newcenter.x = MAX(halfx, newcenter.x);
 	newcenter.x = MIN(self.superview.bounds.size.width - halfx, newcenter.x);
@@ -75,7 +75,7 @@
 	newcenter.y = MAX(halfy, newcenter.y);
 	newcenter.y = MIN(self.superview.bounds.size.height - halfy, newcenter.y);
 	
-	// Set new location
+	// 設定新位置
 	self.center = newcenter;	
 }@end
 
@@ -90,13 +90,13 @@
 	UIGraphicsBeginImageContext(CGSizeMake(SIDELENGTH, SIDELENGTH));
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
-	// Create a filled ellipse
+	// 建立並填滿圓形區域
 	[color setFill];
 	CGRect rect = CGRectMake(0.0f, 0.0f, SIDELENGTH, SIDELENGTH);
 	CGContextAddEllipseInRect(context, rect);
 	CGContextFillPath(context);
 	
-	// Outline the circle a couple of times
+	// 描繪圓形的外框，數次
 	CGContextSetStrokeColorWithColor(context, [[UIColor whiteColor] CGColor]);
 	CGContextAddEllipseInRect(context, CGRectInset(rect, INSET_AMT, INSET_AMT));
 	CGContextStrokePath(context);
@@ -114,7 +114,7 @@
     self.view.backgroundColor = [UIColor blackColor];
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-	// Add the circles to random points on the screen	
+	// 加入圓圈，亂數擺放在螢幕上
 	for (int i = 0; i < MAXCIRCLES; i++)
 	{
 		DragView *dragger = [[DragView alloc] initWithImage:[self createImage]];
