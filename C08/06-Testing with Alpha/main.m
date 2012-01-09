@@ -13,8 +13,11 @@
 #define HALFFLOWER	32.0f
 #define RANDOMPOINT	CGPointMake(random() % ((int)(self.view.bounds.size.width - 2 * HALFFLOWER)) + HALFFLOWER, random() % ((int)(self.view.bounds.size.height - 2 * HALFFLOWER)) + HALFFLOWER)
 
+// 回傳位於(x, y)的alpha的偏移值
+// 點陣圖資料的格式為每像素四個bytes
 NSUInteger alphaOffset(NSUInteger x, NSUInteger y, NSUInteger w){return y * w * 4 + x * 4 + 0;}
 
+// 回傳圖像的點陣圖資料
 unsigned char *getBitmapFromImage (UIImage *image)
 {
 	
@@ -71,6 +74,7 @@ unsigned char *getBitmapFromImage (UIImage *image)
     return self;
 }
 
+// 該點座標有擊中視圖嗎？
 - (BOOL) pointInside:(CGPoint)point withEvent:(UIEvent *)event 
 {
 	if (!CGRectContainsPoint(self.bounds, point)) return NO;
@@ -79,10 +83,10 @@ unsigned char *getBitmapFromImage (UIImage *image)
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // Promote the touched view
+    // 將被觸摸到的視圖移到最前面
     [self.superview bringSubviewToFront:self];
     
-    // Remember original location
+    // 記住原來的位置
     previousLocation = self.center;
 }
 
@@ -91,7 +95,7 @@ unsigned char *getBitmapFromImage (UIImage *image)
 	CGPoint translation = [uigr translationInView:self.superview];
 	CGPoint newcenter = CGPointMake(previousLocation.x + translation.x, previousLocation.y + translation.y);
 	
-	// Bound movement into parent bounds
+	// 將移動範圍限制在父視圖的bounds內
 	float halfx = CGRectGetMidX(self.bounds);
 	newcenter.x = MAX(halfx, newcenter.x);
 	newcenter.x = MIN(self.superview.bounds.size.width - halfx, newcenter.x);
@@ -100,7 +104,7 @@ unsigned char *getBitmapFromImage (UIImage *image)
 	newcenter.y = MAX(halfy, newcenter.y);
 	newcenter.y = MIN(self.superview.bounds.size.height - halfy, newcenter.y);
 	
-	// Set new location
+	// 設定新位置
 	self.center = newcenter;
 }
 
@@ -120,7 +124,7 @@ unsigned char *getBitmapFromImage (UIImage *image)
     self.view.backgroundColor = [UIColor blackColor];
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Add the flowers to random points on the screen	
+    // 加入花朵，亂數擺放在螢幕上
 	for (int i = 0; i < MAXFLOWERS; i++)
 	{
 		NSString *whichFlower = [[NSArray arrayWithObjects:@"blueFlower.png", @"pinkFlower.png", @"orangeFlower.png", nil] objectAtIndex:(random() % 3)];
