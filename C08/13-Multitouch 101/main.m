@@ -18,14 +18,18 @@
 @implementation TouchTrackerView
 - (void) touchesBegan:(NSSet *) touches withEvent:(UIEvent *) event
 {
+    // 建立路徑字典，如果還不存在的話
     if (!touchPaths) 
         touchPaths = [NSMutableDictionary dictionary];
     
+	// 每個觸控物件有新的貝茲路徑
 	for (UITouch *touch in touches)
 	{
+		// 以觸控物件的記憶體位址當做鍵
 		NSString *key = [NSString stringWithFormat:@"%d", touch];
 		CGPoint pt = [touch locationInView:self];
 		
+		// 建立新路徑
 		UIBezierPath *path = [UIBezierPath bezierPath];
 		path.lineWidth = 4;
 		[path moveToPoint:pt];
@@ -34,6 +38,7 @@
 	} 
 }
 
+// 繼續追蹤手指的路徑
 - (void) touchesMoved:(NSSet *) touches withEvent:(UIEvent *) event
 {
 	for (UITouch *touch in touches)
@@ -49,6 +54,7 @@
 	[self setNeedsDisplay];
 }
 
+// 結束時，移除路徑
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	for (UITouch *touch in touches)
@@ -65,6 +71,7 @@
 	[self touchesEnded:touches withEvent:event];
 }
 
+// 繪製路徑
 - (void) drawRect:(CGRect)rect
 {
 	[COOKBOOK_PURPLE_COLOR set];
@@ -73,6 +80,7 @@
 	
 }
 
+// 確定啟用多點觸控
 - (id) initWithFrame:(CGRect)frame
 {
 	if (self = [super initWithFrame:frame])
