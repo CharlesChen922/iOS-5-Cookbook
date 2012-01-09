@@ -10,9 +10,9 @@
 
 @interface DragView : UIImageView <UIGestureRecognizerDelegate>
 {
-	CGFloat tx; // x translation
-	CGFloat ty; // y translation
-	CGFloat scale; // zoom scale
-	CGFloat theta; // rotation angle
+	CGFloat tx; // x位移
+	CGFloat ty; // y位移
+	CGFloat scale; // 縮放率
+	CGFloat theta; // 旋轉角度
 }
 @end

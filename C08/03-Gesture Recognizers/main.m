@@ -20,7 +20,7 @@
 @implementation TestBedViewController
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-	// Update to the selected image
+	// 選定圖檔後，加入新DragView，更新畫面
 	UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
 	DragView *dv = [[DragView alloc] initWithImage:image];
 	dv.center = self.view.center;
@@ -30,19 +30,19 @@
 		[self dismissModalViewControllerAnimated:YES];
 	else 
 	{
-		// iPad. dismiss popover controller
+		// iPad，解除懸浮元件控制器
 		[popoverController dismissPopoverAnimated:YES];
 		popoverController = nil;
 	}
 }
 
-// Dismiss picker
+// 解除挑選器
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *)picker
 {
 	[self dismissModalViewControllerAnimated:YES];
 }
 
-// Popover was dismissed
+// 懸浮元件已被解除
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)aPopoverController
 {
     popoverController = nil;
@@ -50,7 +50,7 @@
 
 - (void) pickImage: (id) sender
 {
-	// Create an initialize the picker, keep retain count at +1
+	// 建立並初始化挑選器，保持保留計數為1
 	UIImagePickerController *ipc = [[UIImagePickerController alloc] init];
 	{
 		ipc.sourceType =  UIImagePickerControllerSourceTypeSavedPhotosAlbum;
@@ -63,7 +63,7 @@
 	}
 	else 
 	{
-		// Create a retained popover
+		// 建立懸浮元件
 		popoverController = [[UIPopoverController alloc] initWithContentViewController:ipc];
 		popoverController.delegate = self;
 		[popoverController presentPopoverFromBarButtonItem:self.navigationItem.rightBarButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
