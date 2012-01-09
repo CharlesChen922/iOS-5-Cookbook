@@ -36,10 +36,10 @@
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // Promote the touched view
+    // 將被觸摸到的視圖移到最前面
     [self.superview bringSubviewToFront:self];
     
-    // Remember original location
+    // 記住原來的位置
     previousLocation = self.center;
 }
 
@@ -48,7 +48,7 @@
 	CGPoint translation = [uigr translationInView:self.superview];
 	CGPoint newcenter = CGPointMake(previousLocation.x + translation.x, previousLocation.y + translation.y);
 	
-	// Bound movement into parent bounds
+	// 將移動範圍限制在父視圖的bounds內
 	float halfx = CGRectGetMidX(self.bounds);
 	newcenter.x = MAX(halfx, newcenter.x);
 	newcenter.x = MIN(self.superview.bounds.size.width - halfx, newcenter.x);
@@ -57,7 +57,7 @@
 	newcenter.y = MAX(halfy, newcenter.y);
 	newcenter.y = MIN(self.superview.bounds.size.height - halfy, newcenter.y);
 	
-	// Set new location
+	// 設定新位置
 	self.center = newcenter;	
 }@end
 
@@ -73,6 +73,8 @@
 	for (DragView *dv in [self.view subviews]) 
 	{
 		[colors addObject:dv.whichFlower];
+		
+		// 另一種方式是使用[NSValue valueWithCGRect]
 		[locs addObject:NSStringFromCGRect(dv.frame)];
 	}
 	
@@ -83,11 +85,11 @@
 
 - (void) loadFlowersInView: (UIView *) backdrop
 {
-	// Attempt to read in previous colors and locations
+	// 試著讀取先前的顏色與位置
 	NSMutableArray *colors = [[NSUserDefaults standardUserDefaults] objectForKey:@"colors"];
 	NSMutableArray *locs = [[NSUserDefaults standardUserDefaults] objectForKey:@"locs"];
 
-    // Add the flowers to random points on the screen	
+    // 加入花朵，設定位置
 	for (int i = 0; i < MAXFLOWERS; i++)
 	{
 		NSString *whichFlower = [[NSArray arrayWithObjects:@"blueFlower.png", @"pinkFlower.png", @"orangeFlower.png", nil] objectAtIndex:(random() % 3)];
