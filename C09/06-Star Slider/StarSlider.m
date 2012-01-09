@@ -19,13 +19,14 @@
 {
 	if (self = [super initWithFrame:aFrame])
 	{
-		float minimumWidth = WIDTH * 8.0f; // 5 stars, spaced between + 1/2 size on each end
+		// 五個星號，在中間與兩端留一些空間
+		float minimumWidth = WIDTH * 8.0f;
 		float minimumHeight = 34.0f;
 		
-		// This control uses a minimum 260x34 sized frame
+		// 這個控制項的frame最小是260x34
 		self.frame = CGRectMake(0.0f, 0.0f, MAX(minimumWidth, aFrame.size.width), MAX(minimumHeight, aFrame.size.height));
 		
-		// Add stars -- initially assuming fixed width
+		// 加入星號，一開始先假定寬度是固定的
 		float offsetCenter = WIDTH;
 		for (int i = 1; i <= 5; i++)
 		{
@@ -37,6 +38,7 @@
 		}
 	}
 	
+	// 放在有鮮明對比的背景顏色上
 	self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.25f];
 
 	return self;
@@ -52,11 +54,13 @@
 	return [[self alloc] init];
 }
 
+// 根據點擊的座標更新數值
 - (void) updateValueAtPoint: (CGPoint) p
 {
 	int newValue = 0;
 	UIImageView *changedView = nil;
 	
+	// 迭代每個星號，看看點中哪一個
 	for (UIImageView *eachItem in [self subviews])
 		if (p.x < eachItem.frame.origin.x)
 		{
@@ -64,17 +68,18 @@
 		}
 		else 
 		{
-			changedView = eachItem;
+			changedView = eachItem; // 點中最後一個
 			eachItem.image = ON_ART;
 			newValue++;
 		}
 	
+	// 數值變更
 	if (self.value != newValue)
 	{
 		self.value = newValue;
 		[self sendActionsForControlEvents:UIControlEventValueChanged];
 		
-		// Animate the changed view
+		// 以縮放動畫效果呈現新數值
 		[UIView animateWithDuration:0.15f 
 						 animations:^{changedView.transform = CGAffineTransformMakeScale(1.5f, 1.5f);}
 						 completion:^(BOOL done){[UIView animateWithDuration:0.1f animations:^{changedView.transform = CGAffineTransformIdentity;}];}];
@@ -83,32 +88,32 @@
 
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-	// Establish touch down event
+	// 建立UIControlEventTouchDown事件
 	CGPoint touchPoint = [touch locationInView:self];
 	[self sendActionsForControlEvents:UIControlEventTouchDown];
 	
-	// Calcluate value
+	// 計算數值
 	[self updateValueAtPoint:touchPoint];
 	return YES;
 }
 	 
 - (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
-	// Test if drag is currently inside or outside
+	// 檢查拖拉是在範圍內還是外
 	CGPoint touchPoint = [touch locationInView:self];
 	if (CGRectContainsPoint(self.frame, touchPoint))
         [self sendActionsForControlEvents:UIControlEventTouchDragInside];
     else 
         [self sendActionsForControlEvents:UIControlEventTouchDragOutside];
 
-	// Calculate value
+	// 計算數值
 	[self updateValueAtPoint:[touch locationInView:self]];
 	return YES;
 }
 
 - (void) endTrackingWithTouch: (UITouch *)touch withEvent: (UIEvent *)event
 {
-    // Test if touch ended inside or outside
+    // 檢查觸控結束時，在範圍內還是外
     CGPoint touchPoint = [touch locationInView:self];
     if (CGRectContainsPoint(self.bounds, touchPoint))
         [self sendActionsForControlEvents:UIControlEventTouchUpInside];
@@ -119,6 +124,7 @@
 	 
 - (void)cancelTrackingWithEvent: (UIEvent *) event
 {
+	// 取消觸控事件
 	[self sendActionsForControlEvents:UIControlEventTouchCancel];
 }
 @end

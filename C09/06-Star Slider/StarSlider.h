@@ -10,7 +10,7 @@
 
 @interface StarSlider : UIControl
 {
-	int value; // from 0 to 5
+	int value; // 從0到5
 }
 @property (nonatomic, assign) int value;
 + (id) control;
