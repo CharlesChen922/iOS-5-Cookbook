@@ -24,14 +24,14 @@
 @end
 
 @implementation TestBedViewController
-// Remove all custom views from the layout area
+// 移除畫面上所有客製視圖
 - (void) clear
 {
 	for (UIView *view in self.view.subviews)
 		if (view != scrollView) [view removeFromSuperview];
 }
 
-// Set the random contents of the scroll view
+// 捲動視圖，任意放入一些東西
 - (void) setColors
 {
 	float offset = 0.0f;
@@ -46,7 +46,7 @@
 	}	
 }
 
-// Force an update of the scroll view elements
+// 強制更新捲動視圖的內容
 - (void) recolor
 {
 	for (UIView *view in scrollView.subviews)

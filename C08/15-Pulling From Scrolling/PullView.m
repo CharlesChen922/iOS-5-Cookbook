@@ -17,6 +17,7 @@
 #define SWIPE_DRAG_MIN 16
 #define DRAGLIMIT_MAX 12 
 
+// 對掃過手勢進行分類
 typedef enum {
 	TouchUnknown,
 	TouchSwipeLeft,
@@ -26,6 +27,7 @@ typedef enum {
 } SwipeTypes;
 
 @implementation PullView
+// 以嵌入式拖曳手勢辨識器建立新視圖
 - (id) initWithImage: (UIImage *) anImage
 {
 	if (self = [super initWithImage:anImage])
@@ -38,26 +40,29 @@ typedef enum {
 	return self;
 }
 
+// 允許同時進行辨識
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return YES;
 }
 
+// 偵測到掃過手勢時，處理拖曳手勢
 - (void) handlePan: (UIPanGestureRecognizer *) uigr
 {
-	// Only deal with scroll view superviews
+	// 只需對UIScrollView的子類別處理
 	if (![self.superview isKindOfClass:[UIScrollView class]]) return;
     
-	// Extract super views
+	// 抓出父類別
 	UIView *supersuper = self.superview.superview;
 	UIScrollView *scrollView = (UIScrollView *) self.superview;
 	
-	// Calculate location of touch
+	// 計算觸控的位置
 	CGPoint touchLocation = [uigr locationInView:supersuper];
 	
+	// 根據辨識器的狀態，處理觸控事件
 	if (uigr.state == UIGestureRecognizerStateBegan) 
 	{
-		// Initialize recognizer
+		// 初始化控制器
 		gestureWasHandled = NO;
 		pointCount = 1;
 		startPoint = touchLocation;
@@ -67,11 +72,11 @@ typedef enum {
     {
         pointCount++;
         
-        // Calculate whether a swipe has occured
+        // 計算是不是已經發生掃過手勢
         float dx = DX(touchLocation, startPoint);
         float dy = DY(touchLocation, startPoint);
         
-        // Detect known swipe-types
+        // 偵測已知的掃過類型
         BOOL finished = YES;
         if ((dx > SWIPE_DRAG_MIN) && (ABS(dy) < DRAGLIMIT_MAX)) // hswipe left
             touchtype = TouchSwipeLeft;
@@ -84,7 +89,7 @@ typedef enum {
         else
             finished = NO;
         
-        // If unhandled and a downward swipe, produce a new draggable view
+        // 如果尚未處理，而且是個往下的掃過手勢，建立新的可拖拉視圖
         if (!gestureWasHandled && finished && (touchtype == TouchSwipeDown))
         {
             dv = [[DragView alloc] initWithImage:self.image];
@@ -96,14 +101,14 @@ typedef enum {
         }
         else if (gestureWasHandled)
         {
-            // allow continued dragging after detection
+            // 偵測後，還能繼續拖拉
             dv.center = touchLocation;
         }
     }
     
     if (uigr.state == UIGestureRecognizerStateEnded)
     {
-        // ensure that the scroll view returns to scrollable
+        // 確定捲動視圖回到可捲動的狀態
         if (gestureWasHandled)
             scrollView.scrollEnabled = YES;
     }

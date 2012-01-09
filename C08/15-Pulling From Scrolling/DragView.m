@@ -20,14 +20,14 @@
 	return self;
 }
 
-// Promote touched view
+// 將被觸控的視圖移到最上面
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
 	[self.superview bringSubviewToFront:self];
 	previousLocation = self.center;
 }
 
-// Move view
+// 移動視圖
 - (void) handlePan: (UIPanGestureRecognizer *) uigr
 {
 	CGPoint translation = [uigr translationInView:self.superview];
