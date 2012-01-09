@@ -98,13 +98,13 @@ CGRect CGRectFlipFlop(CGRect rect)
     return CGRectMake(rect.origin.y, rect.origin.x, rect.size.height, rect.size.width);
 }
 
-// Does not affect point of origin
+// 不會影響原點
 CGRect CGRectFlipSize(CGRect rect)
 {
     return CGRectMake(rect.origin.x, rect.origin.y, rect.size.height, rect.size.width);
 }
 
-// Does not affect size
+// 不會影響大小
 CGRect  CGRectFlipOrigin(CGRect rect)
 {
     return CGRectMake(rect.origin.y, rect.origin.x, rect.size.width, rect.size.height);
@@ -132,7 +132,7 @@ CGSize CGSizeFitInSize(CGSize sourceSize, CGSize destSize)
 	return newSize;
 }
 
-// Only scales down, not up, and centers result
+// 只會縮小，不會放大，並將結果置中
 CGRect CGRectFitSizeInRect(CGSize sourceSize, CGRect destRect)
 {
     CGSize destSize = destRect.size;
