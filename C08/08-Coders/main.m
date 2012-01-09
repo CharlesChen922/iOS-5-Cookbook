@@ -57,10 +57,10 @@
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // Promote the touched view
+    // 將被觸摸到的視圖移到最前面
     [self.superview bringSubviewToFront:self];
     
-    // Remember original location
+    // 記住原來的位置
     previousLocation = self.center;
 }
 
@@ -69,7 +69,7 @@
 	CGPoint translation = [uigr translationInView:self.superview];
 	CGPoint newcenter = CGPointMake(previousLocation.x + translation.x, previousLocation.y + translation.y);
 	
-	// Bound movement into parent bounds
+	// 將移動範圍限制在父視圖的bounds內
 	float halfx = CGRectGetMidX(self.bounds);
 	newcenter.x = MAX(halfx, newcenter.x);
 	newcenter.x = MIN(self.superview.bounds.size.width - halfx, newcenter.x);
@@ -78,7 +78,7 @@
 	newcenter.y = MAX(halfy, newcenter.y);
 	newcenter.y = MIN(self.superview.bounds.size.height - halfy, newcenter.y);
 	
-	// Set new location
+	// 設定新位置
 	self.center = newcenter;	
 }
 
