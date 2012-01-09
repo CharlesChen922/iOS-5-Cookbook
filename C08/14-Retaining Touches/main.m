@@ -59,7 +59,7 @@ NSString *nonce()
 
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // Move all completed touches out of memory named keys
+    // 完成的觸控路徑，原本以記憶體位址當鍵，通通換掉
     for (UITouch *touch in touches)
     {
         NSString *key = [NSString stringWithFormat:@"%d", touch];
