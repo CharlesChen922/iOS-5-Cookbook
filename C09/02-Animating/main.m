@@ -28,6 +28,7 @@
 
 - (void) zoomButton: (UIButton *) aButton
 {
+	// 將按鈕放大一點點
 	[UIView animateWithDuration:0.2f 
 					 animations:^{
 						 button.transform = CGAffineTransformMakeScale(1.1f, 1.1f);
@@ -36,6 +37,7 @@
 
 - (void) relaxButton: (UIButton *) aButton
 {
+	// 將按鈕回復成原本大小
 	[UIView animateWithDuration:0.2f 
 					 animations:^{
 						 button.transform = CGAffineTransformIdentity;
@@ -67,25 +69,25 @@
     [super loadView];
     self.view.backgroundColor = [UIColor whiteColor];
 
-    // Create a button sized to our art
+    // 根據美術圖案的大小建立按鈕
 	button = [UIButton buttonWithType:UIButtonTypeCustom];
 	button.frame = CGRectMake(0.0f, 0.0f, 300.0f, 233.0f);
 	
-	// Set up the button aligment properties
+	// 設定按鈕的對齊屬性
 	button.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
 	
-	// Set the font and color
+	// 設定字型與大小
 	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 	[button setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
 	button.titleLabel.font = [UIFont boldSystemFontOfSize:24.0f];
 	
-	// Add actions
+	// 加入動作，切換按鈕時，執行放大縮小的動畫效果
 	[button addTarget:self action:@selector(zoomButton:) forControlEvents: UIControlEventTouchDown | UIControlEventTouchDragInside | UIControlEventTouchDragEnter];
 	[button addTarget:self action:@selector(relaxButton:) forControlEvents: UIControlEventTouchDragExit | UIControlEventTouchCancel | UIControlEventTouchDragOutside];
 	[button addTarget:self action:@selector(toggleButton:) forControlEvents: UIControlEventTouchUpInside];
     
-	// Place the button into the view and initialize its art
+	// 將按鈕放入視圖裡，並初始化美術圖案
 	[self.view addSubview:button];
     [self toggleButton:button];
 }
