@@ -30,11 +30,11 @@
     
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Add control to view
+    // 將控制項加入視圖
 	cc = [[ColorControl alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 280.0f, 100.0f)];
     [self.view addSubview:cc];
 
-	// Add target-action pair
+	// 設定目標-動作配對
 	[cc addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
