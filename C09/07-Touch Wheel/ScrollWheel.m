@@ -1,28 +1,28 @@
 #import "ScrollWheel.h"
 
 #pragma mark Math
-// Return a point with respect to a given origin
+// 相對於給定的原點，回傳點的座標
 CGPoint centeredPoint(CGPoint pt, CGPoint origin)
 {
 	return CGPointMake(pt.x - origin.x, pt.y - origin.y);
 }
 
-// Return the angle of a point with respect to a given origin
+// 相對於給定的原點，回傳點的角度
 float getangle (CGPoint p1, CGPoint c1)
 {
-	// SOH CAH TOA 
+	// 三角函數，sin=對邊/斜邊，cos=鄰邊/斜邊，tan=對邊/鄰邊
 	CGPoint p = centeredPoint(p1, c1);
 	float h = ABS(sqrt(p.x * p.x + p.y * p.y));
 	float a = p.x;
 	float baseAngle = acos(a/h) * 180.0f / M_PI;
 	
-	// Above 180
+	// 大於180
 	if (p1.y > c1.y) baseAngle = 360.0f - baseAngle;
 	
 	return baseAngle;
 }
 
-// Return whether a point falls within the radius from a given origin
+// 給定原點，判斷點是否落在半徑範圍內
 BOOL pointInsideRadius(CGPoint p1, float r, CGPoint c1)
 {
 	CGPoint pt = centeredPoint(p1, c1);
@@ -38,15 +38,16 @@ BOOL pointInsideRadius(CGPoint p1, float r, CGPoint c1)
 @synthesize theta;
 
 #pragma mark Object initialization
+// 觸控輪的外觀規劃
 - (id) initWithFrame: (CGRect) aFrame
 {
 	if (self = [super initWithFrame:aFrame])
 	{
-		// This control uses a fixed 200x200 sized frame
+		// 這個控制項的frame固定為200x200
 		self.frame = CGRectMake(0.0f, 0.0f, 200.0f, 200.0f); 
 		self.center = CGPointMake(CGRectGetMidX(aFrame), CGRectGetMidY(aFrame));
 		
-		// Add the touchwheel art
+		// 觸控輪的美術圖案
 		UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wheel.png"]];
 		[self  addSubview:iv];
 	}
@@ -69,17 +70,19 @@ BOOL pointInsideRadius(CGPoint p1, float r, CGPoint c1)
 - (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
 {
 	CGPoint p = [touch locationInView:self];
-	CGPoint cp = CGPointMake(self.bounds.size.width / 2.0f, self.bounds.size.height / 2.0f);
-	// self.value = 0.0f; // Uncomment to set each touch to a separate value calculation
 	
-	// First touch must touch the gray part of the wheel
+	// 在視圖自己的座標系統裡的中心點
+	CGPoint cp = CGPointMake(self.bounds.size.width / 2.0f, self.bounds.size.height / 2.0f);
+	// self.value = 0.0f; // 拿掉註解的話，每次觸控都是重新開始
+	
+	// 一開始觸控的位置必須在輪子的灰色區域裡
 	if (!pointInsideRadius(p, cp.x, cp)) return NO;
 	if (pointInsideRadius(p, 30.0f, cp)) return NO;
 
-	// Set the initial angle
+	// 設定初始角度
 	self.theta = getangle([touch locationInView:self], cp);
 
-	// Establish touch down
+	// 發出UIControlEventTouchDown事件
 	[self sendActionsForControlEvents:UIControlEventTouchDown];
 
 	return YES;
@@ -89,30 +92,32 @@ BOOL pointInsideRadius(CGPoint p1, float r, CGPoint c1)
 {
 	
 	CGPoint p = [touch locationInView:self];
+	
+	// 在視圖自己的座標系統裡的中心點
 	CGPoint cp = CGPointMake(self.bounds.size.width / 2.0f, self.bounds.size.height / 2.0f);
 	
-	// Touch updates
+	// 更新
 	if (CGRectContainsPoint(self.frame, p))
         [self sendActionsForControlEvents:UIControlEventTouchDragInside];
     else 
         [self sendActionsForControlEvents:UIControlEventTouchDragOutside];		
 
-	// falls outside too far, with boundary of 50 pixels. Inside strokes treated as touched
+	// 離開太遠了，距離在50像素以內
 	if (!pointInsideRadius(p, cp.x + 50.0f, cp)) return NO;
 	
 	float newtheta = getangle([touch locationInView:self], cp);
 	float dtheta = newtheta - self.theta;
 
-	// correct for edge conditions
+	// 修正極端的狀況
 	int ntimes = 0;
 	while ((ABS(dtheta) > 300.0f)  && (ntimes++ < 4))
 		if (dtheta > 0.0f) dtheta -= 360.0f; else dtheta += 360.0f;
 
-	// Update current values
+	// 更新數值
 	self.value -= dtheta / 360.0f;
 	self.theta = newtheta;
 
-	// Send value changed alert
+	// 送出數值更新的事件
 	[self sendActionsForControlEvents:UIControlEventValueChanged];
 
 	return YES;
@@ -120,7 +125,7 @@ BOOL pointInsideRadius(CGPoint p1, float r, CGPoint c1)
 
 - (void) endTrackingWithTouch: (UITouch *)touch withEvent: (UIEvent *)event
 {
-    // Test if touch ended inside or outside
+    // 檢查觸控結束時，在範圍內還是外
     CGPoint touchPoint = [touch locationInView:self];
     if (CGRectContainsPoint(self.bounds, touchPoint))
         [self sendActionsForControlEvents:UIControlEventTouchUpInside];
@@ -131,7 +136,7 @@ BOOL pointInsideRadius(CGPoint p1, float r, CGPoint c1)
 
 - (void)cancelTrackingWithEvent: (UIEvent *) event
 {
-	// Cancel
+	// 取消
 	[self sendActionsForControlEvents:UIControlEventTouchCancel];
 }
 @end
