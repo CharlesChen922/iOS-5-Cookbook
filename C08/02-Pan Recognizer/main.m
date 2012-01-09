@@ -33,10 +33,10 @@
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // Promote the touched view
+    // 將被觸摸到的視圖移到最前面
     [self.superview bringSubviewToFront:self];
     
-    // Remember original location
+    // 記住原來的位置
     previousLocation = self.center;
 }
 
@@ -58,7 +58,7 @@
     self.view.backgroundColor = [UIColor blackColor];
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
-    // Add the flowers to random points on the screen	
+    // 加入花朵，亂數擺放在螢幕上	
 	for (int i = 0; i < MAXFLOWERS; i++)
 	{
 		NSString *whichFlower = [[NSArray arrayWithObjects:@"blueFlower.png", @"pinkFlower.png", @"orangeFlower.png", nil] objectAtIndex:(random() % 3)];
