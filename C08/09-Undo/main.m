@@ -55,20 +55,20 @@
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // Promote the touched view
+    // 將被觸摸到的視圖移到最前面
     [self.superview bringSubviewToFront:self];
     
-    // Remember original location
+    // 記住原來的位置
     previousLocation = self.center;
 }
 
 - (void) setPosition: (CGPoint) position fromPosition: (CGPoint) previousPosition
 {
-	// Prepare undo-redo first. No completion blocks yet.
+	// 先準備復原動作。尚未可以使用收尾block（completion block）。
 	[[self.undoManager prepareWithInvocationTarget:self] setPosition:previousPosition fromPosition:position];
 	[self.viewController performSelector:@selector(checkUndoAndUpdateNavBar) withObject:nil afterDelay:0.2f];
 	
-	// Make the change
+	// 改變
 	[UIView animateWithDuration:0.1f animations:^{self.center = position;}];
 }
 
@@ -77,7 +77,7 @@
 	CGPoint translation = [uigr translationInView:self.superview];
 	CGPoint newcenter = CGPointMake(previousLocation.x + translation.x, previousLocation.y + translation.y);
 	
-	// Bound movement into parent bounds
+	// 將移動範圍限制在父視圖的bounds內
 	float halfx = CGRectGetMidX(self.bounds);
 	newcenter.x = MAX(halfx, newcenter.x);
 	newcenter.x = MIN(self.superview.bounds.size.width - halfx, newcenter.x);
@@ -86,10 +86,10 @@
 	newcenter.y = MAX(halfy, newcenter.y);
 	newcenter.y = MIN(self.superview.bounds.size.height - halfy, newcenter.y);
 	
-	// Set new location
+	// 設定新位置
 	self.center = newcenter;
 	
-	// Test for end state
+	// 若手勢結束，更新復原堆疊與導覽列
 	if (uigr.state == UIGestureRecognizerStateEnded)
 	{
 		[self setPosition:self.center fromPosition:previousLocation];
@@ -154,14 +154,14 @@
 
 - (void) checkUndoAndUpdateNavBar
 {
-    // Do not interrupt any ongoing operations -- No completion handlers here
+    // 不要打斷任何正在進行中的操作 -- 沒有收尾處理方法（completion handlers）
 	if ([undoManager isUndoing])
 	{
 		[self performSelector:@selector(checkUndoAndUpdateNavBar) withObject:nil afterDelay:0.1f];
 		return;
 	}
 	
-	// Don't show the undo button if the undo stack is empty
+	// 如果復原堆疊是空的，不顯示Undo按鈕
 	if (!undoManager.canUndo) 
 		self.navigationItem.leftBarButtonItem = nil;
 	else
@@ -170,7 +170,7 @@
 
 - (void) undo
 {
-	// Perform the undo
+	// 復原
 	[undoManager undo];
 }
 
