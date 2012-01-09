@@ -29,6 +29,7 @@ typedef void (^CompletionBlock)(BOOL completed);
 
 @implementation TestBedViewController
 
+// 以頁面控制項切換頁面
 - (void) pageTurn: (UIPageControl *) aPageControl
 {
 	int whichPage = aPageControl.currentPage;
@@ -36,12 +37,14 @@ typedef void (^CompletionBlock)(BOOL completed);
 					 animations:^{scrollView.contentOffset = CGPointMake(dimension * whichPage, 0.0f);}];
 }
 
+// 以捲動切換頁面。加入一些彈性
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)aScrollView
 {
-    // Fudge a little and take the floor to accommodate division issues
+    // 稍微模糊一點，並取floor，捨棄小數點
 	pageControl.currentPage = floor((scrollView.contentOffset.x / dimension) + 0.25);
 }
 
+// 回傳新顏色
 - (UIColor *)randomColor
 {
 	float red = (64 + (random() % 191)) / 256.0f;
@@ -50,14 +53,17 @@ typedef void (^CompletionBlock)(BOOL completed);
 	return [UIColor colorWithRed:red green:green blue:blue alpha:1.0f];
 }
 
+// 新增、刪除、擺設方向更改時，重新規劃頁面
 - (void) layoutPages
 {
     int whichPage = pageControl.currentPage;
     
+	// 更新捲動視圖與內容大小
     scrollView.frame = CGRectMake(0.0f, 0.0f, dimension, dimension);
     scrollView.contentSize = CGSizeMake(pageControl.numberOfPages * dimension, dimension);
 	scrollView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
     
+    // 只顯示這些頁面（標號為999）
     float offset = 0.0f;
     for (UIView *eachView in scrollView.subviews)
     {
@@ -68,9 +74,11 @@ typedef void (^CompletionBlock)(BOOL completed);
         }
     }
     
+	// 捲動到新頁面
     scrollView.contentOffset = CGPointMake(dimension * whichPage, 0.0f);
 }
 
+// 新增頁面
 - (void) addPage
 {
 	pageControl.numberOfPages = pageControl.numberOfPages + 1;
@@ -84,6 +92,7 @@ typedef void (^CompletionBlock)(BOOL completed);
     [self layoutPages];
 }
 
+// 使用者要求新增頁面
 - (void) requestAdd: (UIButton *) button
 {
 	[self addPage];
@@ -92,6 +101,7 @@ typedef void (^CompletionBlock)(BOOL completed);
 	[self pageTurn:pageControl];
 }
 
+// 刪除目前頁面
 - (void) deletePage
 {
 	int whichPage = pageControl.currentPage;
@@ -111,6 +121,7 @@ typedef void (^CompletionBlock)(BOOL completed);
     [self layoutPages];
 }
 
+// 取消刪除
 - (void) hideConfirmAndCancel
 {
 	cancelButton.enabled = NO;
@@ -120,6 +131,7 @@ typedef void (^CompletionBlock)(BOOL completed);
     }];
 }
 
+// 使用者確定刪除目前頁面
 - (void) confirmDelete: (UIButton *) button
 {
 	[self deletePage];
@@ -129,19 +141,21 @@ typedef void (^CompletionBlock)(BOOL completed);
 	[self hideConfirmAndCancel];
 }
 
+// 使用者取消刪除
 - (void) cancelDelete: (UIButton *) button
 {
 	[self hideConfirmAndCancel];
 }
 
+// 使用者要求刪除目前頁面
 - (void) requestDelete: (UIButton *) button
 {
-	// Bring forth the cancel and confirm buttons
+	// 顯示取消與確定按鈕
 	[cancelButton.superview bringSubviewToFront:cancelButton];
 	[confirmButton.superview bringSubviewToFront:confirmButton];
 	cancelButton.enabled = YES;
 	
-	// Animate the confirm button into place
+	// 將確定按鈕以動畫效果顯示
 	confirmButton.center = CGPointMake(deleteButton.center.x - 300.0f, deleteButton.center.y);
 	
 	[UIView animateWithDuration:0.3f animations:^(void)
@@ -150,6 +164,7 @@ typedef void (^CompletionBlock)(BOOL completed);
     }];
 }
 
+// 載入視圖時，設定頁面控制項與捲動視圖
 - (void) viewDidLoad
 {
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
@@ -159,21 +174,22 @@ typedef void (^CompletionBlock)(BOOL completed);
     pageControl.numberOfPages = 0;
 	[pageControl addTarget:self action:@selector(pageTurn:) forControlEvents:UIControlEventValueChanged];
     
-	// Create the scroll view and set its content size and delegate
+	// 建立捲動視圖，設定內容大小與委派
 	scrollView = [[UIScrollView alloc] init];
 	scrollView.pagingEnabled = YES;
 	scrollView.delegate = self;
 	[self.view addSubview:scrollView];
     
-	// Load in pages
+	// 載入頁面
 	for (int i = 0; i < INITPAGES; i++)
         [self addPage];    
     pageControl.currentPage = 0;
 	
-	// Increase the size of the add button
+	// 加大新增按鈕的大小，比較容易點擊
     addButton.frame = CGRectInset(addButton.frame, -20.0f, -20.0f);
 }
 
+// 更新視圖畫面編排
 - (void) viewDidAppear:(BOOL)animated
 {
     dimension = MIN(self.view.bounds.size.width, self.view.bounds.size.height) * 0.8f;
