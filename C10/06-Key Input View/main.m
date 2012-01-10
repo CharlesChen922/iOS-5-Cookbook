@@ -20,19 +20,20 @@
 
 @implementation KeyInputToolbar
 
-// Is there text available that can be deleted
+// 有文字可以被刪除嗎？
 - (BOOL) hasText
 {
 	if (!string || !string.length) return NO;
 	return YES;
 }
 
+// 列按鈕被點擊時，變成第一回應者
 - (void) resume
 {
     [self becomeFirstResponder];
 }
 
-// Reload the toolbar with the string
+// 重新載入工具列，更新字串
 - (void) update
 {
 	NSMutableArray *theItems = [NSMutableArray array];
@@ -43,7 +44,7 @@
 	self.items = theItems;	
 }
 
-// Insert new text into the string
+// 插入新字串
 - (void)insertText:(NSString *)text
 {
 	if (!string) string = [NSMutableString string];
@@ -51,10 +52,10 @@
 	[self update];
 }
 
-// Delete one character
+// 刪除一個字元
 - (void)deleteBackward
 {
-	// Super caution, even if hasText reports YES
+	// 請特別小心，即使hasText回傳YES
 	if (!string) 
 	{
 		string = [NSMutableString string];
@@ -64,17 +65,19 @@
 	if (!string.length) 
 		return;
 	
-	// Remove a character
+	// 刪除一個字元
 	[string deleteCharactersInRange:NSMakeRange(string.length - 1, 1)];
 	[self update];
 }
 
+// 允許視圖變成第一回應者
 - (BOOL)canBecomeFirstResponder 
 { 
 	return YES; 
 }
 
-// Do not use this in App Store code, kids. Allows you to force Hardware keyboard only interaction
+// 各位，提交給App Store的應用軟體裡，不要使用底下的程式碼。
+// 強迫啟動硬體鍵盤的處理流程
 /* - (void) disableOnscreenKeyboard
  {
  void *gs = dlopen("/System/Library/PrivateFrameworks/GraphicsServices.framework/GraphicsServices", RTLD_LAZY);
@@ -84,9 +87,10 @@
  } */
 
 
+// 被觸控時，變成第一回應者
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 {
-	// [self disableOnscreenKeyboard]; // App Store unsafe
+	// [self disableOnscreenKeyboard]; // 可能會被App Store退回
 	[self becomeFirstResponder];
 }	
 @end
