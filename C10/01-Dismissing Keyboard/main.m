@@ -19,6 +19,8 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+	// 抓到使用者按下換行鍵的時間點
+    //讓文字輸入欄位放棄第一回應者的狀態
     [textField resignFirstResponder];
     return YES;
 }
@@ -30,14 +32,17 @@
     
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
    
-    // Create a text field by hand
+	// 手動建立文字輸入欄位
 	tf = [[UITextField alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 100.0f, 30.0f)];
  	tf.center = CGPointMake(self.view.center.x, 30.0f);
 	tf.placeholder = @"Name";
 	[self.view addSubview:tf];
 	
-	// Update all text fields, including those defined in interface builder,
-	// to set the delegate, return key type, and several other useful traits
+	// 更新文字輸入欄位，包括以IB定義的，
+	// 設定委派、換行鍵種類、其他文字特性。
+	// 有一點要事先聲明，這裡僅示範文字輸入欄位的屬性設定，
+	// 不處理如何尋找視圖──我已經事先知道
+	// 在此處理的子視圖是些什麼東西
 	for (UIView *view in self.view.subviews)
 	{
 		if ([view isKindOfClass:[UITextField class]])
