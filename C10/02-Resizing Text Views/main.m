@@ -24,19 +24,19 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 
 - (void) keyboardWillHide: (NSNotification *) notification
 {
-	// return to previous text view size
+	// 回到先前大小
 	tv.frame = self.view.bounds;
 }
 
 - (void) adjustForKeyboard: (NSNotification *) notification
 {
     
-	// Retrieve the keyboard bounds via the notification userInfo dictionary
+	// 取得userInfo字典裡的鍵盤bounds
 	CGRect kbounds;
 	NSDictionary *userInfo = [notification userInfo];
 	[(NSValue *)[userInfo objectForKey:@"UIKeyboardBoundsUserInfoKey"] getValue:&kbounds];
     
-	// Shrink the textview frame -- comment this out to see the default behavior
+	// 收縮文字視圖的frame -- 註解底下這行，看看預設的樣子
     CGRect destRect = CGRectShrinkHeight(self.view.bounds, kbounds.size.height);
 	tv.frame = destRect;
 }
@@ -51,6 +51,7 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 	tv.font = [UIFont fontWithName:@"Georgia" size:(IS_IPAD) ? 24.0f : 14.0f];
 	[self.view addSubview:tv];
     
+	// 註冊兩個很關鍵的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustForKeyboard:) name:UIKeyboardDidShowNotification object:nil];
 }
