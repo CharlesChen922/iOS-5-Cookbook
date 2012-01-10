@@ -26,6 +26,7 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 
 - (UIToolbar *) accessoryView
 {
+	// 回傳輔助視圖，有著兩個按鈕的工具列：清除與完成
 	tb = [[UIToolbar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 44.0f)];
 	tb.tintColor = [UIColor darkGrayColor];
 	
@@ -38,11 +39,13 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 	return tb;
 }
 
+// 以輔助視圖上的按鈕清除輸入文字
 - (void) clearText
 {
 	[tv setText:@""];
 }
 
+// 以輔助視圖上的按鈕解除鍵盤
 - (void) leaveKeyboardMode
 {
 	[tv resignFirstResponder];
@@ -50,19 +53,19 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 
 - (void) keyboardWillHide: (NSNotification *) notification
 {
-	// return to previous text view size
+	// 回到先前大小
 	tv.frame = self.view.bounds;
 }
 
 - (void) adjustForKeyboard: (NSNotification *) notification
 {
     
-	// Retrieve the keyboard bounds via the notification userInfo dictionary
+	// 取得userInfo字典裡的鍵盤bounds
 	CGRect kbounds;
 	NSDictionary *userInfo = [notification userInfo];
 	[(NSValue *)[userInfo objectForKey:@"UIKeyboardBoundsUserInfoKey"] getValue:&kbounds];
     
-	// Shrink the textview frame -- comment this out to see the default behavior
+	// 收縮文字視圖的frame -- 註解底下這行，看看預設的樣子
     CGRect destRect = CGRectShrinkHeight(self.view.bounds, kbounds.size.height);
 	tv.frame = destRect;
 }
@@ -73,6 +76,7 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
     self.view.backgroundColor = [UIColor whiteColor];    
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
+	// 將客製輔助視圖賦值給文字視圖
     tv = [[UITextView alloc] initWithFrame:self.view.bounds];
 	tv.font = [UIFont fontWithName:@"Georgia" size:(IS_IPAD) ? 24.0f : 14.0f];
     tv.inputAccessoryView = [self accessoryView];
