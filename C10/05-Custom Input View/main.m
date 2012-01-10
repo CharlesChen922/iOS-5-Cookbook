@@ -46,12 +46,14 @@
 @implementation InputToolbar
 - (void) appendString: (NSString *) string
 {
+	// 檢查responderView
 	if (!responderView || ![responderView isFirstResponder]) 
 	{
 		responderView = [UIView currentResponder];
 		if (!responderView) return;
 	}
 	
+	// 若回應者是個文字視圖，插入字串
 	if ([responderView isKindOfClass:[UITextView class]])
     {
         UITextView *textView = (UITextView *) responderView;
@@ -62,10 +64,11 @@
               string, [responderView class]);
 }
 
-// Perform the two appends
+// 處理那兩個輸入文字的項目
 - (void) hello: (id) sender {[self appendString:@"Hello "];}
 - (void) world: (id) sender {[self appendString:@"World "];}
 
+// 初始化工具列的列按鈕
 - (id) initWithFrame: (CGRect) aFrame
 {
 	if (!(self = [super initWithFrame: aFrame])) return self;
