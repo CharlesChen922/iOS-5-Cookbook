@@ -38,11 +38,11 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 	return tb;
 }
 
-// Provide functionality for the two accessory buttons
+// 輔助視圖上兩個按鈕的方法
 - (void) clearText {[tv setText:@""];}
 - (void) leaveKeyboardMode {[tv resignFirstResponder];}
 
-// Decide whether to load the accessory view with or without the Done key
+// 判斷要不要載入Done完成按鈕，放上輔助視圖
 - (void) loadAccessoryView: (BOOL) addDoneKey
 {
 	NSMutableArray *items = [NSMutableArray array];
@@ -55,7 +55,7 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 
 - (BOOL) isUsingHardwareKeyboard: (CGRect) kbounds
 {
-    // Decide whether to show the Done button
+    // 判斷要不要顯示Done完成按鈕
 	CGFloat startPoint = tb.superview.frame.origin.y;
 	CGFloat endHeight = startPoint + kbounds.size.height;
 	CGFloat viewHeight = self.view.window.frame.size.height;
@@ -65,14 +65,14 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 
 - (void) keyboardDidHide: (NSNotification *) notification
 {
-	// return to previous text view size
+	// 回到先前的大小
 	tv.frame = self.view.bounds;
 }
 
 - (void) keyboardDidShow: (NSNotification *) notification
 {
     
-	// Retrieve the keyboard bounds via the notification userInfo dictionary
+	// 取得userInfo字典裡的鍵盤bounds
 	CGRect kbounds;
 	NSDictionary *userInfo = [notification userInfo];
 	[(NSValue *)[userInfo objectForKey:@"UIKeyboardBoundsUserInfoKey"] getValue:&kbounds];
@@ -83,7 +83,7 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 
 - (void) updateTextViewBounds: (NSNotification *) notification
 {
-	if (![tv isFirstResponder])	 // no keyboard
+	if (![tv isFirstResponder])	// 沒有鍵盤
 	{
 		tv.frame = self.view.bounds;
 		return;
