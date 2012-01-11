@@ -48,7 +48,7 @@
 		[cs addCharactersInString:@"+-"];
 	
 	
-	// legal characters check
+	// 檢查合法字元
     NSString *filtered = [[string componentsSeparatedByCharactersInSet:[cs invertedSet]] componentsJoinedByString:@""];
     BOOL basicTest = [string isEqualToString:filtered];
     
