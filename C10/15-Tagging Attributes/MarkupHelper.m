@@ -24,7 +24,11 @@
 	StringHelper *stringHelper = [StringHelper buildHelper];
 	CGFloat fontSize = BASE_TEXT_SIZE;
     
+<<<<<<< HEAD
 	// 初始化標頭（header）、粗體、斜體.
+=======
+	// 初始化標頭（header）、粗體、斜體
+>>>>>>> translate comments to Chinese, C10/15-Tagging Attributes
 	int hlevel = 0;
 	BOOL bold = NO, emph = NO;
 	
@@ -94,7 +98,7 @@
 		else if (STRMATCH(tagText, @"</b>"))	bold = NO;
 		else if (STRMATCH(tagText, @"<b>"))		bold = YES;
 		
-		// 置中標籤Center Tag
+		// 置中標籤
 		if (STRMATCH(tagText, @"</center>"))
 			stringHelper.alignment = @"natural";
 		else if (STRMATCH(tagText, @"<center>"))
