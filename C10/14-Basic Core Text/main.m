@@ -35,14 +35,14 @@
 	
 	CGContextSetTextMatrix(context, CGAffineTransformIdentity);
 	CGContextTranslateCTM(context, 0, self.bounds.size.height);
-	CGContextScaleCTM(context, 1.0, -1.0); // flip the context
+	CGContextScaleCTM(context, 1.0, -1.0); // 翻轉內文
 	
-	// Slightly inset from the edges of the view
+	// 從視圖的邊緣內縮
 	CGMutablePathRef path = CGPathCreateMutable();
 	CGRect insetRect = CGRectInset(self.frame, 100.0f, 80.0f);
 	CGPathAddRect(path, NULL, insetRect);
     
-	// Draw the text
+	// 繪製文字
 	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.string);
 	CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, self.string.length), path, NULL);
 	CTFrameDraw(theFrame, context);
@@ -65,7 +65,7 @@
 @implementation TestBedViewController
 - (void) createText
 {
-	// Initialize a string helper
+	// 初始化StringHelper
 	stringHelper = [StringHelper buildHelper];
 	
 	stringHelper.fontName = @"Futura";
