@@ -30,10 +30,11 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 
 - (void) archiveData
 {
+	// 將目前文字內容儲存到檔案裡
 	[tv.text writeToFile:DATAPATH atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
-// Decide whether to load the accessory view with or without the Done key
+// 決定輔助視圖要不要有Done完成按鈕
 - (void) loadAccessoryView
 {
 	NSMutableArray *items = [NSMutableArray array];
@@ -58,7 +59,7 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 	tb.items = items;	
 }
 
-// Returns a plain accessory view
+// 回傳沒東西的輔助視圖
 - (UIToolbar *) accessoryView
 {
 	tb = [[UIToolbar alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.frame.size.width, 44.0f)];
@@ -67,7 +68,7 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 	return tb;
 }
 
-// Respond to the two accessory buttons
+// 輔助視圖上兩個按鈕的回應動作
 - (void) leaveKeyboardMode { [tv resignFirstResponder];	[self archiveData];}
 - (void) clearText { [tv setText:@""]; }
 
@@ -110,6 +111,7 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
 	tv.frame = newframe;	
 }
 
+// 文字內容變更時，更新undo/redo按鈕
 - (void)textViewDidChange:(UITextView *)textView
 {
 	[self loadAccessoryView];
@@ -121,11 +123,13 @@ CGRect CGRectShrinkHeight(CGRect rect, CGFloat amount)
     self.view.backgroundColor = [UIColor whiteColor];    
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
     
+	// 設定文字視圖
     tv = [[UITextView alloc] initWithFrame:self.view.bounds];
 	tv.font = [UIFont fontWithName:@"Georgia" size:(IS_IPAD) ? 24.0f : 14.0f];
     tv.inputAccessoryView = [self accessoryView];
     tv.delegate = self;
     
+	// 若檔案存在，載入資料
     if ([[NSFileManager defaultManager] fileExistsAtPath:DATAPATH])
     {
         NSString *string = [NSString stringWithContentsOfFile:DATAPATH encoding:NSUTF8StringEncoding error:nil];
