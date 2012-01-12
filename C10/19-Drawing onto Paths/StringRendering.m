@@ -19,16 +19,16 @@
     return renderer;
 }
 
-// Prepare a flipped context
+// 準備翻轉過的內文
 - (void) prepareContextForCoreText
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
 	CGContextSetTextMatrix(context, CGAffineTransformIdentity);
 	CGContextTranslateCTM(context, 0, view.bounds.size.height);
-	CGContextScaleCTM(context, 1.0, -1.0); // flip the context
+	CGContextScaleCTM(context, 1.0, -1.0); // 翻轉內文
 }
 
-// Adjust the drawing rectangle to compensate for the flipped context
+// 因為內文已經翻轉，隨之調整用來繪製的矩形
 - (CGRect) adjustedRect: (CGRect) rect
 {
     CGRect newRect = rect;
@@ -37,7 +37,7 @@
     return newRect;
 }
 
-// Add text to rectangle
+// 在矩形裡加入文字
 - (void) drawInRect: (CGRect) theRect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -56,7 +56,7 @@
 	CFRelease(path);
 }
 
-// Draw in path
+// 在路徑裡繪製
 - (void) drawInPath: (CGMutablePathRef) path
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -71,7 +71,7 @@
 
 }
 
-// Return distance between two points
+// 回傳兩點距離
 float distance (CGPoint p1, CGPoint p2)
 {
 	float dx = p2.x - p1.x;
@@ -85,25 +85,25 @@ float distance (CGPoint p1, CGPoint p2)
 	int pointCount = points.count;
 	if (pointCount < 2) return;
     
-    // CALCULATIONS
+    // 計算
     
-    // calculate the length of the point path
+    // 計算路徑長度
 	float totalPointLength = 0.0f;
 	for (int i = 1; i < pointCount; i++)
 		totalPointLength += distance([[points objectAtIndex:i] CGPointValue], [[points objectAtIndex:i-1] CGPointValue]);
 	
-	// Create the typographic line
+	// 建立排版線，取得長度
 	CTLineRef line = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)string);
 	if (!line) return;
 	double lineLength = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
 	
-	// Retrieve the runs
+	// 取得字符流
 	CFArrayRef runArray = CTLineGetGlyphRuns(line);
 	
-	// Count the items
-	int glyphCount = 0; //  Number of glyphs encountered
-	float runningWidth; //  running width tally
-	int glyphNum = 0;   //  Current glyph
+	// 計算項目個數
+	int glyphCount = 0; //  經過的字符個數
+	float runningWidth; //  記錄字符流的寬度
+	int glyphNum = 0;   //  目前的字符
 	for (CFIndex runIndex = 0; runIndex < CFArrayGetCount(runArray); runIndex++) 
 	{
 		CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArray, runIndex);
@@ -116,7 +116,7 @@ float distance (CGPoint p1, CGPoint p2)
 		}
 	}
     
-    // Use total length to calculate the percent of path consumed at each point
+    // 利用總長度，計算每一點座標的百分比例
 	NSMutableArray *pointPercentArray = [NSMutableArray array];
 	[pointPercentArray addObject:[NSNumber numberWithFloat:0.0f]];
 	float distanceTravelled = 0.0f;
@@ -126,16 +126,16 @@ float distance (CGPoint p1, CGPoint p2)
 		[pointPercentArray addObject:[NSNumber numberWithFloat:(distanceTravelled / totalPointLength)]];
 	}
 	
-	// Add a final item just to stop with. Probably not needed. 
+	// 加入最後的項目
 	[pointPercentArray addObject:[NSNumber numberWithFloat:2.0f]];
     
     
-    // PREPARE FOR DRAWING
+    // 準備繪製
     
     NSRange subrange = {0, glyphNum};
     NSAttributedString *newString = [string attributedSubstringFromRange:subrange];
     
-	// Re-establish line and run array
+	// 為新字串重新建立線與字符流陣列
 	if (glyphNum)
 	{
 		CFRelease(line);
@@ -147,46 +147,46 @@ float distance (CGPoint p1, CGPoint p2)
 		runArray = CTLineGetGlyphRuns(line);
 	}
  
-	// Keep a running tab of how far the glyphs have travelled to
-	// be able to calculate the percent along the point path
+	// 記錄字符已經走多遠了
+    // 才能計算在點路徑上的百分比例
 	float glyphDistance = 0.0f;
 		
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     
-    // Set the initial positions
+    // 設定初始位置
     CGPoint textPosition = CGPointMake(0.0f, 0.0f);
 	CGContextSetTextPosition(context, textPosition.x, textPosition.y);
     
     for (CFIndex runIndex = 0; runIndex < CFArrayGetCount(runArray); runIndex++) 
 	{
-		// Retrieve the run
+		// 取得字符流
 		CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArray, runIndex);
 		
-        // Retrieve font and color
+        // 取得字型與顏色
 		CFDictionaryRef attributes = CTRunGetAttributes(run);
 		CTFontRef runFont = CFDictionaryGetValue(attributes, kCTFontAttributeName);
 		CGColorRef fontColor = (CGColorRef) CFDictionaryGetValue(attributes, kCTForegroundColorAttributeName);
 		CFShow(attributes);
 		if (fontColor) [[UIColor colorWithCGColor:fontColor] set];
 		
-		// Iterate through each glyph in the run
+		// 在字符流裡迭代每一個字符
 		for (CFIndex runGlyphIndex = 0; runGlyphIndex < CTRunGetGlyphCount(run); runGlyphIndex++) 
 		{
-			// Calculate the percent travel
+			// 計算已經經過的百分比
 			float glyphWidth = CTRunGetTypographicBounds(run, CFRangeMake(runGlyphIndex, 1), NULL, NULL, NULL);			
 			float percentConsumed = glyphDistance / lineLength;
             
-			// Find a corresponding pair of points in the path
+			// 在路徑裡找出相對應的一對點座標
 			CFIndex index = 1;
 			while ((index < pointPercentArray.count) && 
 				   (percentConsumed > [[pointPercentArray objectAtIndex:index] floatValue]))
 				index++;
 			
-			// Don't try to draw if we're out of data. This should not happen.
+			// 沒資料時可別試著繪製啊。這不該發生。
 			if (index > (points.count - 1)) continue;
 			
-			// Calculate the intermediate distance between the two points
+			// 計算兩點之間的中間點
 			CGPoint point1 = [[points objectAtIndex:index - 1] CGPointValue];
 			CGPoint point2 = [[points objectAtIndex:index] CGPointValue];
             
@@ -200,23 +200,23 @@ float distance (CGPoint p1, CGPoint p2)
 			CGPoint targetPoint = CGPointMake(point1.x + (percentOffset * dx), (point1.y + percentOffset * dy));
 			targetPoint.y = view.bounds.size.height - targetPoint.y;
             
-			// Set the x and y offset
+			// 設定內文的x與y位移
 			CGContextTranslateCTM(context, targetPoint.x, targetPoint.y);
 			CGPoint positionForThisGlyph = CGPointMake(textPosition.x, textPosition.y);
 			
-			// Rotate
+			// 旋轉內文
 			float angle = -atan(dy / dx);
 			if (dx < 0) angle += M_PI; // going left, update the angle
 			CGContextRotateCTM(context, angle);
 			
-			// Apply text matrix transform
+			// 套用文字矩陣幾何轉換
 			textPosition.x -= glyphWidth;
 			CGAffineTransform textMatrix = CTRunGetTextMatrix(run);
 			textMatrix.tx = positionForThisGlyph.x;
 			textMatrix.ty = positionForThisGlyph.y;
 			CGContextSetTextMatrix(context, textMatrix);
 			
-			// Draw the glyph
+			// 繪製字符
 			CGGlyph glyph;
 			CGPoint position;
 			CGFontRef cgFont = CTFontCopyGraphicsFont(runFont, NULL);
@@ -229,7 +229,7 @@ float distance (CGPoint p1, CGPoint p2)
 			
 			CFRelease(cgFont);
 			
-			// Reset context transforms
+			// 重置內文的幾何轉換
 			CGContextRotateCTM(context, -angle);
 			CGContextTranslateCTM(context, -targetPoint.x, -targetPoint.y);
 			
@@ -243,16 +243,16 @@ float distance (CGPoint p1, CGPoint p2)
 
 #define VALUE(_INDEX_) [NSValue valueWithCGPoint:points[_INDEX_]]
 
-// Get points from Bezier Curve
+// 從貝茲曲線上取得點座標
 void _getPointsFromBezier(void *info, const CGPathElement *element) 
 {
     NSMutableArray *bezierPoints = (__bridge NSMutableArray *)info;    
     
-    // Retrieve the path element type and its points
+    // 取得路徑上的元素種類與它的點座標
     CGPathElementType type = element->type;
     CGPoint *points = element->points;
     
-    // Add the points if they're available (per type)
+    // 如果可用的話（根據種類）加入點座標
     if (type != kCGPathElementCloseSubpath)
     {
         [bezierPoints addObject:VALUE(0)];

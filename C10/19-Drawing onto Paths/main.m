@@ -82,19 +82,19 @@
 }
 
 
-// Draw text using Core Text
+// 使用Core Text繪製文字
 - (void) drawRect:(CGRect)rect
 {
     [renderer prepareContextForCoreText];
     
-    // Draw into rect
+    // 在rect內繪製
     // renderer.inset = 30.0f;
     // [renderer drawInRect:self.bounds];
     
-    // Draw onto circle
+    // 在圓形上繪製
     // [renderer drawOnBezierPath:[self circlePath]];
     
-    // Draw onto spiral
+    // 螺旋形繪製
     [renderer drawOnBezierPath:[self spiralPath]];
 }
 @end
@@ -113,7 +113,7 @@
     
     NSString *testString = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ac lectus ac elit fringilla hendrerit. Aliquam erat volutpat. In magna enim, rutrum in malesuada et, aliquet sit amet libero. Sed posuere bibendum pharetra. Nulla facilisi. Aliquam non justo eu nulla egestas mattis consequat at est. Nam id odio id dui convallis mollis. Pellentesque adipiscing quam ut lacus dignissim a luctus orci iaculis. Ut dapibus ultrices faucibus. Suspendisse potenti. Nulla id quam velit. Fusce id purus lectus, sed pulvinar erat. Ut nisi eros, venenatis nec aliquet vel, scelerisque vitae urna. Fusce id nisl nec massa laoreet ultrices. Proin tortor lorem, tristique sed semper nec, dignissim sed lorem. Suspendisse porttitor, arcu quis lacinia aliquet, augue nibh sollicitudin tortor, vel dapibus massa urna vitae mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus eros mi, elementum volutpat tincidunt in, viverra ut orci. Aliquam erat volutpat. Pellentesque porttitor bibendum ante, id malesuada metus faucibus a. Fusce augue nisi, dapibus at auctor sit amet, scelerisque ac velit. Nunc tincidunt tincidunt libero, eget molestie massa fringilla sit amet. Morbi bibendum consectetur mollis. Morbi lectus ipsum, posuere quis pellentesque id, mollis in tellus. Sed turpis elit, tempus quis tempor a, tempor vel erat. Integer facilisis volutpat congue. Fusce at felis in lectus imperdiet eleifend eget non ipsum.";
 	
-	// The line break mode wraps character-by-character
+	// 斷行模式，無法容納時，在第一個字元斷行
 	uint8_t breakMode = kCTLineBreakByCharWrapping;
 	CTParagraphStyleSetting wordBreakSetting = {
 		kCTParagraphStyleSpecifierLineBreakMode,
@@ -123,10 +123,10 @@
 	CTParagraphStyleSetting alignSettings[1] = {wordBreakSetting};
 	CTParagraphStyleRef paraStyle = CTParagraphStyleCreate(alignSettings, 1);
     
-	// Set the text 
+	// 設定文字
 	CTFontRef fontRef = CTFontCreateWithName((CFStringRef)@"Futura", IS_IPAD ? 32.0f : 16.0f, NULL);
     
-	// Create the attributed string
+	// 建立標記樣式的字串
 	NSDictionary *attrDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 									(__bridge id)fontRef, (NSString *)kCTFontAttributeName, 
 									(__bridge id)paraStyle, (NSString *)kCTParagraphStyleAttributeName,
@@ -135,7 +135,7 @@
 	CFRelease(fontRef);
 	CFRelease(paraStyle);
     
-	// Add the attributed string to the CTView
+	// 將標記樣式的字串加入CTView
     cView = [[CTView alloc] initWithAttributedString:attString];
 	[self.view addSubview:cView];
 	cView.frame = self.view.bounds;
