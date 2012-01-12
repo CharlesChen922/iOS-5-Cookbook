@@ -11,37 +11,38 @@
 #define STRMATCH(STRING1, STRING2) ([[STRING1 uppercaseString] rangeOfString:[STRING2 uppercaseString]].location != NSNotFound)
 
 @implementation MarkupHelper
+// 語彙掃描，類似HTML語法，建立標記樣式字串
 + (NSAttributedString *) stringFromMarkup: (NSString *) inputString
 {
     NSString *aString = [inputString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     
-	// Prepare to scan
+	// 準備掃描
 	NSScanner *scanner = [NSScanner scannerWithString:aString];
 	[scanner setCharactersToBeSkipped:[NSCharacterSet newlineCharacterSet]];
 	NSCharacterSet *startSet = [NSCharacterSet characterSetWithCharactersInString:@"<"];
 	NSCharacterSet *endSet = [NSCharacterSet characterSetWithCharactersInString:@">"];
 	
-	// Initialize a string helper
+	// 初始化StringHelper
 	StringHelper *stringHelper = [StringHelper buildHelper];
 	CGFloat fontSize = BASE_TEXT_SIZE;
     
-	// Headers, bolding, italics.
+	// 初始化標頭（header）、粗體、斜體
 	int hlevel = 0;
 	BOOL bold = NO, emph = NO;
 	
 	NSUInteger loc = 0;
 	while (loc < aString.length)
 	{
-		NSString *contentText = nil; // scan to tag
+		NSString *contentText = nil; // 掃描直到標籤
 		[scanner scanUpToCharactersFromSet:startSet intoString:&contentText];
 		
-		// Handle content (non-tag) text here
+		// 在此處理內容文字（無標籤）
 		if (contentText)
 		{
-			// Move the next location forward
+			// 下一個位置往前推進
 			scanner.scanLocation = (loc += contentText.length + 1);
             
-			// Set the font for the content material
+			// 為內容設定字型
 			NSString *fontName = @"Futura-Medium";
 			if (hlevel == 0)
 			{
@@ -55,7 +56,7 @@
 			[stringHelper appendFormat:contentText];
 		}
         
-		// Scan for the tag
+		// 掃描標籤
 		NSString *baseTag = nil; 
 		[scanner scanUpToCharactersFromSet:endSet intoString:&baseTag];
 		if (!baseTag)
@@ -64,18 +65,18 @@
 			return stringHelper.string;
 		}
 		
-		// Move the next location forward
+		// 下一個位置往前推進
 		scanner.scanLocation = (loc += baseTag.length + 1);
 		
-		// Restore standard tag form
+		// 還原標準標籤格式
 		NSString *tagText = [baseTag stringByAppendingString:@">"];
 		if (![tagText hasPrefix:@"<"]) 
 			tagText = [@"<" stringByAppendingString:tagText];
 		
-		// -- PROCESS TAGS -- 
+		// -- 處理標籤 --
 		
-		// Header Tags
-		if (STRMATCH(tagText, @"</h")) // finish any headline
+		// 標頭（header）標籤
+		if (STRMATCH(tagText, @"</h")) // 結束標頭
 		{
 			hlevel = 0;
 			[stringHelper appendFormat:@"\n"];
@@ -88,19 +89,19 @@
 		if (hlevel)
 			fontSize = BASE_TEXT_SIZE + (8.0f - hlevel) * 2.0f;
 		
-		// Bold and Italic Tags
+		// 粗體與斜體標籤
 		if (STRMATCH(tagText, @"</i>"))			emph = NO;
 		else if (STRMATCH(tagText, @"<i>"))		emph = YES;
 		else if (STRMATCH(tagText, @"</b>"))	bold = NO;
 		else if (STRMATCH(tagText, @"<b>"))		bold = YES;
 		
-		// Center Tag
+		// 置中標籤
 		if (STRMATCH(tagText, @"</center>"))
 			stringHelper.alignment = @"natural";
 		else if (STRMATCH(tagText, @"<center>"))
 			stringHelper.alignment = @"center";
 		
-		// Custom (non-HTML) tag examples: Color and Size
+		// 客製（非HTML）標籤，範例：顏色與大小
 		
 		if (STRMATCH(tagText, @"<color red>"))
 			stringHelper.foregroundColor = [UIColor redColor];
@@ -111,9 +112,9 @@
 		else if (STRMATCH(tagText, @"</color")) // match partial
 			stringHelper.foregroundColor = [UIColor blackColor];
 		
-		if (STRMATCH(tagText, @"<size")) // match partial
+		if (STRMATCH(tagText, @"<size")) // 部分配對
 		{
-			// Scan the value for the new font size
+			// 掃描新字型大小的數值
 			NSScanner *newScanner = [NSScanner scannerWithString:tagText];
 			NSCharacterSet *cs = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
 			[newScanner setCharactersToBeSkipped:cs];
@@ -123,12 +124,12 @@
 			fontSize = BASE_TEXT_SIZE;
 		
         
-		// Paragraph and line break tags
-		if (STRMATCH(tagText, @"<br")) // match all variants
+		// 段落與換行標籤
+		if (STRMATCH(tagText, @"<br")) // 與所有變種配對
 			[stringHelper appendFormat:@"\n"];
 		else if (STRMATCH(tagText, @"</p>"))
 			[stringHelper appendFormat:@"\n\n"];
-		else if (STRMATCH(tagText, @"<p>")) // default paragraph alignment
+		else if (STRMATCH(tagText, @"<p>")) // 預設對齊方式
 			stringHelper.alignment = @"natural";
 	}
     
