@@ -5,11 +5,11 @@
  */
 
 /*
- About this class:
+ 關於這個類別:
  
- - it assumes western left-to-right usage for the page flips
- - it assumes a side-by-side page in landscape, one page in portrait
- - it stores but does not use the current page 
+ - 西式書本，從左到右的翻頁形式
+ - 在橫擺時呈現兩頁，直擺時呈現一頁
+ - 會記錄目前頁面，但不使用 
  */
 
 
@@ -50,14 +50,14 @@
 
 #pragma mark Page Handling
 
-// Update if you'd rather use some other decision style
+// 若你想使用其他風格的寫法，請自行修改
 - (BOOL) useSideBySide: (UIInterfaceOrientation) orientation
 {
     BOOL isLandscape = UIInterfaceOrientationIsLandscape(orientation);
     return isLandscape;
 }
 
-// Store the new page and update the delgate
+// 更新目前頁面，記錄下來，呼叫委派
 - (void) updatePageTo: (uint) newPageNumber
 {
     pageNumber = newPageNumber;
@@ -68,7 +68,7 @@
     SAFE_PERFORM_WITH_ARG(bookDelegate, @selector(bookControllerDidTurnToPage:), [NSNumber numberWithInt:pageNumber]);
 }
 
-// Request controller from delegate
+// 向委派請求控制器
 - (UIViewController *) controllerAtPage: (int) aPageNumber
 {
     if (bookDelegate && 
@@ -81,7 +81,7 @@
     return nil;
 }
 
-// Update interface to the given page
+// 根據給定頁面，更新畫面
 - (void) fetchControllersForPage: (uint) requestedPage orientation: (UIInterfaceOrientation) orientation
 {
     BOOL sideBySide = [self useSideBySide:orientation];
@@ -91,18 +91,18 @@
     uint leftPage = requestedPage;
     if (sideBySide && (leftPage % 2)) leftPage--;
     
-    // Only check against current page when count is appropriate
+    // 當數目相符時，才對目前頁面進行檢查
     if (currentCount && (currentCount == numberOfPagesNeeded))
     {
         if (pageNumber == requestedPage) return;
         if (pageNumber == leftPage) return;
     }
     
-    // Decide the prevailing direction by checking the new page against the old
+    // 根據新舊頁面，決定翻頁方向
     UIPageViewControllerNavigationDirection direction = (requestedPage > pageNumber) ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
     [self updatePageTo:requestedPage];
     
-    // Update the controllers
+    // 更新控制器
     NSMutableArray *pageControllers = [NSMutableArray array];
     SAFE_ADD(pageControllers, [self controllerAtPage:leftPage]);    
     if (sideBySide)
@@ -111,7 +111,7 @@
     [self setViewControllers:pageControllers direction: direction animated:YES completion:nil];
 }
 
-// Entry point for external move request
+// 外界而來的翻頁指令
 - (void) moveToPage: (uint) requestedPage
 {
     [self fetchControllersForPage:requestedPage orientation:(UIInterfaceOrientation)[UIDevice currentDevice].orientation];
@@ -148,14 +148,14 @@
 }
 
 #pragma mark Class utility routines
-// Return a UIViewController that knows how to rotate
+// 回傳知道如何旋轉的UIViewController
 + (id) rotatableViewController
 {
     UIViewController *vc = [[RotatableVC alloc] init];
     return vc;
 }
 
-// Return a new book
+// 回傳新的BookController
 + (id) bookWithDelegate: (id) theDelegate
 {
     BookController *bc = [[BookController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];

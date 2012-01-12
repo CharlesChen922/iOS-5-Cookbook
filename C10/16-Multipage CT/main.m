@@ -35,7 +35,7 @@
 	
 	CGContextSetTextMatrix(context, CGAffineTransformIdentity);
 	CGContextTranslateCTM(context, 0, self.bounds.size.height);
-	CGContextScaleCTM(context, 1.0, -1.0); // flip the context
+	CGContextScaleCTM(context, 1.0, -1.0); // 翻轉內文
     
     [[UIColor scrollViewTexturedBackgroundColor] set];
     CGContextFillRect(context, self.frame);
@@ -44,13 +44,13 @@
     CGRect insetWhite = CGRectInset(self.frame, 10.0f, 10.0f);
     CGContextFillRect(context, insetWhite);
 	
-	// Slightly inset from the edges of the view
+	// 從視圖的邊緣稍微往內縮
 	CGMutablePathRef path = CGPathCreateMutable();
     CGFloat inset = IS_IPAD ? 30.0f : 15.0f;
     CGRect insetRect = CGRectInset(self.frame, inset, inset);
 	CGPathAddRect(path, NULL, insetRect);
     
-	// Draw the text
+	// 繪製文字
 	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.string);
 	CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, self.string.length), path, NULL);
 	CTFrameDraw(theFrame, context);
@@ -90,12 +90,12 @@
     return pages;
 }
 
-// Provide a view controller on demand for the given page number
+// 根據給定的頁面編號，提供視圖控制器
 - (id) viewControllerForPage: (int) pageNumber
 {    
     if (pageNumber < 0) return nil;
     
-    // Provide endleafs before text and after the last (odd) page
+    // 在本文前插入一頁，在最後（奇數）頁之後插入一頁
     if ((pageNumber == 0) ||
         (pageNumber == pageArray.count + 1))
     {
@@ -106,30 +106,30 @@
     
     if (pageNumber > pageArray.count) return nil;
     
-    // Adjust page number to take initial endleaf into account
+    // 調整頁面數目，減去前面插入的起始書頁
     pageNumber--;
     
-    // Establish a new controller
+    // 建立新控制器
     UIViewController *controller = [BookController rotatableViewController];
     
-    // Look up the text that needs to be shown
+    // 找出需要顯示的文字
     NSRange offsetRange = [[pageArray objectAtIndex:pageNumber] rangeValue];
     NSAttributedString *subString = [attributed attributedSubstringFromRange:offsetRange];
 
-    // Add subview
+    // 加入子視圖
     CGRect appRect = (CGRect) {.size = [[UIScreen mainScreen] applicationFrame].size};
     CTView *ct = [[CTView alloc] initWithAttributedString:subString];
     ct.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     ct.frame = appRect;
     [controller.view addSubview:ct];
 
-    // Return the new controller
+    // 回傳新控制器
     return controller;
 }
 
 - (void) viewDidLoad
 {
-    // Add the child controller, and set it to the first page
+    // 加入子控制器，設為第一頁
     [self.view addSubview:bookController.view];
     [self addChildViewController:bookController];
     [bookController didMoveToParentViewController:self];
@@ -145,7 +145,7 @@
     NSString *markup = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     attributed = [MarkupHelper stringFromMarkup:markup];
 
-    // Establish the page view controller
+    // 建立頁面視圖控制器
     CGRect appRect = [[UIScreen mainScreen] applicationFrame];
     bookController = [BookController bookWithDelegate:self];
     bookController.view.frame = (CGRect){.size = appRect.size};

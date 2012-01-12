@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-// Used for storing the most recent book page used
+// 用來儲存最近使用的書頁
 #define DEFAULTS_BOOKPAGE   @"BookControllerMostRecentPage"
 
 @protocol BookControllerDelegate <NSObject>
