@@ -36,12 +36,12 @@ CGRect rectCenteredInRect(CGRect rect, CGRect mainRect)
 	[super drawRect:rect];
 	CGContextRef context = UIGraphicsGetCurrentContext();
     
-	// Flip coordinates and inset enough so the status bar isn't an issue
+	// 翻轉座標，往內縮足夠的距離，才不會跟狀態列起衝突
 	CGRect flipRect = CGRectMake(0.0f, 0.0f, self.frame.size.height, self.frame.size.width);
 	flipRect = CGRectInset(flipRect, 24.0f, 24.0f);
     
-	// Iterate until finding a set of font traits that fits this rectangle
-	// Thanks for the inspiration from the lovely QuickSilver people
+	// 迭代，直到找到適當的一組字型樣式，能夠符合矩形大小
+    // 感謝QuickSilver可愛的開發人員給我的靈感
 	for(fontSize = 18; fontSize < 300; fontSize++ ) 
 	{
 		textFont = [UIFont boldSystemFontOfSize:fontSize+1];
@@ -50,7 +50,7 @@ CGRect rectCenteredInRect(CGRect rect, CGRect mainRect)
 			break;
 	}
 	
-	// Initialize the string helper to match the traits
+	// 初始化StringHelper ，使用上面找到的字型樣式
 	StringHelper *shelper = [StringHelper buildHelper];
 	shelper.fontSize = fontSize;
 	shelper.foregroundColor = [UIColor whiteColor];
@@ -58,38 +58,38 @@ CGRect rectCenteredInRect(CGRect rect, CGRect mainRect)
 	shelper.fontName = @"GeezaPro-Bold";
 	[shelper appendFormat:@"%@", string];
     
-	// Establish a frame that encloses the text at the maximum size
+	// 找出可以包含文字的最大frame
 	CGRect textFrame = CGRectZero;
 	textFrame.size = [string sizeWithFont:[UIFont fontWithName:shelper.fontName size:shelper.fontSize]];
 	
-	// Center the destination rect within the flipped rectangle
+	// 在翻轉後的矩形裡，將目的地矩形置中
 	CGRect centerRect = rectCenteredInRect(textFrame, flipRect);
     
-	// Flip coordinates so the text reads the right way
+	// 翻轉座標，以正確方向顯示文字
 	CGContextSetTextMatrix(context, CGAffineTransformIdentity);
 	CGContextTranslateCTM(context, 0, self.bounds.size.height);
 	CGContextScaleCTM(context, 1.0, -1.0);
     
-	// Rotate 90 deg to write text horizontally along window's vertical axis
+	// 旋轉90度，靠著視窗的垂直軸，繪製文字
 	CGContextRotateCTM(context, -M_PI_2);
 	CGContextTranslateCTM(context, -self.frame.size.height, 0.0f);
 	
-	// Draw a lovely gray backsplash
+	// 繪製灰色底圖
 	[[UIColor grayColor] set];
 	CGRect insetRect = CGRectInset(centerRect, -20.0f, -20.0f);
 	[[UIBezierPath bezierPathWithRoundedRect:insetRect cornerRadius:32.0f] fill];
 	CGContextFillPath(context);
     
-	// Create a path for the text to draw into
+	// 建立路徑，繪製文字的地方
 	CGMutablePathRef path = CGPathCreateMutable();
 	CGPathAddRect(path, NULL, centerRect);
 	
-	// Draw the text
+	// 繪製文字
 	CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)shelper.string);
 	CTFrameRef theFrame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, shelper.string.length), path, NULL);
 	CTFrameDraw(theFrame, context);
 	
-	// Clean up
+	// 結束清理
 	CFRelease(framesetter);
 	CFRelease(path);
 	CFRelease(theFrame);	
