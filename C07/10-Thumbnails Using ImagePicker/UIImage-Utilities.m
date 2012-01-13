@@ -55,7 +55,7 @@ UIImage *screenShot()
 
 + (UIImage *) imageWithBits: (UInt8 *) bits withSize: (CGSize) size
 {
-	// 建立色彩空間
+	// Create a color space
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	if (colorSpace == NULL)
     {
@@ -64,7 +64,7 @@ UIImage *screenShot()
         return nil;
     }
 	
-	// 建立點陣圖內文
+	// Create the bitmap context
     CGContextRef context = CGBitmapContextCreate (bits, size.width, size.height, 8, size.width * 4, colorSpace, kCGImageAlphaPremultipliedFirst);
     if (context == NULL)
     {
@@ -74,28 +74,28 @@ UIImage *screenShot()
 		return nil;
     }
 	
-	// 建立CGImageRef
+	// Create the image ref
     CGColorSpaceRelease(colorSpace );
 	CGImageRef imageRef = CGBitmapContextCreateImage(context);
 	free(CGBitmapContextGetData(context)); // This does the free
 	CGContextRelease(context);
 	
-	// 利用CGImageRef回傳UIImage
+	// Return image using image ref
 	UIImage *newImage = [UIImage imageWithCGImage:imageRef];
 	CFRelease(imageRef);
 
 	return newImage;
 }
 
-// 等比例縮放，完整置入視圖裡，不裁切
+// Proportionately resize, completely fit in view, no cropping
 - (UIImage *) fitInSize: (CGSize) viewsize
 {
-    // 計算置入時的大小
+    // calculate the fitted size
     CGSize size = CGSizeFitInSize(self.size, viewsize);
     
     UIGraphicsBeginImageContext(viewsize);
     
-    // 計算需要鋪上多少空白
+    // Calculate any matting needed for image spacing
     float dwidth = (viewsize.width - size.width) / 2.0f;
     float dheight = (viewsize.height - size.height) / 2.0f;
     
@@ -108,14 +108,14 @@ UIImage *screenShot()
     return newImage;
 }
 
-// 不縮放，可能會裁切
+// No resize, may crop
 - (UIImage *) centerInSize: (CGSize) viewsize
 {
     CGSize size = self.size;
     UIGraphicsBeginImageContext(viewsize);
     
-    // 計算偏移值，確定讓圖像的中心
-    // 放在視圖的中心
+    // Calculate the offset to ensure that the image center is set
+    // to the view center
     float dwidth = (viewsize.width - size.width) / 2.0f;
     float dheight = (viewsize.height - size.height) / 2.0f;
     
@@ -128,13 +128,13 @@ UIImage *screenShot()
     return newImage;
 }
 
-// 填滿視圖每一個像素，邊緣不留白,
-// 若需要，縮放並裁切
+// Fill every view pixel with no black borders,
+// resize and crop if needed
 - (UIImage *) fillSize: (CGSize) viewsize
 {
     CGSize size = self.size;
     
-    // 決定最小的縮放比例
+    // Choose the scale factor that requires the least scaling
     CGFloat scalex = viewsize.width / size.width;
     CGFloat scaley = viewsize.height / size.height;
     CGFloat scale = MAX(scalex, scaley);
@@ -144,7 +144,7 @@ UIImage *screenShot()
     CGFloat width = size.width * scale;
     CGFloat height = size.height * scale;
     
-    // 縮放後，將圖像置中
+    // Center the scaled image
     float dwidth = ((viewsize.width - width) / 2.0f);
     float dheight = ((viewsize.height - height) / 2.0f);
     
@@ -172,7 +172,7 @@ UIImage *screenShot()
 
 CGContextRef CreateARGBBitmapContext (CGSize size)
 {
-    // 建立新的色彩空間
+    // Create the new color space
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     if (colorSpace == NULL)
     {
@@ -180,7 +180,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
         return NULL;
     }
     
-    // 配置記憶體存放點陣圖資料
+    // Allocate memory for the bitmap data
     void *bitmapData = malloc(size.width * size.height * 4);
     if (bitmapData == NULL)
     {
@@ -189,7 +189,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
         return NULL;
     }
     
-    // 建立內文，一個色頻有8 bits
+    // Build an 8-bit per channel context
     CGContextRef context = CGBitmapContextCreate (bitmapData, size.width, size.height, 8, size.width * 4, colorSpace, kCGImageAlphaPremultipliedFirst);
     CGColorSpaceRelease(colorSpace );
     if (context == NULL)
@@ -204,7 +204,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
 
 - (UInt8 *) createBitmap
 {
-    // 給定某圖像，建立點陣圖資料
+    // Create bitmap data for the given image
     CGContextRef context = CreateARGBBitmapContext(self.size);
     if (context == NULL) return NULL;
     
@@ -218,21 +218,22 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
 
 - (UIImage *) convolveImageWithEdgeDetection
 {
-    // 維度
+    // Dimensions
     int theheight = floor(self.size.height);
     int thewidth =  floor(self.size.width);
     
-    // 取得輸入bits，建立輸出bits
+    // Get input and create output bits
     UInt8 *inbits = (UInt8 *)[self createBitmap];
     UInt8 *outbits = (UInt8 *)malloc(theheight * thewidth * 4);
     
-    // 基本的Canny邊緣偵測
+    // Basic Canny Edge Detection
     int matrix1[9] = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
     int matrix2[9] = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
     
     int radius = 1;
     
-    // 迭代每個像素（留下寬radius的邊界)
+    // Iterate through each available pixel (leaving a radius-sized
+    // boundary)
     for (int y = radius; y < (theheight - radius); y++)
         for (int x = radius; x < (thewidth - radius); x++)
         {
@@ -260,7 +261,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
                     offset++;
                 }
             
-            // 賦值outbits
+            // Assign the outbits
             int sumr = MIN(((ABS(sumr1) + ABS(sumr2)) / 2), 255);
             int sumg = MIN(((ABS(sumg1) + ABS(sumg2)) / 2), 255);
             int sumb = MIN(((ABS(sumb1) + ABS(sumb2)) / 2), 255);
@@ -273,7 +274,7 @@ CGContextRef CreateARGBBitmapContext (CGSize size)
             (UInt8) inbits[alphaOffset(x, y, thewidth)];
         }
     
-    // 釋放原先的點陣圖，imageWithBits釋放outbits
+    // Release the original bitmap. imageWithBits frees outbits
     free(inbits);
 
     return [UIImage imageWithBits:outbits withSize:CGSizeMake(thewidth, theheight)];

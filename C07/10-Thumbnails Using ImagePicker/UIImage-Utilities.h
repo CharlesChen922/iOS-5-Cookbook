@@ -8,7 +8,8 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-// 解決從PNG格式建立CI Image JPEG格式的臭蟲
+// There's a bug when creating CI Images from PNG vs JPEG
+// This is a workaround
 CIImage *ciImageFromPNG(NSString *pngFileName);
 
 // RGBA offsets
@@ -17,28 +18,28 @@ NSUInteger redOffset(NSUInteger x, NSUInteger y, NSUInteger w);
 NSUInteger greenOffset(NSUInteger x, NSUInteger y, NSUInteger w);
 NSUInteger blueOffset(NSUInteger x, NSUInteger y, NSUInteger w);
 
-// 將視圖的畫面抓下來
+// Screen shots
 UIImage *imageFromView(UIView *theView);
 UIImage *screenShot();
 
 @interface UIImage (Utilities)
-// 取出圖像裡的一部分
+// Extract a subimage
 - (UIImage *) subImageWithBounds:(CGRect) rect;
 
-// 縮圖
+// Thumbnails
 - (UIImage *) fitInSize: (CGSize) viewsize;
 - (UIImage *) centerInSize: (CGSize) viewsize;
 - (UIImage *) fillSize: (CGSize) viewsize;
 
-// 回傳圖像的點陣圖資料
+// Return a bitmap representation of the image
 - (UInt8 *) createBitmap;
 
-// 基本的Canny邊緣偵測
+// Perform a basic Canny detection
 - (UIImage *) convolveImageWithEdgeDetection;
 
-// 從CIImage建立UIImage，這是個暫時解法
+// This is a bug workaround for creating a UIImage from a CIImage
 + (UIImage *) imageWithCIImage: (CIImage *) aCIImage orientation: (UIImageOrientation) anOrientation;
 
-// 從點陣圖資料建立UIImage
+// Create an image from a bitmap
 + (UIImage *) imageWithBits: (UInt8 *) bits withSize: (CGSize) size;
 @end
