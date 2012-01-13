@@ -119,6 +119,9 @@
 	{
 		DragView *dragger = [[DragView alloc] initWithImage:[self createImage]];
 		dragger.center = RANDOMPOINT;
+		
+		// dragger.backgroundColor = [UIColor lightGrayColor]; // 凸顯背景方框
+		
 		[self.view addSubview:dragger];
 	}	
 }
@@ -140,7 +143,7 @@
 @implementation TestBedAppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {	
-    [application setStatusBarHidden:YES];
+    //[application setStatusBarHidden:YES];
 	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	TestBedViewController *tbvc = [[TestBedViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:tbvc];

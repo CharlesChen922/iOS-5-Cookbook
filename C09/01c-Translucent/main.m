@@ -114,7 +114,7 @@
 @implementation TestBedAppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {	
-    [application setStatusBarHidden:YES];
+    //[application setStatusBarHidden:YES];
 	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	TestBedViewController *tbvc = [[TestBedViewController alloc] init];
     window.rootViewController = tbvc;
