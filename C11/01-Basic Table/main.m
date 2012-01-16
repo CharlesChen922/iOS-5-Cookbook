@@ -19,19 +19,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView 
 { 
-	// This simple table has only one section
+	// 這個表格很簡單，只有一個區段
 	return 1; 
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section 
 {
-	// Return the number of items
+	// 回傳區段裡的列數目
 	return items.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Dequeue or create a cell
+	// 從佇列裡取得儲存格重複使用，或建立新的
 	UITableViewCellStyle style =  UITableViewCellStyleDefault;
 	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:@"BaseCell"];
     
@@ -44,7 +44,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    // Respond to user interaction
+    // 回應使用者的操作
     self.title = [items objectAtIndex:indexPath.row];
 }
 

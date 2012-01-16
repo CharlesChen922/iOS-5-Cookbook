@@ -71,7 +71,7 @@ action:SELECTOR]
     // 設定標題文字，加入Convert按鈕
     self.title = @"Converter";
     self.navigationItem.rightBarButtonItem = 
-    BARBUTTON(@"Convert", @selector(convert:));
+        BARBUTTON(@"Convert", @selector(convert:));
 }
 
 // 應用程式支援所有裝置擺設方向
