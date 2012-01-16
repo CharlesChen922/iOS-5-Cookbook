@@ -45,38 +45,39 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView 
 { 
-	// This simple table has only one section
+	// 這個簡單的表格只有一個區段
 	return 1; 
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section 
 {
-	// Return the number of items
+	// 回傳列數目
 	return items.count;
 }
 
 - (void) toggleSwitch: (UISwitch *) aSwitch
 {
-    // Store the state for the active switch
+    // 儲存作用中的開關的狀態
     [switchStates setBool:aSwitch.isOn ForKey:NUMSTR(aSwitch.superview.tag)];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Use the built-in nib loader
+    // 使用內建的nib載入器
 	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:@"CustomCell"];
 
-    // Retrieve the switch and add a target if needed
+    // 取得開關，有需要的話加入目標
     UISwitch *switchView = (UISwitch *)[cell viewWithTag:99];
     if (![switchView allTargets].count)
         [switchView addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
     
+	// 設定儲存格的標籤
 	cell.textLabel.text = [items objectAtIndex:indexPath.row];
     
-    // Comment this out to see "wrong" behavior
+    // 移除底下這行，觀察「錯」的程式行為
     switchView.on = [switchStates boolForKey:NUMSTR(indexPath.row)];
     
-    // Label the cell's content view, so it can be recovered from the switch
+   // 賦予標號給儲存格的contentView，開關需要這個數字
     cell.contentView.tag = indexPath.row;
     
 	return cell;
@@ -84,7 +85,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    // Respond to user interaction
+    // 回應使用者的操作動作
     self.title = [items objectAtIndex:indexPath.row];
 }
 
