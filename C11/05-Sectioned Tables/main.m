@@ -11,7 +11,7 @@
 #define CRAYON_COLOR(CRAYON) getColor([[CRAYON componentsSeparatedByString:@"#"] lastObject])
 #define ALPHA	@"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-// Convert a 6-character hex color to a UIColor object
+// 將由六個16進位數字組成的顏色值，轉為UIColor物件
 UIColor *getColor(NSString *hexColor)
 {
 	unsigned int red, green, blue;
@@ -37,20 +37,20 @@ UIColor *getColor(NSString *hexColor)
 
 @implementation TestBedViewController
 
-// Return the letter that starts each section member's text
+// 回傳區段資料文字的第一個字母
 - (NSString *) firstLetter: (NSInteger) section
 {
     return [[ALPHA substringFromIndex:section] substringToIndex:1];
 }
 
-// Return an array of items that appear in each section
+// 回傳含有區段項目資料的陣列
 - (NSArray *) itemsInSection: (NSInteger) section
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF beginswith[cd] %@", [self firstLetter:section]];
     return [crayonColors.allKeys filteredArrayUsingPredicate:predicate];
 }
 
-// Return an array of section titles for index
+// 回傳陣列，內含區段索引的標題文字
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)aTableView 
 {
     NSMutableArray *indices = [NSMutableArray array];
@@ -58,49 +58,50 @@ UIColor *getColor(NSString *hexColor)
         if ([[sectionArray objectAtIndex:i] count])
             [indices addObject:[self firstLetter:i]];
     
-		// [indices addObject:@"\ue057"]; // <-- using emoji
+		// [indices addObject:@"\ue057"]; // <-- 使用emoji繪文字表情符號
 		
     return indices;
 }
 
-// Find the section that corresponds to a given title
+// 根據給定標頭文字，找到相對應的區段編號
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
 	return [ALPHA rangeOfString:title].location;
 }
 
-// Return the header title for a section
+// 回傳某區段的標頭文字
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section
 {
     if ([[sectionArray objectAtIndex:section] count] == 0) return nil;
     return [NSString stringWithFormat:@"Crayon names starting with '%@'", [self firstLetter:section]];
 }
 
-// Return the number of table sections
+// 回傳表格裡有幾個區段
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView 
 { 
     return sectionArray.count;
 }
 
-// Return the number of rows per section
+// 回傳某區段裡有幾列
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section 
 {
     return [[sectionArray objectAtIndex:section] count];
 }
 
-// Produce a cell for the given index path
+// 根據給定的索引路徑，回傳儲存格
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Dequeue or create a cell
+	// 從佇列裡取得儲存格重複使用，或建立新的
 	UITableViewCellStyle style =  UITableViewCellStyleDefault;
 	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:@"BaseCell"];
 	if (!cell) 
         cell = [[UITableViewCell alloc] initWithStyle:style reuseIdentifier:@"BaseCell"] ;  
     
-	// Retrieve the crayon and its color
+	// 取得crayon（蠟筆）與它的顏色
     NSArray *currentItems = [sectionArray objectAtIndex:indexPath.section];
 	NSString *crayon = [currentItems objectAtIndex:indexPath.row];
     
+	// 更新儲存格
 	cell.textLabel.text = crayon;
 	if (![crayon hasPrefix:@"White"])
 		cell.textLabel.textColor = [crayonColors objectForKey:crayon];
@@ -109,7 +110,7 @@ UIColor *getColor(NSString *hexColor)
 	return cell;
 }
 
-// Respond to user selections by updating tint colors
+// 使用者點選時，更新導覽列的漸層顏色
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
     NSArray *currentItems = [sectionArray objectAtIndex:indexPath.section];
@@ -123,7 +124,7 @@ UIColor *getColor(NSString *hexColor)
 {
     [super loadView];
 
-	// Prepare the crayon color dictionary
+	// 準備含有crayon（蠟筆）顏色的字典
 	NSString *pathname = [[NSBundle mainBundle]  pathForResource:@"crayons" ofType:@"txt" inDirectory:@"/"];
 	NSArray *rawCrayons = [[NSString stringWithContentsOfFile:pathname encoding:NSUTF8StringEncoding error:nil] componentsSeparatedByString:@"\n"];
 	crayonColors = [NSMutableDictionary dictionary];
