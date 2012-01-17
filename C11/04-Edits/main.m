@@ -22,19 +22,19 @@
 #pragma mark Table contents
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView 
 { 
-	// This simple table has only one section
+	// 這個簡單的表格，只有一個區段
 	return 1; 
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section 
 {
-	// Return the number of items
+	// 回傳項目的個數
 	return items.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Dequeue or create a cell
+	// 從佇列取出儲存格重複使用，或是建立新的
 	UITableViewCellStyle style =  UITableViewCellStyleDefault;
 	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:@"BaseCell"];
     
@@ -49,8 +49,10 @@
 #pragma mark Edits
 - (void) setBarButtonItems
 {
+	// 無論何時都顯示Add按鈕
 	self.navigationItem.leftBarButtonItem = SYSBARBUTTON(UIBarButtonSystemItemAdd, @selector(addItem:));
 	
+	// 看情況顯示Edit或Done按鈕
 	if (self.tableView.isEditing)
 		self.navigationItem.rightBarButtonItem = SYSBARBUTTON(UIBarButtonSystemItemDone, @selector(leaveEditMode));
 	else
@@ -72,11 +74,11 @@
 
 - (void) updateItemAtIndexPath: (NSIndexPath *) indexPath withString: (NSString *) string
 {
-    // Prepare for undo
+    // 在執行編輯動作前，建立復原動作
     NSString *undoString = string ? nil : [items objectAtIndex:indexPath.row];
 	[[self.undoManager prepareWithInvocationTarget:self] updateItemAtIndexPath:indexPath withString:undoString];
 
-	// You cannot insert a nil item. Passing nil is a delete request.
+	// 傳入nil代表刪除
 	if (!string) 
 		[items removeObjectAtIndex:indexPath.row];
 	else 
@@ -88,7 +90,7 @@
 
 - (void) addItem: (id) sender
 {
-	// add a new item
+	// 加入新項目
 	NSIndexPath *newPath = [NSIndexPath indexPathForRow:items.count inSection:0];
 	NSString *newTitle = [NSString stringWithFormat:@"Item %d", ++count];
 	[self updateItemAtIndexPath:newPath withString:newTitle];
@@ -96,14 +98,14 @@
 
 - (void)tableView:(UITableView *)aTableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	// delete item
+	// 刪除項目
 	[self updateItemAtIndexPath:indexPath withString:nil];
 }
 
 #pragma mark Delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    // Respond to user interaction
+    // 在此回應使用者的點選
 }
 
 #pragma mark First Responder for Undo Support
@@ -128,7 +130,7 @@
     items = [NSMutableArray arrayWithArray:[@"A*B*C*D*E" componentsSeparatedByString:@"*"]];
     [self setBarButtonItems];
     
-    // Provide Undo Support
+    // 支援復原Undo
     self.tableView.undoManager.levelsOfUndo = 999;    
     [UIApplication sharedApplication].applicationSupportsShakeToEdit = YES;
 }
