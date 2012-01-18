@@ -17,12 +17,12 @@
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-	return 3; // three columns
+	return 3; // 三個轉輪
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-	return 20; // twenty items per column
+	return 20; // 每轉輪20個項目
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
@@ -44,27 +44,28 @@
 - (void) action: (id) sender
 {
 	
-	// Establish enough space for the picker
+	// 為挑選器視圖建立足夠大的空間
 	NSString *title = @"\n\n\n\n\n\n\n\n\n\n\n\n";
 	if (IS_IPHONE)
 		title = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ? @"\n\n\n\n\n\n\n\n\n" : @"\n\n\n\n\n\n\n\n\n\n\n\n" ;
     
-	// Create the base action sheet
+	// 建立動作表
 	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Set Combo", nil];
 
+	// 顯示動作表
     if (IS_IPHONE)
         [actionSheet showInView:self.view];
     else
         [actionSheet showFromBarButtonItem:sender animated:NO];
 	
-	// Build the picker
+	// 建立挑選器視圖
 	UIPickerView *pickerView = [[UIPickerView alloc] init];
 	pickerView.tag = 101;
 	pickerView.delegate = self;
 	pickerView.dataSource = self;
 	pickerView.showsSelectionIndicator = YES;
     
-	// If working with an iPad, adjust the frames as needed
+	// 若在iPad上，調整frame
 	if (!IS_IPHONE)
 	{
 		pickerView.frame = CGRectMake(0.0f, 0.0f, 272.0f, 216.0f);
@@ -73,7 +74,7 @@
 		actionSheet.center = center;
 	}
 	
-	// Embed the picker
+	// 將挑選器視圖嵌入動作表
 	[actionSheet addSubview:pickerView];
 }
 
