@@ -20,12 +20,15 @@
 @implementation TestBedViewController
 - (void) update: (id) sender
 {
+	// 將日期時間重置為現在的時間
     [datePicker setDate:[NSDate date]];
+	// 更新日期挑選器的datePickerMode 模式屬性
     datePicker.datePickerMode = seg.selectedSegmentIndex;
 }
 
 - (void) action: (id) sender
 {
+	// 根據分段控制項，設定輸出格式
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	switch (seg.selectedSegmentIndex)
 	{
