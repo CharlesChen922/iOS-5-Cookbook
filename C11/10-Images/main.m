@@ -17,12 +17,13 @@
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-	return 3; // three columns
+	return 3; // 三個轉輪
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-	return 1000000;
+	// 回傳一個不合實際的超大數目，代表每一轉輪裡有幾列
+	return 1000000; 
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
@@ -32,6 +33,7 @@
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
+	// 配合美術圖案，指定列的高度
 	return 120.0f;
 }
 
@@ -46,6 +48,7 @@
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
+	// 有需要時建立新的視圖，加入美術圖案
 	UIImageView *imageView;
 	imageView = view ? (UIImageView *) view : [[UIImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 60.0f, 60.0f)];
 	NSArray *names = [NSArray arrayWithObjects:@"club.png", @"diamond.png", @"heart.png", @"spade.png", nil];
@@ -55,6 +58,7 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+	// 根據目前轉輪選定的項目，設定標題
 	UIPickerView *pickerView = (UIPickerView *)[actionSheet viewWithTag:101];
 	NSArray *names = [NSArray arrayWithObjects:@"C", @"D", @"H", @"S", nil];
 	self.title = [NSString stringWithFormat:@"%@•%@•%@", 
@@ -66,27 +70,28 @@
 - (void) action: (id) sender
 {
 	
-	// Establish enough space for the picker
+	// 為挑選器視圖建立足夠大的空間
 	NSString *title = @"\n\n\n\n\n\n\n\n\n\n\n\n";
 	if (IS_IPHONE)
 		title = UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation) ? @"\n\n\n\n\n\n\n\n\n" : @"\n\n\n\n\n\n\n\n\n\n\n\n" ;
     
-	// Create the base action sheet
+	// 建立動作表
 	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:title delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil otherButtonTitles:@"Set Combo", nil];
 
+	// 顯示動作表
     if (IS_IPHONE)
         [actionSheet showInView:self.view];
     else
         [actionSheet showFromBarButtonItem:sender animated:NO];
 	
-	// Build the picker
+	// 建立挑選器視圖
 	UIPickerView *pickerView = [[UIPickerView alloc] init];
 	pickerView.tag = 101;
 	pickerView.delegate = self;
 	pickerView.dataSource = self;
 	pickerView.showsSelectionIndicator = YES;
     
-	// If working with an iPad, adjust the frames as needed
+	// 若在iPad上，調整frame
 	if (!IS_IPHONE)
 	{
 		pickerView.frame = CGRectMake(0.0f, 0.0f, 272.0f, 216.0f);
@@ -95,10 +100,10 @@
 		actionSheet.center = center;
 	}
 	
-	// Embed the picker
+	// 將挑選器視圖嵌入動作表
 	[actionSheet addSubview:pickerView];
     
-    // Pick a random item in the middle of the table
+	// 亂數選出在表格中央位置附近的項目
 	[pickerView selectRow:50000 + (random() % 4) inComponent:0 animated:YES];
 	[pickerView selectRow:50000 + (random() % 4) inComponent:1 animated:YES];
 	[pickerView selectRow:50000 + (random() % 4) inComponent:2 animated:YES];
