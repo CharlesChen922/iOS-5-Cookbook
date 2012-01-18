@@ -30,27 +30,27 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-	// Detect if the trigger has been set, if so add new items
+	// 偵測有無觸發，若有，加入新項目並重新載入表格
 	if (addItemsTrigger)
 	{
 		numberOfItems += 2;
 		[self.tableView reloadData];
 	}
     
-	// Reset the trigger
+	// 重置觸發旗標
 	addItemsTrigger = NO;
 }
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
-	// Trigger the offset if the user has pulled back more than 50 pixels
+	// 若使用者往回捲超過50點，進行觸發
 	if (scrollView.contentOffset.y < -50.0f)
 		addItemsTrigger = YES;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	// Dequeue or create a cell
+	// 從佇列裡取得儲存格重複使用，或建立新的
 	UITableViewCellStyle style =  UITableViewCellStyleDefault;
 	UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:@"BaseCell"];
 	if (!cell) 
@@ -63,13 +63,13 @@
 - (void) loadView
 {
     [super loadView];
-    numberOfItems = 3; // start with a few seed cells
+    numberOfItems = 3; // 一開始先顯示幾個儲存格
     
-	// Add self as scroll view delegate to catch scroll events
+	// 把自己設為捲動視圖的委派物件，擷取捲動事件
 	self.tableView.delegate = self;
 	self.tableView.autoresizesSubviews = YES;
 	
-	// Add the "Pull to Load" above the table
+	// 把「Pull to Load（下拉代表載入）」放在表格上
 	UIView *pullView = [[[NSBundle mainBundle] loadNibNamed:@"HiddenHeaderView" owner:self options:nil] lastObject]; 
 	pullView.frame = CGRectOffset(pullView.frame, 0.0f, -pullView.frame.size.height);
 	[self.tableView addSubview:pullView];
