@@ -34,34 +34,34 @@
 @implementation TestBedViewController
 - (void) popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-    // Stop holding onto the popover
+    // 不再抓著懸浮元件
     popover = nil;
 }
 
 - (void) action: (id) sender
 {
-    // Always check for existing popover
+    // 檢查懸浮元件是否已經存在
     if (popover) 
         [popover dismissPopoverAnimated:YES];
     
-    // Retrieve the nav controller from the storyboard
+    // 從storyboard取回導覽控制器
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Storyboard" bundle:[NSBundle mainBundle]];
     UINavigationController *controller = [storyboard instantiateInitialViewController];
     
-    // Present either modally or as a popover
+    // 模態顯示，或是懸浮元件
     if (IS_IPHONE)
     {
         [self.navigationController presentModalViewController:controller animated:YES];
     }
     else
     {
-        // No done button on iPads
+        // 在iPad上，不使用Done按鈕
         controller.topViewController.navigationItem.rightBarButtonItem = nil;
         
-        // Set the content size to iPhone-sized
+        // 將內容大小設定為iPhone的大小
         controller.topViewController.contentSizeForViewInPopover = CGSizeMake(320.0f, 480.0f - 44.0f);
         
-        // Create and deploy the popover
+        // 建立並顯示懸浮元件
         popover = [[UIPopoverController alloc] initWithContentViewController:controller];        
         [popover presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
     }    
