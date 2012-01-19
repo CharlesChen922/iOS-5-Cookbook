@@ -24,13 +24,13 @@
 
 - (void) halfway
 {
-    [ActivityAlert setMessage:@"Halfway done."];
+    [ActivityAlert setMessage:@"Halfway done."]; // 做完一半了
 }
 
 - (void) action: (id) sender
 {
     amount = 0.0f;
-    [ActivityAlert presentWithText:@"Please wait"];
+    [ActivityAlert presentWithText:@"Please wait"]; // 請稍等
     [self performSelector:@selector(finish) withObject:nil afterDelay:5.0f];
     [self performSelector:@selector(halfway) withObject:nil afterDelay:2.5f];
 }
