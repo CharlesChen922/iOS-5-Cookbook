@@ -15,7 +15,7 @@
 @implementation TappableView
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    // Uncomment to make the view disappear on touch
+    // 拿掉註解，觸控時就拿掉視圖
     // [self removeFromSuperview];
 }
 @end
@@ -44,7 +44,7 @@
     [overlayView addSubview:aiv];
     [window addSubview:overlayView];
     
-    // Comment out if you are using touch-to-remove
+    // 拿掉底下這行，如果想要「觸控即移除」的話
     [self performSelector:@selector(removeOverlay:) withObject:overlayView afterDelay:5.0f];
 }
 
