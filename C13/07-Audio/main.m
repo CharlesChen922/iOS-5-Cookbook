@@ -42,13 +42,13 @@
     [super loadView];
     self.view.backgroundColor = [UIColor whiteColor];
     
-	// create the sound
+	// 建立音效
 	NSString *sndpath = [[NSBundle mainBundle] pathForResource:@"basicsound" ofType:@"wav"];
 	CFURLRef baseURL = (__bridge CFURLRef)[NSURL fileURLWithPath:sndpath];
 	
-	// Identify it as not a UI Sound
+	// 將它設定為非UISound（使用介面音效）
     AudioServicesCreateSystemSoundID(baseURL, &mysound);
-	AudioServicesPropertyID flag = 0;  // 0 means always play
+	AudioServicesPropertyID flag = 0;  // 0代表一定要播放
 	AudioServicesSetProperty(kAudioServicesPropertyIsUISound, sizeof(SystemSoundID), &mysound, sizeof(AudioServicesPropertyID), &flag);
 	
 	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Sound", @selector(playSound));
