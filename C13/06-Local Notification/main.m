@@ -17,12 +17,12 @@
 {
     UIApplication *app = [UIApplication sharedApplication];
     
-    // Remove all prior notifications
+    // 移除所有先前的通知
     NSArray *scheduled = [app scheduledLocalNotifications];
     if (scheduled.count) 
         [app cancelAllLocalNotifications];
 	
-    // Create a new notification
+    // 建立新通知
     UILocalNotification* alarm = [[UILocalNotification alloc] init];
     if (alarm)
     {
@@ -32,7 +32,7 @@
 		alarm.alertBody = @"Five Seconds Have Passed";
         [app scheduleLocalNotification:alarm];
         
-        // Force quit. Never do this in App Store code.
+        // 強迫退出。要提交到App Store的程式可別這麼做。
         exit(0);
     }
 }
