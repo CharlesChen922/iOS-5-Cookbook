@@ -16,7 +16,7 @@
 
 @implementation TestBedViewController
 
-// Choose from 3 buttons and cancel
+// 從三個項目與取消（Cancel）中選一個
 - (void) alertThree: (id) sender
 {
     // Cancel = 0, One = 1, Two = 2, Three = 3
@@ -25,7 +25,7 @@
     NSLog(@"Selected Button: %d", [delegate show]);
 }
 
-// Text input
+// 文字輸入
 - (void) alertText: (id) sender
 {
     // OK = 1, Cancel = 0
@@ -40,7 +40,7 @@
     [[[UIAlertView alloc] initWithTitle:nil message:response delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil] show];
 }
 
-// Basic action sheet
+// 基本的動作表
 - (void) actionBasic: (id) sender
 {
     // Destructive = 0, One = 1, Two = 2, Three = 3, Cancel = 4
@@ -52,7 +52,7 @@
     NSLog(@"Selected Button: %d", result);
 }
 
-// Long action sheet
+// 很長的動作表
 - (void) actionSheetLong: (id) sender
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:nil cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"One", @"Two", @"Three", @"Four", @"Five", @"Six", @"Seven", @"Eight", @"Nine", nil];
