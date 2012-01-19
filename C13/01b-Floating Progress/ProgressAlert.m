@@ -40,6 +40,7 @@ static UIProgressView *progress = nil;
     alertView.title = aTitle;
 }
 
+// 使用簡短的訊息
 + (void) setMessage: (NSString *) aMessage;
 {
     NSString *message = aMessage;

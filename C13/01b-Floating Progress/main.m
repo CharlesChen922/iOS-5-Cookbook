@@ -22,10 +22,10 @@
 {
     amount += 0.05f;
     [ProgressAlert setProgress:amount];
-    [ProgressAlert setMessage:[NSString stringWithFormat:@"%0.0f%% done", amount * 100]];
+    [ProgressAlert setMessage:[NSString stringWithFormat:@"%0.0f%% done", amount * 100]]; // 完成進度百分比
 
     if (amount > 0.5f)
-        [ProgressAlert setTitle:@"Nearly Done..."];    
+        [ProgressAlert setTitle:@"Nearly Done..."]; // 幾乎快完成了
     
     if (amount > 1)
     {
@@ -39,7 +39,7 @@
 - (void) action: (id) sender
 {
     amount = 0.0f;
-    [ProgressAlert presentProgress:amount withText:@"Processing..."];
+    [ProgressAlert presentProgress:amount withText:@"Processing..."]; // 進行中
     [self performSelector:@selector(update:) withObject:nil afterDelay:0.5f];
 }
 
@@ -49,9 +49,9 @@
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = BARBUTTON(@"Action", @selector(action:));
     
-    // Examples later in the chapter
+    // 本章後面的範例
     
-    // Network activity indicator
+    // 網路活動指示器
     // [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     // Badging
