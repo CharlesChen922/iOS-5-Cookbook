@@ -16,7 +16,7 @@
 - (void)accelerometer:(UIAccelerometer *)accelerometer
         didAccelerate:(UIAcceleration *)acceleration
 {
-    // Determine up from the x and y acceleration components
+    // 從x與y的加速度數值，找出朝上的方向
     float xx = -acceleration.x;
     float yy = acceleration.y;
     float angle = atan2(yy, xx);
@@ -31,6 +31,7 @@
     arrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
     [self.view addSubview:arrow];
     
+	// 初始化，設定委派物件，開始抓取加速度感應器的事件
     [UIAccelerometer sharedAccelerometer].delegate = self;
 }
 
@@ -51,11 +52,12 @@
 @implementation TestBedAppDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions 
 {	
-    [application setStatusBarHidden:YES];
+    //[application setStatusBarHidden:YES];
     
 	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	TestBedViewController *tbvc = [[TestBedViewController alloc] init];
-    window.rootViewController = tbvc;
+	UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:tbvc];
+    window.rootViewController = nc;
 	[window makeKeyAndVisible];
     return YES;
 }
