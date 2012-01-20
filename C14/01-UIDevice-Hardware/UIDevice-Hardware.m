@@ -15,7 +15,7 @@
 
 @implementation UIDevice (Hardware)
 /*
- Platforms
+ Platforms平台
  
  iFPGA ->        ??
 
@@ -34,7 +34,7 @@
  iPod3,1   ->    iPod touch 3G, N18
  iPod4,1   ->    iPod touch 4G, N80
  
- // Thanks NSForge
+ // 感謝NSForge
  iPad1,1   ->    iPad 1G, WiFi and 3G, K48
  iPad2,1   ->    iPad 2G, WiFi, K93
  iPad2,2   ->    iPad 2G, GSM 3G, K94
@@ -69,7 +69,7 @@
 }
 
 
-// Thanks, Tom Harrington (Atomicbird)
+// 感謝Tom Harrington (Atomicbird)
 - (NSString *) hwmodel
 {
     return [self getSysInfoByName:"hw.model"];
@@ -128,7 +128,7 @@
 {
     NSString *platform = [self platform];
 
-    // The ever mysterious iFPGA
+    // 神祕的iFPGA
     if ([platform isEqualToString:@"iFPGA"])        return UIDeviceIFPGA;
 
     // iPhone
@@ -156,7 +156,7 @@
     if ([platform hasPrefix:@"iPod"])               return UIDeviceUnknowniPod;
     if ([platform hasPrefix:@"iPad"])               return UIDeviceUnknowniPad;
     
-     // Simulator thanks Jordan Breeding
+     // Simulator模擬器，感謝Jordan Breeding
     if ([platform hasSuffix:@"86"] || [platform isEqual:@"x86_64"])
     {
         BOOL smallerScreen = [[UIScreen mainScreen] bounds].size.width < 768;
@@ -202,9 +202,9 @@
 }
 
 #pragma mark MAC addy
-// Return the local MAC addy
-// Courtesy of FreeBSD hackers email list
-// Accidentally munged during previous update. Fixed thanks to mlamb.
+// 回傳MAC位址
+// 我從FreeBSD駭客郵件論壇學到的
+// 先前更新時有錯誤，已修正。感謝mlamb
 - (NSString *) macaddress
 {
     int                 mib[6];
@@ -252,7 +252,7 @@
     return outstring;
 }
 
-// Illicit Bluetooth check -- cannot be used in App Store
+// 非法藍芽檢測，App Store禁止
 /* 
 Class  btclass = NSClassFromString(@"GKBluetoothSupport");
 if ([btclass respondsToSelector:@selector(bluetoothStatus)])

@@ -52,7 +52,7 @@
     
     NSString *separator = @"\n***\n";
 
-    // Run tests
+    // 測試
     [self log:@"Mac Address: %@", [device macaddress]];   
     [self log:@"Platform: %@, %@", [device platform], [device platformString]];
     [self log:@"Total memory: %@", [self commasForNumber:[device totalMemory]]];

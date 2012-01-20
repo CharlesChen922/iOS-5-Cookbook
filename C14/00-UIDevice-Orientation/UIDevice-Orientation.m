@@ -4,7 +4,7 @@
  BSD License, Use at your own risk
  */
 
-// Thanks jweinberg, Emanuele Vulcano, rincewind42, Jonah Williams
+// 感謝jweinberg, Emanuele Vulcano, rincewind42, Jonah Williams
 
 #import "UIDevice-Orientation.h"
 
@@ -41,14 +41,14 @@ float device_angle;
 			return 0.0f;
 	}
 #else
-    // supercede current delegate
+    // 儲存目前的委派物件，改成自己
 	id priorDelegate = [UIAccelerometer sharedAccelerometer].delegate;
 	[UIAccelerometer sharedAccelerometer].delegate = self;
 	
-	// Wait for a reading
+	// 等待讀取數值
 	CFRunLoopRun();
     
-    // restore delgate
+    // 恢復先前的委派物件
 	[UIAccelerometer sharedAccelerometer].delegate = priorDelegate;
 	
 	return device_angle;
@@ -57,7 +57,7 @@ float device_angle;
 
 #pragma mark relative orientation
 
-// Thanks Jonah Williams
+// 感謝Jonah Williams
 - (float) orientationAngleRelativeToOrientation:(UIDeviceOrientation) someOrientation
 {
  	float dOrientation = 0.0f;
