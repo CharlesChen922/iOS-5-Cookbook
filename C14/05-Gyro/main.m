@@ -32,7 +32,7 @@
 
     NSLog(@"Establishing motion manager");
     
-    // Establish the motion manager
+    // 建立運動管理者
     motionManager = [[CMMotionManager alloc] init];
     if (motionManager.deviceMotionAvailable)
         [motionManager 

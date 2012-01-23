@@ -20,45 +20,45 @@ static VIDEOkit *sharedInstance = nil;
 
 - (void) setupExternalScreen
 {
-	// Check for missing screen
+	// 檢查有無連接
 	if (!SCREEN_CONNECTED) return;
 	
-	// Set up external screen
+	// 設定外接螢幕
 	UIScreen *secondaryScreen = [[UIScreen screens] objectAtIndex:1];
 	UIScreenMode *screenMode = [[secondaryScreen availableModes] lastObject];
 	CGRect rect = (CGRect){.size = screenMode.size};
 	NSLog(@"Extscreen size: %@", NSStringFromCGSize(rect.size));
 	
-	// Create new outwindow
+	// 建立新的視窗給外接螢幕
 	self.outwindow = [[UIWindow alloc] initWithFrame:CGRectZero];
 	outwindow.screen = secondaryScreen;
-	outwindow.screen.currentMode = screenMode; // Thanks Scott Lawrence
+	outwindow.screen.currentMode = screenMode; // 感謝Scott Lawrence
 	[outwindow makeKeyAndVisible];
 	outwindow.frame = rect;
 
-	// Add base video view to outwindow
+	// 加入視圖給outwindow
 	baseView = [[UIImageView alloc] initWithFrame:rect];
 	baseView.backgroundColor = [UIColor darkGrayColor];
 	[outwindow addSubview:baseView];
 
-	// Restore primacy of main window
+	// 回復原本的主視窗的狀態
 	[delegate.view.window makeKeyAndVisible];
 }
 
 - (void) updateScreen
 {
-	// Abort if the screen has been disconnected
+	// 若外接螢幕已經被拔除，就終止
 	if (!SCREEN_CONNECTED && outwindow)
 		self.outwindow = nil;
 	
-	// (Re)initialize if there's no output window
+	// （再）初始化，如果沒有輸出視窗的話
 	if (SCREEN_CONNECTED && !outwindow)
 		[self setupExternalScreen];
 	
-	// Abort if we have encountered some weird error
+	// 如果遇到奇怪的錯誤，終止
 	if (!self.outwindow) return;
 	
-	// Go ahead and update
+	// 繼續更新
     SAFE_PERFORM_WITH_ARG(delegate, @selector(updateExternalView:), baseView);
 }
 
@@ -97,11 +97,11 @@ static VIDEOkit *sharedInstance = nil;
 {
 	if (!(self = [super init])) return self;
 	
-	// Handle output window creation
+	// 處理外接螢幕的視窗
 	if (SCREEN_CONNECTED) 
         [self screenDidConnect:nil];
 	
-	// Register for connect/disconnect notifications
+	// 註冊外接螢幕連接∕拔除的通知
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenDidConnect:) name:UIScreenDidConnectNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(screenDidDisconnect:) name:UIScreenDidDisconnectNotification object:nil];
 
