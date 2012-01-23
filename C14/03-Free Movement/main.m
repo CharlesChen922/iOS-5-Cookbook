@@ -27,31 +27,34 @@
 
 - (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration
 {
-	// extract the acceleration components
+	// 取出各方向的加速度數值
 	float xx = -acceleration.x;
 	float yy = acceleration.y;
+	
+	// 儲存最近的角位移
     mostRecentAngle = atan2(yy, xx);
 	
-	// Has the direction changed?
+	// 方向改變了嗎？
 	float accelDirX = SIGN(xvelocity) * -1.0f; 
 	float newDirX = SIGN(xx);
 	float accelDirY = SIGN(yvelocity) * -1.0f;
 	float newDirY = SIGN(yy);
 	
-	// Accelerate. To increase viscosity lower the additive value
+	// 加速。減低遲滯係數的話，移動速度就會減慢
 	if (accelDirX == newDirX) xaccel = (abs(xaccel) + 0.85f) * SIGN(xaccel);
 	if (accelDirY == newDirY) yaccel = (abs(yaccel) + 0.85f) * SIGN(yaccel);
 	
-	// Apply acceleration changes to the current velocity
+	// 將加速度套用到目前的速度上
 	xvelocity = -xaccel * xx;
 	yvelocity = -yaccel * yy;
 }
 
 - (void) tick
 {
+	// 改變位置前，重置幾何轉換矩陣
     butterfly.transform = CGAffineTransformIdentity;
     
-	// Move the butterfly according to the current velocity vector
+	// 根據目前速度向量，移動蝴蝶
     CGRect rect = CGRectOffset(butterfly.frame, xvelocity, 0.0f);
     if (CGRectContainsRect(self.view.bounds, rect))
         butterfly.frame = rect;
@@ -60,6 +63,7 @@
     if (CGRectContainsRect(self.view.bounds, rect))
         butterfly.frame = rect;
 
+	// 旋轉蝴蝶，跟位置無關
     butterfly.transform = CGAffineTransformMakeRotation(mostRecentAngle + M_PI_2);
 }
 
@@ -67,7 +71,7 @@
 {
     CGSize size;
     
-	// Load the animation cells
+	// 載入組成動畫的圖檔
 	NSMutableArray *butterflies = [NSMutableArray array];
 	for (int i = 1; i <= 17; i++) 
     {
@@ -77,27 +81,27 @@
 		[butterflies addObject:image];
     }
 	
-	// Begin the animation
+	// 動畫開始
 	butterfly = [[UIImageView alloc] initWithFrame:(CGRect){.size=size}];
 	[butterfly setAnimationImages:butterflies];
 	butterfly.animationDuration = 0.75f;
 	[butterfly startAnimating];
 
-	// Set the butterfly's initial speed and acceleration
+	// 設定蝴蝶的初始速度與加速度
 	xaccel = 2.0f;
 	yaccel = 2.0f;
 	xvelocity = 0.0f;
 	yvelocity = 0.0f;
 	
-    // Add the butterfly
+    // 加入蝴蝶視圖
 	butterfly.center = RECTCENTER(self.view.bounds);
 	[self.view addSubview:butterfly];
 	
 
-	// Activate the accelerometer
+	// 啟用加速度感應器
 	[[UIAccelerometer sharedAccelerometer] setDelegate:self];
 	
-	// Start the physics timer
+	// 啟動物理計時器
     [NSTimer scheduledTimerWithTimeInterval: 0.03f target: self selector: @selector(tick) userInfo: nil repeats: YES];	
 }
 
