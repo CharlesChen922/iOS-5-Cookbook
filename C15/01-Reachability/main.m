@@ -24,7 +24,7 @@
 
 #pragma mark Tests
 
-// Run basic reachability tests
+// 執行一系列的基本連線測試
 - (void) runTests
 {
     UIDevice *device = [UIDevice currentDevice];
@@ -84,7 +84,7 @@
     [self log:@"Elapsed time: %0.1f", [[NSDate date] timeIntervalSinceDate:date]];
 }
 
-// Auto perform reachability tests when reachability values change
+// 當可達性有所變化時，自動檢查網路連線可達性
 - (void) reachabilityChanged
 {
     [self log:@"REACHABILITY CHANGED!\n"];

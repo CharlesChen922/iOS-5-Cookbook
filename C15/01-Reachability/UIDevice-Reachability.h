@@ -17,7 +17,7 @@
 + (NSString *) addressFromData:(NSData *) addressData;
 + (NSString *) portFromData:(NSData *) addressData;
 
-// Retrieve connectivity info
+// 取回網路連線資訊
 - (NSString *) hostname;
 - (NSString *) getIPAddressForHost: (NSString *) theHost;
 - (NSString *) localIPAddress;
@@ -25,7 +25,7 @@
 - (NSArray *) localWiFiIPAddresses;
 - (NSString *) whatismyipdotcom;
 
-// Availability tests
+// 可用性測試
 - (BOOL) hostAvailable: (NSString *) theHost;
 - (BOOL) networkAvailable;
 - (BOOL) activeWLAN;
@@ -33,8 +33,8 @@
 - (BOOL) activePersonalHotspot;
 - (BOOL) performWiFiCheck;
 
-- (BOOL) forceWWAN; // via Apple
-- (void) shutdownWWAN; // via Apple
+- (BOOL) forceWWAN; // 由Apple的範例程式碼而來
+- (void) shutdownWWAN; // 由Apple的範例程式碼而來
 
 - (BOOL) scheduleReachabilityWatcher: (id) watcher;
 - (void) unscheduleReachabilityWatcher;

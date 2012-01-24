@@ -35,7 +35,7 @@ static Boolean TestGetIFAddrs(void)
 				netmask = ifiterator->ifa_netmask;
 				daddr = ifiterator->ifa_dstaddr;
 				
-				// we've found an entry for the IP address
+				// 找到該IP位址的欄位
 				struct sockaddr_in	*iaddr;
 				char				addrstr[64];
 				iaddr = (struct sockaddr_in *)saddr;
@@ -61,7 +61,7 @@ static Boolean TestGetIFAddrs(void)
 		}
 		else if (ifiterator->ifa_addr->sa_family == AF_INET6)
 		{
-			// we've found an entry for the IP address
+			// 找到該IP位址的欄位
 			struct sockaddr_in6	*iaddr6 = (struct sockaddr_in6 *)ifiterator->ifa_addr;
 			char				addrstr[256];
 			inet_ntop(ifiterator->ifa_addr->sa_family, iaddr6, addrstr, sizeof(addrstr));
@@ -70,7 +70,7 @@ static Boolean TestGetIFAddrs(void)
 		ifiterator = ifiterator->ifa_next;
 	}
 	if (ifbase)
-		freeifaddrs(ifbase);	/* done with the memory allocated by getifaddrs */
+		freeifaddrs(ifbase);	/* getifaddrs配置的記憶體，使用完畢 */
 	
     return addrFound;
 }
@@ -85,10 +85,10 @@ static void MyCFWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEvent
 	{
 		case kCFStreamEventOpenCompleted:
 			myInfoPtr->isConnected = TRUE;
-			TestGetIFAddrs();		// call the test function to return the local ip address associated with this connection.
+			TestGetIFAddrs();		// 呼叫測試方法，回傳本地端與此網路連線關連在一起的IP位址
 			if (myInfoPtr->clientCB)
 			{
-				// call client callback routine
+				// 呼叫客戶端的回呼函式
 				myInfoPtr->clientCB(myInfoPtr->refCon);
 			}
 			printf("write stream connected\n");
@@ -104,7 +104,7 @@ static void MyCFWriteStreamClientCallBack(CFWriteStreamRef stream, CFStreamEvent
 			printf("event occurred\n"); // ??
 			break;
 	}
-	// stop the run loop at this point
+	// 在此處停止run loop
 	CFRunLoopStop(CFRunLoopGetCurrent());
 }
 
@@ -123,16 +123,16 @@ extern MyInfoRef StartWWAN(ConnectClientCallBack clientCB, void *refCon)
 		return NULL;
 	}
 	
-	// init the allocated memory
+	// 初始配置記憶體
 	memset(myInfoPtr, 0, sizeof(MyStreamInfo));
 	myInfoPtr->clientCB = clientCB;
 	myInfoPtr->refCon = refCon;	
 	ctxt.info = myInfoPtr;
 	
-	// Check for a dotted-quad address, if so skip any host lookups 
+	// 檢查有四個句點的位址，如果有，不進行名稱查詢
 	in_addr_t addr = inet_addr(host); 
 	if (addr != INADDR_NONE) { 
-		// Create the streams from numberical host 
+		// 從數字型的主機名稱建立CFStream
 		struct sockaddr_in sin; 
 		memset(&sin, 0, sizeof(sin)); 
 		
@@ -144,11 +144,11 @@ extern MyInfoRef StartWWAN(ConnectClientCallBack clientCB, void *refCon)
 		addressData = CFDataCreate(NULL, (UInt8 *)&sin, sizeof(sin)); 
 		CFSocketSignature sig = { AF_INET, SOCK_STREAM, IPPROTO_TCP, addressData }; 
 		
-		// Create the streams. 
+		// 建立CFStream
 		CFStreamCreatePairWithPeerSocketSignature(kCFAllocatorDefault, &sig, &(myInfoPtr->rStreamRef), &(myInfoPtr->wStreamRef)); 		
 		CFRelease(addressData); 
 	} else { 
-		// Create the streams from ascii host name 
+		// 從ascii的主機名稱建立CFStream
 		CFStringRef hostStr = CFStringCreateWithCStringNoCopy(kCFAllocatorDefault, host, kCFStringEncodingUTF8, kCFAllocatorNull); 
 		CFStreamCreatePairWithSocketToHost(kCFAllocatorDefault, hostStr, portNum, &(myInfoPtr->rStreamRef), &(myInfoPtr->wStreamRef)); 
 	} 
@@ -157,12 +157,11 @@ extern MyInfoRef StartWWAN(ConnectClientCallBack clientCB, void *refCon)
 	myInfoPtr->isStreamInitd = TRUE;
 	myInfoPtr->isClientSet = FALSE;
 	
-	// Inform the streams to kill the socket when it is done with it. 
-	// This effects the write stream too since the pair shares the 
-	// one socket. 
+	// 告知CFStream，結束時要關閉socket
+	// 這也會影響寫入的CFStream，因為這一對共享同一個socket
 	CFWriteStreamSetProperty(myInfoPtr->wStreamRef, kCFStreamPropertyShouldCloseNativeSocket, kCFBooleanTrue); 
 	
-	// set up the client
+	// 設定客戶端
 	if (!CFWriteStreamSetClient(myInfoPtr->wStreamRef, kCFStreamEventOpenCompleted | kCFStreamEventErrorOccurred | kCFStreamEventEndEncountered, 
 								MyCFWriteStreamClientCallBack, &ctxt))
 	{
@@ -174,10 +173,10 @@ extern MyInfoRef StartWWAN(ConnectClientCallBack clientCB, void *refCon)
 	
 	if (!errorOccurred)
 	{
-		// schedule the stream
+		// 排程
 		CFWriteStreamScheduleWithRunLoop(myInfoPtr->wStreamRef, CFRunLoopGetCurrent(), kCFRunLoopCommonModes);
 		
-		// Try to open the stream.
+		// 試著開啟
 		if (!CFWriteStreamOpen(myInfoPtr->wStreamRef))
 		{
 			printf("CFWriteStreamOpen failed\n");
@@ -187,7 +186,7 @@ extern MyInfoRef StartWWAN(ConnectClientCallBack clientCB, void *refCon)
 	
 	if (!errorOccurred)
 	{
-		// everything worked so far, so run the runloop - when the callback gets called, it will stop the run loop
+		// 到目前為止沒有問題，所以執行run loop，當回呼函式被呼叫時，它會停止run loop
 		printf("CFWriteStreamOpen returned with no error - calling CFRunLoopRun\n");
 		CFRunLoopRun();
 		if (myInfoPtr->errorOccurred)

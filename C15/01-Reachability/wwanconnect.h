@@ -1,4 +1,4 @@
-// Direct from Apple. Thank you Apple
+// 從Apple範例程式碼抄來的，謝謝你Apple。
 
 #if !defined(__WWAN_CONNECT__)
 #define __WWAN_CONNECT__	1
@@ -32,25 +32,22 @@ typedef struct __MyInfoRef *MyInfoRef;
  *  StartWWAN()
  *  
  *  Discussion:
- *    This function will initiate a Wireless Wide Area Network (WWAN)
- *     connection by using the CFSocketStream API to connect with a 
- *     server system defined by kTestHost:kTestPort above.
- *     No communications are expected to happen over the CFSocketStream
- *     connection.
+ *    這個函式，以CFSocketStream API，開啟Wireless Wide Area Network (WWAN)連線，
+ *     與上頭kTestHost:kTestPort定義的伺服器系統連線，
+ *     在CFSocketStream連線上，並不會發生任何的資料溝通。
  *  
  *    clientCB:
- *     if the connection is opened, the callback routine, if not NULL
- *     will be called. function defintion - see ConnectClientCallBack above
+ *     開啟連線後，這代表會被呼叫的回呼函式，如果不是NULL的話。
+ *     函式的定義請見上頭的ConnectClientCallBack。
  *     
  *    refCon:
- *     if a client callback, clientCB is defined, then the refCon
- *      parameter will be the argument to the client callback
+ *     如果clientCB與refCon有定義的話，
+ *     呼叫回呼函式時，會傳入這個refCon當參數。
  *
  *    return:
- *     if the WWAN connection is successful, a MyInfoRef value is returned
- *     The MyInfoRef value must be passed to StopWWAN to stop the WWAN
- *     connection.
- *     A NULL result indicates that the connection was unsuccessful
+ *     如果WWAN連線成功了，回傳MyInfoRef。
+ *     這個MyInfoRef，必須傳入StopWWAN，以關閉WWAN連線。
+ *     若回傳NULL，代表連線失敗。
  *    
  */
 extern MyInfoRef StartWWAN(ConnectClientCallBack clientCB, void *refCon);
@@ -59,14 +56,13 @@ extern MyInfoRef StartWWAN(ConnectClientCallBack clientCB, void *refCon);
  *  StopWWAN()
  *  
  *  Discussion:
- *    This function closes the CFSocketStream which was used to establish the
- *    WWAN connection. Once the WWAN connection has been started, BSD
- *    network functions can be used to communicate across the WWAN connection.
- *    As of the writing of this sample, there is no guarantee that the use of
- *    only BSD socket API's will maintain the WWAN connection.
+ *    這個函式會關閉當初用來開啟WWAN連線的CFSocketStream，
+ *    一旦WWAN開始連線，就可以使用BSD的網路函式，在WWAN連線上進行溝通。
+ *    當我撰寫此範例時，只使用BSD socket API的話，
+ *    並不能保證WWAN會一直處於連線狀態。
  *  
  *    infoRef:
- *     pass in the MyInfoRef result from the StartWWAN function.
+ *     傳入從StartWWAN得來的MyInfoRef。
  *     
  */
 
