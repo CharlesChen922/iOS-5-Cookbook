@@ -53,14 +53,14 @@
     TWTweetComposeViewController __weak *twee = tweeter;
     tweeter.completionHandler = ^(TWTweetComposeViewControllerResult result){
         [[NSOperationQueue mainQueue] addOperationWithBlock:^(){
-            // Retrieve status
+            // 取回狀態
             BOOL canceled = (result == TWTweetComposeViewControllerResultCancelled);
             
-            // Dismiss controller
+            // 解除控制器
             TWTweetComposeViewController __strong *twong = twee;
             [twong dismissModalViewControllerAnimated:YES];
             
-            // Update GUI
+            // 更新GUI
             self.title =  canceled ? @"Cancelled" : @"Tweeted";
             self.navigationItem.rightBarButtonItem.enabled = YES;
         }];
