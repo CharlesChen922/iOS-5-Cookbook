@@ -11,13 +11,13 @@
 #define BARBUTTON(TITLE, SELECTOR) [[UIBarButtonItem alloc] initWithTitle:TITLE style:UIBarButtonItemStylePlain target:self action:SELECTOR]
 #define IS_IPAD	(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
-// Large Movie (35 MB)
+// 大影片（35 MB）
 #define LARGE_URL @"http://www.archive.org/download/BettyBoopCartoons/Betty_Boop_More_Pep_1936_512kb.mp4"
 
-// Short movie (3 MB)
+// 小影片（3 MB）
 #define SMALL_URL @"http://www.archive.org/download/Drive-inSaveFreeTv/Drive-in--SaveFreeTv_512kb.mp4"
 
-// Wrong URL
+// 無效的影片網址
 #define FAKE_URL @"http://www.idontbelievethisisavalidurlforthisexample.com"
 
 #define DEST_PATH	[NSHomeDirectory() stringByAppendingString:@"/Documents/Movie.mp4"]
@@ -45,7 +45,7 @@
 
 - (void) downloadFinished
 {
-    // Restore GUI
+    // 恢復GUI
     self.navigationItem.rightBarButtonItem = BARBUTTON(@"Go", @selector(go));
     seg.enabled = YES;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -56,7 +56,7 @@
         return;
     }   
     
-    // Play the movie
+    // 準備播放器
     movieController = [[MPMoviePlayerController alloc] initWithContentURL:[NSURL fileURLWithPath:DEST_PATH]];
 	movieController.view.frame = self.view.bounds;
     movieController.controlStyle = MPMovieControlStyleFullscreen;
@@ -115,23 +115,28 @@
 
 - (void) go
 {
+	// 禁用GUI
     self.navigationItem.rightBarButtonItem = nil;
     seg.enabled = NO;
     
+	// 選擇下載哪個項目
     NSArray *items = [NSArray arrayWithObjects: SMALL_URL, LARGE_URL, FAKE_URL, nil];
     NSString *whichItem = [items objectAtIndex:seg.selectedSegmentIndex];
     NSURL *sourceURL = [NSURL URLWithString:whichItem];
 
-    // Remove any existing data
+    // 移除任何已存在的資料
     if ([[NSFileManager defaultManager] fileExistsAtPath:DEST_PATH])
         [[NSFileManager defaultManager] removeItemAtPath:DEST_PATH error:nil];
     
+	// 啟動網路活動指示器
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+	
+	// 在新的NSOperationQueue裡進行下載
     [[[NSOperationQueue alloc] init] addOperationWithBlock:
      ^{
          [self getData:sourceURL];
          [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-             // Finish up on main thread
+             // 在主緒程裡處理收尾工作
              [self downloadFinished];
          }];
      }];
@@ -153,7 +158,7 @@
     log = [NSMutableString string];
     self.navigationItem.rightBarButtonItem = BARBUTTON(@"Go", @selector(go));
     
-    // Allow user to pick short or long data
+    // 讓使用者挑選短的或長的資料
     NSArray *items = [@"Short Long Wrong" componentsSeparatedByString:@" "];
 	seg = [[UISegmentedControl alloc] initWithItems:items];
 	seg.selectedSegmentIndex = 0;
@@ -176,7 +181,7 @@
     [log appendString:@"\n"];
     [log appendString:outstring];
 
-    // Perform GUI update on main thread
+    // 在主緒程裡更新GUI
     [[NSOperationQueue mainQueue] addOperationWithBlock:^(){
         textView.text = log;
     }];
