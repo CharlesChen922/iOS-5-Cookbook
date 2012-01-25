@@ -27,7 +27,7 @@
 {
     float percent = (float) totalBytesWritten / (float) expectedTotalBytes;
 
-    // Perform GUI update on main thread
+    // 在主緒程裡更新GUI 
     [[NSOperationQueue mainQueue] addOperationWithBlock:^(){
         progress.progress = percent;
     }];
@@ -41,7 +41,7 @@
         return;
     }
     
-    // This is broken as of Summer 2011.
+    // 在2011年夏天時，還不能動。
     NSLog(@"Theoretically downloaded to: %@", destinationURL);    
 }
 
@@ -72,7 +72,6 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     progress.frame = CGRectInset(self.view.frame, 80.0f, 80.0f);
-    movieController.view.frame = self.view.bounds;
 }
 
 - (void) viewDidLayoutSubviews
