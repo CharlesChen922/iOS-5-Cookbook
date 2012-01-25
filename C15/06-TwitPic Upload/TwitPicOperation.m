@@ -12,7 +12,7 @@
 
 #define HOST    @"twitpic.com"
 
-// Posting constants
+// 一些關於POST的常數
 #define IMAGE_CONTENT @"Content-Disposition: form-data; name=\"%@\"; filename=\"image.jpg\"\r\nContent-Type: image/jpeg\r\n\r\n"
 #define STRING_CONTENT @"Content-Disposition: form-data; name=\"%@\"\r\n\r\n"
 #define MULTIPART @"multipart/form-data; boundary=------------0x0x0x0x0x0x0x0x"
@@ -39,14 +39,14 @@
 		
 		if ([value isKindOfClass:[NSData class]]) 
 		{
-			// handle image data
+			// 處理圖像資料
 			NSString *formstring = [NSString stringWithFormat:IMAGE_CONTENT, [keys objectAtIndex:i]];
 			[result appendData: DATA(formstring)];
 			[result appendData:value];
 		}
 		else 
 		{
-			// all non-image fields assumed to be strings
+			// 假定所有非圖像的欄位都是字串
 			NSString *formstring = [NSString stringWithFormat:STRING_CONTENT, [keys objectAtIndex:i]];
 			[result appendData: DATA(formstring)];
 			[result appendData:DATA(value)];
@@ -84,10 +84,11 @@
 	[post_dict setObject:@"Posted from iTweet" forKey:@"message"];
 	[post_dict setObject:self.imageData forKey:@"media"];
 	
-	// Create the post data from the post dictionary
+	// 從post_dict字典，建立postData資料
 	NSData *postData = [self generateFormDataFromPostDictionary:post_dict];
 	
-	// Establish the API request. Use upload vs uploadAndPost for skip tweet
+	// 建立URLRequest
+    // 以upload而不是uploadAndPost，可跳過tweet
     NSString *baseurl = @"http://twitpic.com/api/upload"; 
     NSURL *url = [NSURL URLWithString:baseurl];
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url];
@@ -97,7 +98,7 @@
 	[urlRequest setValue:MULTIPART forHTTPHeaderField: @"Content-Type"];
     [urlRequest setHTTPBody:postData];
 	
-	// Submit & retrieve results
+	// 送出以及取得結果
     NSError *error;
     NSURLResponse *response;
 	NSLog(@"Contacting TwitPic....");
@@ -108,7 +109,7 @@
 		return;
 	}
 	
-	// Return results
+	// 回傳結果
     NSString *outstring = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
 	[self cleanup: outstring];
 }
