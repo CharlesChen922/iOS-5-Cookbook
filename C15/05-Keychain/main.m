@@ -39,7 +39,8 @@
         password.text = credential.password;
     }
     
-    // Never log credentials in real world deployment
+    // 在實際的專案裡，可不要輸出機密資料喔！
+	// 這裡是為了測試用的！
     NSLog(@"Loading [%@, %@]", username.text, password.text);
 }
 
@@ -48,7 +49,7 @@
     NSURLCredential *credential = [NSURLCredential credentialWithUser:username.text password:password.text persistence: NSURLCredentialPersistencePermanent];
     NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:HOST port:0 protocol:@"http" realm:nil authenticationMethod:nil];
     
-    // Most recent is always default credential
+    // 最後最新的，設為預設值
     [[NSURLCredentialStorage sharedCredentialStorage] setDefaultCredential:credential forProtectionSpace:protectionSpace];
     
     NSLog(@"%@", [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace]);
@@ -59,7 +60,8 @@
     [self dismissModalViewControllerAnimated:YES];
     [self storeCredentials];
 
-    // Never log credentials in real world deployment
+    // 在實際的專案裡，可不要輸出機密資料喔！
+	// 這裡是為了測試用的！
     NSLog(@"Storing [%@, %@]", username.text, password.text);
 }
 
@@ -68,7 +70,7 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
-// User tapping "done" means done
+// 使用者點擊Done按鈕，表示完成了
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
@@ -76,33 +78,33 @@
     return YES;
 }
 
-// Only enable cancel on edits
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    // Empty password when the user name changes
+    // 若開始編輯使用者名稱，清除密碼欄位
     if (textField == username)
         password.text = @"";
     
+	// 編輯時，才啟用Cancel按鈕
     self.navigationItem.leftBarButtonItem.enabled = YES;
 }
 
-// Watch for known usernames during text edits
+// 在使用者編輯時，檢查該使用者名稱是否已經存在鑰匙圈裡
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (textField != username) return YES;
     
-    // Calculate the target string that will occupy the field
+    // 算出最終字串
     NSString *targetString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     if (!targetString) return YES;
     if (!targetString.length) return YES;
     
-    // Always check if there's a matching password on file
+    // 檢查是否有可配對成功的密碼資料
     NSURLProtectionSpace *protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:HOST port:0 protocol:@"http" realm:nil authenticationMethod:nil];
     NSDictionary *credentialDictionary = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
     NSURLCredential *pwCredential = [credentialDictionary objectForKey:targetString];
     if (!pwCredential) return YES;
     
-    // Match!
+    // 配對成功！更新密碼欄位
     password.text = pwCredential.password;
     return YES;
 }
