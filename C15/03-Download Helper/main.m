@@ -56,7 +56,7 @@
 {
     self.navigationItem.rightBarButtonItem = nil;
 
-    // Remove any existing data
+    // 移除任何已存在的資料
     if ([[NSFileManager defaultManager] fileExistsAtPath:DEST_PATH])
         [[NSFileManager defaultManager] removeItemAtPath:DEST_PATH error:nil];
     

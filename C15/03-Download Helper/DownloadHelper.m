@@ -12,6 +12,7 @@
 @synthesize delegate, urlString, targetPath;
 @synthesize isDownloading, bytesRead, expectedLength;
 
+// 開始下載
 - (void) start
 {
 	isDownloading = NO;
@@ -92,7 +93,7 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)aResponse
 {
-	// Check for bad connection
+	// 檢查不正常的連線
 	expectedLength = [aResponse expectedContentLength];
 	if (expectedLength == NSURLResponseUnknownLength)
 	{
@@ -123,7 +124,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-	// finished downloading the data, cleaning up
+	// 資料下載結束，清理收尾
 	[outputStream close];
 	[urlconnection unscheduleFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
 	[self cleanup];
