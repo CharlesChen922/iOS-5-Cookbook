@@ -73,7 +73,7 @@
 	return controller;
 }
 
-// Called upon going into portrait mode, hiding the normal table view
+// 進入直擺模式，隱藏一般的表格視圖
 - (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)aPopoverController 
 {
     barButtonItem.title = aViewController.title;
@@ -81,7 +81,7 @@
     self.popoverController = aPopoverController;
 }
 
-// Called upon going into landscape mode.
+// 進入橫擺模式
 - (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem 
 {
 	self.navigationItem.leftBarButtonItem = nil;
@@ -189,15 +189,15 @@
 @implementation TestBedAppDelegate
 - (UISplitViewController *) splitviewControllerWithRoot: (TreeNode *) root
 {
-	// Create the navigation-run root view
+	// 建立根視圖控制器
 	XMLTreeViewController *rootVC = [XMLTreeViewController controllerWithRoot:root];
 	UINavigationController *rootNav = [[UINavigationController alloc] initWithRootViewController:rootVC];
 	
-	// Create the navigation-run detail view
+	// 建立細節視圖控制器
 	SplitDetailViewController *detailVC = [SplitDetailViewController controllerWithText:@""];
 	UINavigationController *detailNav = [[UINavigationController alloc] initWithRootViewController:detailVC];
 	
-	// Add both to the split view controller
+	// 將兩者加入分割視圖控制器
 	UISplitViewController *svc = [[UISplitViewController alloc] init];
 	svc.viewControllers = [NSArray arrayWithObjects: rootNav, detailNav, nil];
 	svc.delegate = detailVC;

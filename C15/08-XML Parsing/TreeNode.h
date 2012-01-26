@@ -33,20 +33,20 @@
 + (TreeNode *) treeNode;
 - (NSString *) dump;
 
-// Leaf Utils
+// 樹葉
 - (BOOL) isLeaf;
 - (BOOL) hasLeafValue;
 - (NSArray *) leaves;
 - (NSArray *) allLeaves;
 
-// Key Utils
+// 鍵
 - (NSArray *) keys; 
 - (NSArray *) allKeys; 
 - (NSArray *) uniqKeys;
 - (NSArray *) uniqAllKeys;
 
 
-// Search Utils
+// 搜尋
 - (TreeNode *) objectForKey: (NSString *) aKey;
 - (NSString *) leafForKey: (NSString *) aKey;
 - (NSMutableArray *) objectsForKey: (NSString *) aKey;
@@ -54,6 +54,6 @@
 - (TreeNode *) objectForKeys: (NSArray *) keys;
 - (NSString *) leafForKeys: (NSArray *) keys;
 
-// Convert Utils
+// 轉換
 - (NSMutableDictionary *) dictionaryForChildren;
 @end

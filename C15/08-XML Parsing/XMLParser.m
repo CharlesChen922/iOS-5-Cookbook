@@ -14,7 +14,7 @@
 @implementation XMLParser
 static XMLParser *sharedInstance = nil;
 
-// Use just one parser instance at any time
+// 單件設計模式，任何時候只有一個解析器實體
 +(XMLParser *) sharedInstance 
 {
     if(!sharedInstance)
@@ -22,7 +22,8 @@ static XMLParser *sharedInstance = nil;
     return sharedInstance;
 }
 
-// Parser returns the tree root. You may have to go down one node to the real results
+// 解析器回傳樹的根節點，你必須往下一個節點，
+// 才是真正的結果。
 - (TreeNode *) parse: (NSXMLParser *) parser
 {
 	stack = [NSMutableArray array];
@@ -32,16 +33,16 @@ static XMLParser *sharedInstance = nil;
 	[parser setDelegate:self];
 	[parser parse];
 
-	// pop down to real root
+	// 往下找尋真的根
 	TreeNode *realroot = [[root children] lastObject];
 
-    // Remove any connections
+    // 移除任何連結
 	root.children = nil;
 	root.leafvalue = nil;
 	root.key = nil;
 	realroot.parent = nil;
 	
-    // Return the true root
+    // 回傳真的根
 	return realroot;
 }
 
@@ -65,7 +66,7 @@ static XMLParser *sharedInstance = nil;
     return results;
 }
 
-// Descend to a new element
+// 往下找到新元素
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
     if (qName) elementName = qName;
@@ -81,13 +82,13 @@ static XMLParser *sharedInstance = nil;
 	[stack addObject:leaf];
 }
 
-// Pop after finishing element
+// 元素結束時，疊出
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
 	[stack removeLastObject];
 }
 
-// Reached a leaf
+// 抵達樹葉
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
 	if (![[stack lastObject] leafvalue])

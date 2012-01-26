@@ -9,7 +9,7 @@
 
 #define SAFE_PERFORM_WITH_ARG(THE_OBJECT, THE_SELECTOR, THE_ARG) (([THE_OBJECT respondsToSelector:THE_SELECTOR]) ? [THE_OBJECT performSelector:THE_SELECTOR withObject:THE_ARG] : nil)
 
-// Simple Alert Utility
+// 簡單的工具方法，顯示警示視圖
 void showAlert(id formatstring,...)
 {
 	if (!formatstring) return;
@@ -46,7 +46,7 @@ void showAlert(id formatstring,...)
     close(fd);    
 }
 
-// Listen for external requests
+// 聆聽從外而來的請求
 - (void) listenForRequests
 {
     @autoreleasepool {
@@ -70,12 +70,12 @@ void showAlert(id formatstring,...)
     }
 }
 
-// Begin serving data -- this is a private method called by startService
+// 開始服務 -- 私用方法，由startService呼叫
 - (void) startServer
 {
 	static struct	sockaddr_in serv_addr;
 	
-	// Set up socket
+	// 設定socket
 	if((listenfd = socket(AF_INET, SOCK_STREAM,0)) < 0)	
 	{
 		isServing = NO;
@@ -83,12 +83,12 @@ void showAlert(id formatstring,...)
 		return;
 	}
 	
-    // Serve to a random port
+    // 以任意port埠號進行服務
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	serv_addr.sin_port = 0;
 	
-	// Bind
+	// bind
 	if(bind(listenfd, (struct sockaddr *)&serv_addr,sizeof(serv_addr)) <0)	
 	{
 		isServing = NO;
@@ -96,7 +96,7 @@ void showAlert(id formatstring,...)
 		return;
 	}
 	
-	// Find out what port number was chosen.
+	// 查出系統選了哪個埠號
 	int namelen = sizeof(serv_addr);
 	if (getsockname(listenfd, (struct sockaddr *)&serv_addr, (void *) &namelen) < 0) {
 		close(listenfd);
@@ -107,7 +107,7 @@ void showAlert(id formatstring,...)
 	
 	chosenPort = ntohs(serv_addr.sin_port);
 	
-	// Listen
+	// listen
 	if(listen(listenfd, 64) < 0)	
 	{
 		isServing = NO;
