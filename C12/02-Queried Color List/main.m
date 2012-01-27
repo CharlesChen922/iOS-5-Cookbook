@@ -24,22 +24,22 @@
 @implementation TestBedViewController
 - (void) performFetch
 {
-	// Init a fetch request
+	// 初始化取回請求
 	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 	NSEntityDescription *entity = [NSEntityDescription entityForName:@"Crayon" inManagedObjectContext:context];
 	[fetchRequest setEntity:entity];
-	[fetchRequest setFetchBatchSize:100]; // more than needed for this example
+	[fetchRequest setFetchBatchSize:100]; // 比本範例所需還要大
 	
-	// Apply an ascending sort for the items
+	// 上升型排序
 	NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:nil];
 	NSArray *descriptors = [NSArray arrayWithObject:sortDescriptor];
 	[fetchRequest setSortDescriptors:descriptors];
     
-    // Recover query
+    // 查詢
 	NSString *query = searchBar.text;
 	if (query && query.length) fetchRequest.predicate = [NSPredicate predicateWithFormat:@"name contains[cd] %@", query];
 	
-	// Init the fetched results controller
+	// 初始化取回結果控制器
 	NSError *error;
 	fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:@"section" cacheName:nil];
     fetchedResultsController.delegate = self;
@@ -50,7 +50,7 @@
 #pragma mark Color Utility
 - (UIColor *) getColor: (NSString *) hexColor
 {
-	// Convert a hex color string into a UIColor instance
+	// 將代表顏色含有六個數字的字串，轉為UIColor實體
 	unsigned int red, green, blue;
 	NSRange range;
 	range.length = 2;
@@ -67,11 +67,11 @@
 {
 	NSError *error; 
 	
-	// Extract the color/name pair
+	// 取出顏色∕名稱配對
 	NSArray *colorComponents = [colorString componentsSeparatedByString:@"#"];
 	if (colorComponents.count != 2) return;
 	
-	// Store a name/color pair into the database
+	// 將顏色∕名稱配對存進資料庫
 	Crayon *item = (Crayon *)[NSEntityDescription insertNewObjectForEntityForName:@"Crayon" inManagedObjectContext:context];
 	item.color = [colorComponents objectAtIndex:1];
 	item.name = [colorComponents objectAtIndex:0];
@@ -87,7 +87,7 @@
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section
 {
-	// Return the title for a given section
+	// 回傳區段的標題
 	NSArray *titles = [fetchedResultsController sectionIndexTitles];
 	if (titles.count <= section) return @"Error";
 	return [titles objectAtIndex:section];
@@ -100,7 +100,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index
 {
-	// Query the titles for the section associated with an index title
+	// 根據索引標題，回傳區段編號
 	if (title == UITableViewIndexSearch) 
 	{
 		[self.tableView scrollRectToVisible:searchBar.frame animated:NO];
@@ -116,11 +116,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Retrieve or create a cell
+    // 取得或建立新儲存格
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"basic cell"];
 	if (!cell) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"basic cell"];
 	
-	// Recover object from fetched results
+	// 從取回結果裡，找出物件
 	NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
 	cell.textLabel.text = [managedObject valueForKey:@"name"];
 	UIColor *color = [self getColor:[managedObject valueForKey:@"color"]];
@@ -131,7 +131,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-	// When a row is selected, color the navigation bar accordingly
+	// 點選某列時，隨之改變導覽列的顏色
 	NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
 	UIColor *color = [self getColor:[managedObject valueForKey:@"color"]];
 	self.navigationController.navigationBar.tintColor = color;
@@ -139,7 +139,7 @@
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    return NO; 	// no reordering allowed
+    return NO; 	// 不能調整順序
 }
 
 #pragma mark Search Bar
@@ -160,12 +160,12 @@
 {
 	NSError *error;
 	
-	// Path to sqlite file. 
+	// sqlite檔的路徑
 	NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/colors.sqlite"];
 	NSURL *url = [NSURL fileURLWithPath:path];
     BOOL needsBuilding = ![[NSFileManager defaultManager] fileExistsAtPath:path];
 	
-	// Init the model, coordinator, context
+	// 初始化模型、協調者、內文
 	NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
 	NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
 	if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:nil error:&error]) 
@@ -176,7 +176,7 @@
 		[context setPersistentStoreCoordinator:persistentStoreCoordinator];
 	}
     
-    // Create the DB from the text file if needed
+    // 有需要的話，從文字檔建立資料庫
     if (needsBuilding)
 	{
 		NSString *pathname = [[NSBundle mainBundle]  pathForResource:@"crayons" ofType:@"txt"];
@@ -190,7 +190,7 @@
     [super loadView];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // Create a search bar
+    // 建立搜尋列
 	searchBar = [[UISearchBar alloc] initWithFrame:(CGRect){0,0,100,44}];
     searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     searchBar.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -199,7 +199,7 @@
 	searchBar.delegate = self;
 	self.tableView.tableHeaderView = searchBar;
 	
-	// Create the search display controller
+	// 建立搜尋顯示控制器
 	searchController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
 	searchController.searchResultsDataSource = self;
 	searchController.searchResultsDelegate = self;

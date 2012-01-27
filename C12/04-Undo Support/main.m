@@ -70,18 +70,18 @@
 
 - (void) performFetch
 {
-    // Init a fetch request
+    // 初始化取回請求
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"ToDoItem" inManagedObjectContext:context];
     [fetchRequest setEntity:entity];
-    [fetchRequest setFetchBatchSize:100]; // more than needed for this example
+    [fetchRequest setFetchBatchSize:100]; // 比本範例所需還要大
     
-    // Apply an ascending sort for the items
+    // 上升型排序
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"action" ascending:YES selector:nil];
     NSArray *descriptors = [NSArray arrayWithObject:sortDescriptor];
     [fetchRequest setSortDescriptors:descriptors];
     
-    // Init the fetched results controller
+    // 初始化取回結果控制器
     NSError *error;
     fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:@"sectionName" cacheName:nil];
     fetchedResultsController.delegate = self;
@@ -103,7 +103,7 @@
 
 - (NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section
 {
-    // Return the title for a given section
+    // 回傳區段的標題
     NSArray *titles = [fetchedResultsController sectionIndexTitles];
     if (titles.count <= section) return @"Error";
     return [titles objectAtIndex:section];
@@ -117,11 +117,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Retrieve or create a cell
+    // 取得或建立新儲存格
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"basic cell"];
     if (!cell) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"basic cell"];
     
-    // Recover object from fetched results
+    // 從取回結果裡，找出物件
     NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [managedObject valueForKey:@"action"];
     return cell;
@@ -130,18 +130,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
     // NSManagedObject *managedObject = [fetchedResultsController objectAtIndexPath:indexPath];
-    // some action here
+    // 在此執行動作
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    return NO;     // no reordering allowed
+    return NO;     // 不能調整順序
 }
 
 #pragma mark Data
 -(void)enterEditMode
 {
-    // Start editing
+    // 開始編輯
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES];
     [self.tableView setEditing:YES animated:YES];
     [self setBarButtonItems];
@@ -149,7 +149,7 @@
 
 -(void)leaveEditMode
 {
-    // finish editing
+    // 結束編輯
     [self.tableView setEditing:NO animated:YES];
     [self setBarButtonItems];
 }
@@ -158,7 +158,7 @@
 {
     [context.undoManager beginUndoGrouping];
     
-    // delete request
+    // 刪除
     if (editingStyle == UITableViewCellEditingStyleDelete) 
     {
         NSError *error = nil;
@@ -185,7 +185,7 @@
     item.action = todoAction;
     item.sectionName = [[todoAction substringToIndex:1] uppercaseString];
     
-    // save the new item
+    // 儲存新項目
     NSError *error; 
     if (![context save:&error]) NSLog(@"Error: %@", [error localizedFailureReason]);
     
@@ -206,11 +206,11 @@
 {
     NSError *error;
     
-    // Path to sqlite file. 
+    // sqlite檔的路徑 
     NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/todo.sqlite"];
     NSURL *url = [NSURL fileURLWithPath:path];
     
-    // Init the model, coordinator, context
+    // 初始化模型、協調者、內文
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
     if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:nil error:&error]) 

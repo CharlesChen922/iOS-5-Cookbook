@@ -26,16 +26,16 @@
 @implementation TestBedViewController
 - (void) fetchPeople
 {
-    // Create a basic fetch request
+    // 建立基本的取回請求
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:@"Person" inManagedObjectContext:context]];
     
-    // Add a sort descriptor
+    // 加入排序描述子
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES selector:nil];
     NSArray *descriptors = [NSArray arrayWithObject:sortDescriptor];
     [fetchRequest setSortDescriptors:descriptors];
     
-    // Init the fetched results controller
+    // 初始化結果控制器
     NSError __autoreleasing *error;
     fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:@"Root"];
     if (![fetchedResultsController performFetch:&error])    
@@ -56,7 +56,8 @@
 
 - (void) addObjects
 {
-    // Insert objects for department and several people, setting their properties
+    // 插入物件（Department與幾個Person）
+	// 設定屬性
     for (NSString *name in [@"John Smith*Jane Doe*Fred Wilkins*Emma Smith*Betty Franklin" componentsSeparatedByString:@"*"])    
     {
         NSLog(@"Adding %@", name);
@@ -66,7 +67,7 @@
         person.department = department;
     }
     
-    // Save the data
+    // 儲存資料
     NSError __autoreleasing *error;        
     if (![context save:&error]) 
         NSLog(@"Error: %@", [error localizedFailureReason]);
@@ -77,7 +78,7 @@
 - (void) removePeople
 {
     
-    // remove all people (if they exist)
+    // 移除所有人（如果存在的話）
     if (!fetchedResultsController.fetchedObjects.count) 
     {
         NSLog(@"No people to remove.");
@@ -86,14 +87,14 @@
     
     NSLog(@"Removing people");
     
-    // remove each person
+    // 移除每個人
     for (Person *person in fetchedResultsController.fetchedObjects)    
     {
         NSLog(@"Deleting %@", person.name);
         [context deleteObject:person];            
     }
     
-    // Save the data
+    // 儲存資料
     NSError __autoreleasing *error;        
     if (![context save:&error]) 
         NSLog(@"Error: %@", [error localizedFailureReason]);
@@ -107,11 +108,11 @@
 {
     NSError *error;
     
-    // Path to data file. 
+    // 資料檔的路徑
     NSString *path = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/data.db"];
     NSURL *url = [NSURL fileURLWithPath:path];
     
-    // Init the model, coordinator, context
+    // 初始化模型、協調者、內文
     NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
     NSPersistentStoreCoordinator *persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
     if (![persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:nil error:&error]) 
@@ -123,22 +124,22 @@
     }
     
     
-    // Create a basic fetch request
+    // 建立基本的取回請求
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:@"Department" inManagedObjectContext:context]];
     
-    // Add a sort descriptor
+    // 加入排序描述子
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"groupName" ascending:YES selector:nil];
     NSArray *descriptors = [NSArray arrayWithObject:sortDescriptor];
     [fetchRequest setSortDescriptors:descriptors];
     
-    // Search for departments.
+    // 搜尋部門
     NSFetchedResultsController __block *fetched;
     fetched = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:nil cacheName:@"Dept"];
     if (![fetched performFetch:&error])    
         NSLog(@"Error: %@", [error localizedFailureReason]);
     
-    // Create a new department if it is not found
+    // 若沒找到，建立新部門
     if (!fetched.fetchedObjects.count)
     {
         NSLog(@"Initializing the Department");
