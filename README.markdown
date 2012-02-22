@@ -1,3 +1,5 @@
+這裡是The iOS 5 Developer's Cookbook: Core Concepts and Essential Recipes for iOS Programmers Third Edition的範例程式碼，我將其中的註釋翻譯成中文。
+
 <h3>iPhone Developer's Cookbook</h3>
 Welcome to the source code repository for the iOS 5 edition of the iPhone Developer's Cookbook.  
 
