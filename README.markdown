@@ -1,4 +1,4 @@
-³o¸Ì¬OThe iOS 5 Developer's Cookbook: Core Concepts and Essential Recipes for iOS Programmers Third Editionªº½d¨Òµ{¦¡½X¡A§Ú±N¨ä¤¤ªºµùÄÀÂ½Ä¶¦¨¤¤¤å¡C
+ï»¿é€™è£¡æ˜¯The iOS 5 Developer's Cookbook: Core Concepts and Essential Recipes for iOS Programmers Third Editionçš„ç¯„ä¾‹ç¨‹å¼ç¢¼ï¼Œæˆ‘å°‡å…¶ä¸­çš„è¨»é‡‹ç¿»è­¯æˆä¸­æ–‡ã€‚
 
 <h3>iPhone Developer's Cookbook</h3>
 Welcome to the source code repository for the iOS 5 edition of the iPhone Developer's Cookbook.  
@@ -31,7 +31,8 @@ And so on. If you've asked yourself these questions, then this book is for you. 
 For the sake of pedagogy, this book's sample code usually presents itself in a single main.m file. This is not how people normally develop iPhone or Cocoa applications, or *should* be developing them, but it provides a great way of presenting a single big idea. 
 
 It's hard to tell a story when readers must look through 5 or 7 or 9 individual files at once. Offering a single file concentrates that story, allowing access to that idea in a single chunk.
-These samples are not intended as stand-alone applications. They are there to demonstrate a single recipe and a single idea. One main.m file with a central presentation reveals the implementation story in one place. 
+
+These samples are not intended as stand-alone applications. They are there to demonstrate a single recipe and a single idea. One main.m file with a central presentation reveals the implementation story in one place. 
 
 Readers can study these concentrated ideas and transfer them into normal application structures, using the standard file structure and layout. The presentation in this book does not produce code in a standard day-to-day best practices approach. Instead, it offers concise solutions that you can incorporate back into your work as needed.
 
