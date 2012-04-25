@@ -1,4 +1,12 @@
-﻿這裡是The iOS 5 Developer's Cookbook: Core Concepts and Essential Recipes for iOS Programmers Third Edition的範例程式碼，我將其中的註釋翻譯成中文。
+﻿這裡是The iOS 5 Developer's Cookbook: Core Concepts and Essential Recipes for iOS Programmers Third Edition的範例程式碼，我將原始碼裡面的註釋翻譯成中文。
+
+原文書的Amazon網址在此。
+http://www.amazon.com/The-iOS-Developers-Cookbook-Programmers/dp/0321832078/ref=sr_1_1?s=books&ie=UTF8&qid=1335346124&sr=1-1
+
+中文翻譯本的網址在此。
+iOS SDK 開發範例大全
+http://www.tenlong.com.tw/items/9866072789?item_id=433382
+
 
 <h3>iPhone Developer's Cookbook</h3>
 Welcome to the source code repository for the iOS 5 edition of the iPhone Developer's Cookbook.  
